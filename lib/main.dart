@@ -2,15 +2,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:greet_food/Widgets/Dispense_grid.dart';
 import 'package:greet_food/Widgets/Old/PaginaHome.dart';
-import 'package:greet_food/Widgets/TabNavigator.dart';
+import 'package:greet_food/Widgets/SectionNavigator.dart';
+import 'package:provider/provider.dart';
 import 'Classes/Managers/ManagerArticoli.dart';
-import 'Classes/Managers/ManagerDispense.dart';
+import 'package:greet_food/Classes/Managers/ManagerDispense.dart';
 import 'Classes/Managers/ManagerProdotto.dart';
 import 'Widgets/Factories/AppbarFactory.dart';
 import 'Widgets/HomeSection.dart';
 import 'Widgets/Enumerations.dart';
 import 'Widgets/Old/PaginaScadenze.dart';
 import 'package:provider/provider.dart';
+import 'Widgets/Utility.dart';
 
 String APP_NAME = "GreetFood";
 
@@ -87,12 +89,24 @@ class _GreetFoodHomeState extends State<GreetFoodHome> {
 
   //old
   int _appBarIndex = 1;
+  late List<Widget> _pages;
 
-  final List<Widget> _pages = [
-    PaginaScadenze(),
-    homeScreenBody(),
-    Dispense_grid(),
-  ];
+  @override
+  void initState(){
+    if(kDebugMode){
+      print("Grid dispense: requested init");
+    }
+    super.initState();
+
+    this._pages = [
+      PaginaScadenze(),
+      homeScreenBody(),
+      Consumer<ManagerDispense>(builder: (context, manager, child){
+          return Dispense_grid(manager: manager);
+        }
+      ),
+    ];
+  }
 
   final List<MainSections> mainSections = [MainSections.scadenze, MainSections.home, MainSections.dispense];
 
@@ -124,23 +138,7 @@ class _GreetFoodHomeState extends State<GreetFoodHome> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _appBarIndex,
         onTap: _selectTab,
-        items : [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.punch_clock),
-              label: 'Scadenze',
-              backgroundColor: (_appBarIndex == 0 ? Colors.blueGrey : Colors.white)
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-              backgroundColor: (_appBarIndex == 1 ? Colors.blueGrey : Colors.white)
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Dispense',
-              backgroundColor: (_appBarIndex == 2 ? Colors.blueGrey : Colors.white)
-          ),
-        ],
+        items : getBottomBarItems(),
       ),
     );
   }

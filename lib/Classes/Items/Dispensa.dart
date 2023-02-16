@@ -44,6 +44,7 @@ class Dispensa implements Identifiable{
 
 
 
+
 //TODO REMOVE
 Dispensa getDebugDispensa(){
   return Dispensa("debug", "Assets/PlaceholderImage.png", "una dispensa di debug");
