@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:greet_food/Classes/Managers/ManagerArticoli.dart';
 import 'package:greet_food/Classes/Managers/ManagerDispense.dart';
 import 'package:greet_food/Widgets/CreazioneDispensa.dart';
 import 'package:provider/provider.dart';
@@ -69,8 +70,11 @@ class DispensaCard extends StatelessWidget{
 
   const DispensaCard({required this.manager,required this.dispensa, super.key});
 
-
   Widget build(BuildContext context) {
+
+    ManagerArticoli managerArticoli = Provider.of<ManagerArticoli>(context, listen: false);
+    final articoliContenuti = managerArticoli.getArticoliDispensa().length;
+
     return Container(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -103,7 +107,33 @@ class DispensaCard extends StatelessWidget{
                     Expanded(
                       flex: 1,
                       child: Container(
-                        child: Text(dispensa.nome),
+                        padding:  const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            const Spacer(),
+                            Row(
+                              children: [
+                                const Spacer(),
+                                Text(
+                                  dispensa.nome,
+                                  textAlign: TextAlign.left,
+                                ),
+                                const Spacer(flex: 8),
+                              ],
+                            ),
+                            const Spacer(flex: 3,),
+                            Row(
+                              children: [
+                                const Spacer(),
+                                const Text("Articoli:"),
+                                const Spacer(flex: 6),
+                                Text(articoliContenuti.toString()),
+                                const Spacer(),
+                              ],
+                            ),
+                            const Spacer(),
+                          ],
+                        ),
                       ),
                     ),
                   ]
@@ -150,8 +180,7 @@ class DispensaCard extends StatelessWidget{
       );
     }
 
-    void _onDeleteRequested(BuildContext context) {
-      manager.removeDispensa(dispensa);
-    }
-
+  void _onDeleteRequested(BuildContext context) {
+    manager.removeDispensa(dispensa);
+  }
 }

@@ -36,3 +36,21 @@ class PaginaCreazioneDispenseState extends State<PaginaCreazioneDispense>{
     );
   }
 }
+
+class FormCreazioneDispense extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    throw UnimplementedError();
+  }
+}
+
+class FormCreazioneDispenseState extends State<FormCreazioneDispense>{
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+
+}

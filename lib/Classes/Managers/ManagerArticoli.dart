@@ -102,16 +102,9 @@ class ManagerArticoli extends ChangeNotifier{
     return null;
   }
 
-  /**
-   * Ritorna i feed degli articoli
-   */
-
-  List<Widget> getWidgetArticoliInScadenza(){
-    return [Text("Todo"), Text("Todo"), Text("Todo"), Text("Todo")];
-  }
-
-  List<Widget> getWidgetArticoliScaduti(){
-    return [Text("Todo"), Text("Todo"), Text("Todo"), Text("Todo")];
+  List<Articolo> getArticoliDispensa() {
+    //TODO
+    return [];
   }
 
 }
