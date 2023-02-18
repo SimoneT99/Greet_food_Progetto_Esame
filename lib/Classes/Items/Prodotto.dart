@@ -23,8 +23,22 @@ class Prodotto implements Identifiable{
   }
 
 
+  static int get currentCode => _currentCode;
+
   @override
   bool checkCode(int code) {
     return (code == _id);
   }
+
+  int get id => _id;
+
+  String get nome => _nome;
+
+  String get marca => _marca;
+
+  String get imagePath => _imagePath;
+
+  String get descripion => _descripion;
+
+  String get barcode => _barcode;
 }

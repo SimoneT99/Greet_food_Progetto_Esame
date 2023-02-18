@@ -19,38 +19,40 @@ class PaginaCreazioneDispenseState extends State<PaginaCreazioneDispense>{
   final int _bottomBarIndex = 2;
 
   @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarFactory.getBackAppbar(), //gestire il warning
-      body: Text("TODO"),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _bottomBarIndex,
-        items : getBottomBarItems(),
-      ),
+      body: FormCreazioneDispense(),
     );
   }
 }
 
 class FormCreazioneDispense extends StatefulWidget{
+
+  const FormCreazioneDispense({super.key});
+
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
+    return FormCreazioneDispenseState();
   }
 }
 
 class FormCreazioneDispenseState extends State<FormCreazioneDispense>{
 
+  final _key = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Form(
+      key: _key,
+        child: Column(
+          children: [
+            Text("BottoneFoto"),
+            Text("Nome"),
+            Text("Posizione"),
+            Text("Descrizione"),
+          ],
+        ),
+    );
   }
-
 }

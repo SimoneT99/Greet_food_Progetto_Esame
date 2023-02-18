@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:greet_food/Classes/Managers/ManagerArticoli.dart';
 import 'package:greet_food/Classes/Managers/ManagerDispense.dart';
-import 'package:greet_food/Widgets/CreazioneDispensa.dart';
+import 'package:greet_food/Widgets/CreateUpdateDispensa.dart';
+import 'package:greet_food/Widgets/PaginaDispensa.dart';
 import 'package:provider/provider.dart';
 import 'package:greet_food/Classes/Items/Dispensa.dart';
 
@@ -73,7 +74,7 @@ class DispensaCard extends StatelessWidget{
   Widget build(BuildContext context) {
 
     ManagerArticoli managerArticoli = Provider.of<ManagerArticoli>(context, listen: false);
-    final articoliContenuti = managerArticoli.getArticoliDispensa().length;
+    final articoliContenuti = managerArticoli.getArticoliDispensa(dispensa).length;
 
     return Container(
       padding: const EdgeInsets.all(8.0),
@@ -85,6 +86,10 @@ class DispensaCard extends StatelessWidget{
           child: InkWell(
             onTap: () {
               debugPrint('Short press: ${dispensa.toString()}');
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) {
+                    return PaginaDispensa(dispensa);
+                  }));
             },
             onLongPress: () {
               debugPrint('Long press: ${dispensa.toString()}');

@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:greet_food/Widgets/Dispense_grid.dart';
-import 'package:greet_food/Widgets/Old/PaginaHome.dart';
 import 'package:greet_food/Widgets/SectionNavigator.dart';
 import 'package:provider/provider.dart';
 import 'Classes/Managers/ManagerArticoli.dart';
@@ -10,9 +9,10 @@ import 'Classes/Managers/ManagerProdotto.dart';
 import 'Widgets/Factories/AppbarFactory.dart';
 import 'Widgets/HomeSection.dart';
 import 'Widgets/Enumerations.dart';
-import 'Widgets/Old/PaginaScadenze.dart';
+import 'Widgets/PaginaScadenze.dart';
 import 'package:provider/provider.dart';
 import 'Widgets/Utility.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 String APP_NAME = "GreetFood";
 
@@ -59,7 +59,7 @@ class GreetFoodState extends State<GreetFood>{
               // is not restarted.
                primarySwatch: Colors.blue,
                ),
-              home: const GreetFoodHome(title: "GreetFood"),
+              home: SafeArea(child: const GreetFoodHome(title: "GreetFood")),
           ),
     );
   }
@@ -99,51 +99,54 @@ class _GreetFoodHomeState extends State<GreetFoodHome> {
     super.initState();
 
     this._pages = [
-      PaginaScadenze(),
-      homeScreenBody(),
-      Consumer<ManagerDispense>(builder: (context, manager, child){
+      Scaffold(
+        appBar: AppBarFactory.getEmptyAppbar(),
+        body: PaginaScadenze(),
+      ),
+      Scaffold(
+        appBar: AppBarFactory.getEmptyAppbar(),
+        body: homeScreenBody(),
+      ),
+      Scaffold(
+        appBar: AppBarFactory.getEmptyAppbar(),
+        body: Consumer<ManagerDispense>(builder: (context, manager, child){
           return Dispense_grid(manager: manager);
-        }
+          },
+        ),
       ),
     ];
   }
 
-  final List<MainSections> mainSections = [MainSections.scadenze, MainSections.home, MainSections.dispense];
-
   final navigatorKey = GlobalKey<NavigatorState>();
-
-  void _selectTab(int index){
-    setState(() {
-      if(kDebugMode){
-        print("selezionata la $_appBarIndex pagina");
-      }
-      this._appBarIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBarFactory.getEmptyAppbar(),
-      body: IndexedStack(
-        index: _appBarIndex,
-        children: _pages,
+    return PersistentTabView(
+      context,
+      navBarStyle: NavBarStyle.style14,
+      screens: _pages,
+      onItemSelected: _managePrimaryNavigation(),
+      items: [
+        PersistentBottomNavBarItem(
+          icon: Icon(Icons.punch_clock),
+          title: 'Scadenze',
         ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _appBarIndex,
-        onTap: _selectTab,
-        items : getBottomBarItems(),
-      ),
+        PersistentBottomNavBarItem(
+          icon: Icon(Icons.home),
+          title: 'Home',
+        ),
+        PersistentBottomNavBarItem(
+          icon: Icon(Icons.home),
+          title: 'Dispense',
+        )
+      ],
     );
   }
 
-  Widget _buildBody(){
-    return _pages[_appBarIndex];
+  /**
+   * Dobbiamo gestire tutti i casi partiolari delle schermate
+   */
+  _managePrimaryNavigation() {
+
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:greet_food/Classes/Managers/ManagerArticoli.dart';
 import 'package:greet_food/Widgets/Factories/AppbarFactory.dart';
-import 'package:greet_food/Widgets/Old/PaginaScadenze.dart';
 import 'package:provider/provider.dart';
 import 'package:greet_food/Classes/Managers/ManagerArticoli.dart';
 /**

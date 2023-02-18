@@ -1,5 +1,7 @@
 import 'package:greet_food/Classes/Items/Articolo.dart';
 import 'package:flutter/material.dart';
+import 'package:greet_food/Classes/Items/Dispensa.dart';
+import 'package:greet_food/Classes/Items/Prodotto.dart';
 
 /**
  * Classe che gestise gli articoli
@@ -102,9 +104,18 @@ class ManagerArticoli extends ChangeNotifier{
     return null;
   }
 
-  List<Articolo> getArticoliDispensa() {
+  List<Articolo> getArticoliDispensa(Dispensa dispensa) {
     //TODO
     return [];
   }
 
+  List<Articolo> getArticoliScadutiFinoOggi(Dispensa dispensa) {
+    //TODO
+    return [];
+  }
+
+  Prodotto getProdottoPreferito(Dispensa dispensa) {
+    //TODO
+    return Prodotto("default", "marca_default", "imagePath", "descr", "sdasd");
+  }
 }

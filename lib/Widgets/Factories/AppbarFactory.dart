@@ -13,6 +13,7 @@ class AppBarFactory{
     return AppBar(
       // Here we take the value from the MyHomePage object that was created by
       // the App.build method, and use it to set our appbar title.
+      toolbarHeight: 50,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
