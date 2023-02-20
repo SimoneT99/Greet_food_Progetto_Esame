@@ -106,7 +106,12 @@ class ManagerArticoli extends ChangeNotifier{
 
   List<Articolo> getArticoliDispensa(Dispensa dispensa) {
     //TODO
-    return [];
+    return [
+      Articolo(0, 0, 0, 0, DateTime.now()),
+      Articolo(0, 0, 0, 0, DateTime.now()),
+      Articolo(0, 0, 0, 0, DateTime.now()),
+      Articolo(0, 0, 0, 0, DateTime.now()),
+    ];
   }
 
   List<Articolo> getArticoliScadutiFinoOggi(Dispensa dispensa) {

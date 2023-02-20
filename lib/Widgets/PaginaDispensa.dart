@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:greet_food/Classes/Items/Articolo.dart';
 import 'package:greet_food/Classes/Items/Dispensa.dart';
 import 'package:greet_food/Classes/Managers/ManagerDispense.dart';
 import 'package:greet_food/Widgets/Factories/AppbarFactory.dart';
+import 'package:greet_food/Widgets/VisualizzazioneArticoli.dart';
 import 'package:provider/provider.dart';
 
 import '../Classes/Managers/ManagerArticoli.dart';
@@ -20,9 +22,6 @@ class PaginaDispensa extends StatefulWidget {
   State<StatefulWidget> createState() {
     return PaginaDispensaStato(_dispensa);
   }
-
-
-
 }
 
 class PaginaDispensaStato extends State<PaginaDispensa> with SingleTickerProviderStateMixin{
@@ -31,11 +30,18 @@ class PaginaDispensaStato extends State<PaginaDispensa> with SingleTickerProvide
 
   PaginaDispensaStato(this._dispensa);
 
+  //Gli articoli contenuti nella dispensa
+  late List<Articolo> _articoli_contenuti;
+
   late TabController _tabController;
 
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
+
+    ManagerArticoli managerArticoli = Provider.of<ManagerArticoli>(context, listen: false);
+    this._articoli_contenuti = managerArticoli.getArticoliDispensa(_dispensa);
+
     super.initState();
   }
 
@@ -76,7 +82,7 @@ class PaginaDispensaStato extends State<PaginaDispensa> with SingleTickerProvide
                   child: TabBarView(
                     controller: _tabController,
                       children: [
-                        Text("TODO"),
+                        ViewArticoli(_articoli_contenuti),
                         InformazioniDispensa(_dispensa),
                     ]
                   )
@@ -217,6 +223,3 @@ class InformazioniDispensa extends StatelessWidget{
 /**
  * Pagina con l'elenco degli articoli presenti nella dispensa
  */
-class ContenutoDispensa extends StatefulWidget{
-
-}

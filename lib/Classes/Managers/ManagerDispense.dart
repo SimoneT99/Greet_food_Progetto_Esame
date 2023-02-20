@@ -64,12 +64,15 @@ class ManagerDispense extends ChangeNotifier{
    * Dato un id di una dispensa viene ritornata la dispensa con tale codice se presente
    * altrimenti viene ritornato null
    */
-  Dispensa? getDispensa(int code){
+  Dispensa getDispensa(int code){
+
+    return getDebugDispensa();
+
     for(int i=0; i<_dispense.length; i++){
       if(_dispense[i].checkCode(code)){
         return _dispense[i];
       }
     }
-    return null;
+    throw Exception("Dispensa non presente");
   }
 }

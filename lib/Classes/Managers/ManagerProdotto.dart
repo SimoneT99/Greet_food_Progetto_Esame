@@ -37,12 +37,15 @@ class ManagerProdotti extends ChangeNotifier{
    * Dato un id di una dispensa viene ritornata la dispensa con tale codice se presente
    * altrimenti viene ritornato null
    */
-  Prodotto? getProdotto(int code){
+  Prodotto getProdotto(int code){
+
+    return Prodotto("defaul_prodotto", "marca", "Assets/PlaceholderImage.png", "descrizione", "ssdsddsd");
+
     for(int i=0; i<_prodotti.length; i++){
       if(_prodotti[i].checkCode(code)){
         return _prodotti[i];
       }
     }
-    return null;
+    throw Exception("Prodotto non esistente");
   }
 }
