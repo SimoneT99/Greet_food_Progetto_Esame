@@ -4,5 +4,6 @@
  */
 
 abstract class Identifiable{
- bool checkCode(int code);
+  bool checkCode(int code);
+  int getCode();
 }

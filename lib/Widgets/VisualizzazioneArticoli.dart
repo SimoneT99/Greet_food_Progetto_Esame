@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:greet_food/Classes/Managers/ManagerDispense.dart';
-import 'package:greet_food/Classes/Managers/ManagerProdotto.dart';
+import 'package:greet_food/Widgets/PaginaProdotto.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../Classes/Items/Articolo.dart';
 import '../Classes/Items/Dispensa.dart';
 import '../Classes/Items/Prodotto.dart';
+import '../Classes/Legacy/ManagerDispense.dart';
+import '../Classes/Legacy/ManagerProdotto.dart';
 
 
 /**
@@ -62,25 +63,25 @@ class ViewArticoliState extends State<ViewArticoli>{
 
 class WidgetArticolo extends StatelessWidget{
 
-  late Articolo articolo;
-  late bool isExpanded;
-  late Dispensa dispensa;
-  late Prodotto prodotto;
+  late Articolo _articolo;
+  late bool _isExpanded;
+  late Dispensa _dispensa;
+  late Prodotto _prodotto;
 
 
   WidgetArticolo(Articolo articolo, bool isExpanded) {
-    this.articolo = articolo;
-    this.isExpanded = isExpanded;
+    this._articolo = articolo;
+    this._isExpanded = isExpanded;
   }
 
   @override
   Widget build(BuildContext context) {
     
-    this.prodotto = Provider.of<ManagerProdotti>(context, listen: false).getProdotto(articolo.idProdotto);
-    this.dispensa = Provider.of<ManagerDispense>(context, listen: false).getDispensa(articolo.idDispensa);
+    this._prodotto = Provider.of<ManagerProdotti>(context, listen: false).getProdotto(_articolo.idProdotto);
+    this._dispensa = Provider.of<ManagerDispense>(context, listen: false).getDispensa(_articolo.idDispensa);
 
-    if(isExpanded){
-      return expanded();
+    if(_isExpanded){
+      return expanded(context);
     }
     else{
       return notExpanded();
@@ -102,7 +103,7 @@ class WidgetArticolo extends StatelessWidget{
     );
   }
 
-  Widget expanded(){
+  Widget expanded(BuildContext context){
     return AspectRatio(
       aspectRatio: 1.5,
       child: Container(
@@ -125,6 +126,10 @@ class WidgetArticolo extends StatelessWidget{
                         ElevatedButton(
                             onPressed: () {
                               debugPrint("debug: richiesto passaggio a pagina del prodotto");
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) {
+                                    return PaginaProdotto(_prodotto);
+                                  }));
                             },
                             child: Text("Prodotto")
                         ),
@@ -161,7 +166,7 @@ class WidgetArticolo extends StatelessWidget{
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.fill,
-                  image: AssetImage(prodotto.imagePath),
+                  image: AssetImage(_prodotto.imagePath),
                 ),
               ),
             ),
@@ -176,7 +181,7 @@ class WidgetArticolo extends StatelessWidget{
                   Row(
                     children: [
                       Text(
-                        prodotto.nome,
+                        _prodotto.nome,
                         textAlign: TextAlign.left,
                       ),
                     ],
@@ -184,7 +189,7 @@ class WidgetArticolo extends StatelessWidget{
                   Row(
                     children: [
                       Text(
-                        prodotto.marca,
+                        _prodotto.marca,
                         textAlign: TextAlign.left,
                       ),
                     ],
@@ -194,7 +199,7 @@ class WidgetArticolo extends StatelessWidget{
                     children: [
                       Spacer(),
                       Text(
-                        (new DateFormat("dd-MM-yyyy")).format(articolo.dataScadenza),
+                        (new DateFormat("dd-MM-yyyy")).format(_articolo.dataScadenza),
                         textAlign: TextAlign.right,
                       ),
                     ],
@@ -203,7 +208,7 @@ class WidgetArticolo extends StatelessWidget{
                     children: [
                       Spacer(),
                       Text(
-                        prodotto.marca,
+                        _dispensa.nome,
                         textAlign: TextAlign.right,
                       ),
                     ],

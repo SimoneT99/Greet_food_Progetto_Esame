@@ -41,4 +41,8 @@ class Prodotto implements Identifiable{
   String get descripion => _descripion;
 
   String get barcode => _barcode;
+
+  int getCode() {
+    return this._id;
+  }
 }

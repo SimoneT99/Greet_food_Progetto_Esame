@@ -39,6 +39,10 @@ class Dispensa implements Identifiable{
 
   static int get currentCode => _currentCode;
 
+  int getCode() {
+    return this._id;
+  }
+
 }
 
 

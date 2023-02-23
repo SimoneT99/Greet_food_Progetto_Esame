@@ -2,12 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:greet_food/Classes/Items/Articolo.dart';
 import 'package:greet_food/Classes/Items/Dispensa.dart';
-import 'package:greet_food/Classes/Managers/ManagerDispense.dart';
+
 import 'package:greet_food/Widgets/Factories/AppbarFactory.dart';
 import 'package:greet_food/Widgets/VisualizzazioneArticoli.dart';
 import 'package:provider/provider.dart';
 
-import '../Classes/Managers/ManagerArticoli.dart';
+import '../Classes/Legacy/ManagerArticoli.dart';
+
 
 /**
  * Widget della pagina di una dispensa
@@ -219,7 +220,3 @@ class InformazioniDispensa extends StatelessWidget{
     );
   }
 }
-
-/**
- * Pagina con l'elenco degli articoli presenti nella dispensa
- */

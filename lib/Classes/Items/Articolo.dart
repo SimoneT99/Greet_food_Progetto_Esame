@@ -66,6 +66,8 @@ class Articolo implements Identifiable{
 
   int get idProdotto => _idProdotto;
 
-  int get id => _id;
-
+  @override
+  int getCode() {
+    return this._id;
+  }
 }

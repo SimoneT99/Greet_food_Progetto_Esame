@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:greet_food/Widgets/Dispense_grid.dart';
+import 'package:greet_food/Widgets/VisualizzazioneDispense.dart';
 import 'package:greet_food/Widgets/SectionNavigator.dart';
 import 'package:provider/provider.dart';
-import 'Classes/Managers/ManagerArticoli.dart';
-import 'package:greet_food/Classes/Managers/ManagerDispense.dart';
-import 'Classes/Managers/ManagerProdotto.dart';
+import 'Classes/Legacy/ManagerArticoli.dart';
+import 'Classes/Legacy/ManagerDispense.dart';
+import 'Classes/Legacy/ManagerProdotto.dart';
 import 'Widgets/Factories/AppbarFactory.dart';
 import 'Widgets/HomeSection.dart';
 import 'Widgets/Enumerations.dart';
@@ -105,12 +105,12 @@ class _GreetFoodHomeState extends State<GreetFoodHome> {
       ),
       Scaffold(
         appBar: AppBarFactory.getEmptyAppbar(),
-        body: homeScreenBody(),
+        body: Homepage(),
       ),
       Scaffold(
         appBar: AppBarFactory.getEmptyAppbar(),
         body: Consumer<ManagerDispense>(builder: (context, manager, child){
-          return Dispense_grid(manager: manager);
+          return VisualizzazioneDispense(manager: manager);
           },
         ),
       ),

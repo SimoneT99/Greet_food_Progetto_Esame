@@ -2,33 +2,31 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:greet_food/Classes/Managers/ManagerArticoli.dart';
-import 'package:greet_food/Classes/Managers/ManagerDispense.dart';
 import 'package:greet_food/Widgets/CreateUpdateDispensa.dart';
 import 'package:greet_food/Widgets/PaginaDispensa.dart';
 import 'package:provider/provider.dart';
 import 'package:greet_food/Classes/Items/Dispensa.dart';
 
+import '../Classes/Items/Prodotto.dart';
+import '../Classes/Legacy/ManagerArticoli.dart';
+import '../Classes/Legacy/ManagerDispense.dart';
+
 /**
- * Sezione dispense della main page
+ * Widgets per la visualizzazione delle dispense nella sezione dispense
  */
 
-class Dispense_grid extends StatelessWidget{
+class VisualizzazioneDispense extends StatelessWidget{
 
   final ManagerDispense manager;
 
-  const Dispense_grid({required this.manager, super.key});
+  const VisualizzazioneDispense({required this.manager, super.key});
 
   @override
   Widget build(BuildContext context) {
     final _dispense = manager.getAllDispense();
     if(_dispense != null){
-      return GridView.builder(
+      return ListView.builder(
         itemCount: _dispense!.length+1,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 1,
-          childAspectRatio: 2.5,
-        ),
         itemBuilder: (BuildContext context, int index) {
           if (index<_dispense!.length) {
             return DispensaCard(manager: this.manager, dispensa: _dispense![index]);
@@ -60,10 +58,6 @@ class Dispense_grid extends StatelessWidget{
   }
 }
 
-/**
- * I feed delle dispense
- */
-
 class DispensaCard extends StatelessWidget{
 
   final Dispensa dispensa;
@@ -76,75 +70,78 @@ class DispensaCard extends StatelessWidget{
     ManagerArticoli managerArticoli = Provider.of<ManagerArticoli>(context, listen: false);
     final articoliContenuti = managerArticoli.getArticoliDispensa(dispensa).length;
 
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      child: Card(
-          semanticContainer: true,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          elevation: 5,
-          //borderRadius: BorderRadius.circular(12),
-          child: InkWell(
-            onTap: () {
-              debugPrint('Short press: ${dispensa.toString()}');
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) {
-                    return PaginaDispensa(dispensa);
-                  }));
-            },
-            onLongPress: () {
-              debugPrint('Long press: ${dispensa.toString()}');
-              this._showCancellationDialog(context);
-            },
-            child: Container(
-              child: Row(
-                  children: <Widget>[
-                    AspectRatio(
-                      aspectRatio: 1,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: AssetImage(dispensa.imagePath),
+    return AspectRatio(
+      aspectRatio: 2.5,
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+            semanticContainer: true,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            elevation: 5,
+            //borderRadius: BorderRadius.circular(12),
+            child: InkWell(
+              onTap: () {
+                debugPrint('Short press: ${dispensa.toString()}');
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) {
+                      return PaginaDispensa(dispensa);
+                    }));
+              },
+              onLongPress: () {
+                debugPrint('Long press: ${dispensa.toString()}');
+                this._showCancellationDialog(context);
+              },
+              child: Container(
+                child: Row(
+                    children: <Widget>[
+                      AspectRatio(
+                        aspectRatio: 1,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: AssetImage(dispensa.imagePath),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        padding:  const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            const Spacer(),
-                            Row(
-                              children: [
-                                const Spacer(),
-                                Text(
-                                  dispensa.nome,
-                                  textAlign: TextAlign.left,
-                                ),
-                                const Spacer(flex: 8),
-                              ],
-                            ),
-                            const Spacer(flex: 3,),
-                            Row(
-                              children: [
-                                const Spacer(),
-                                const Text("Articoli:"),
-                                const Spacer(flex: 6),
-                                Text(articoliContenuti.toString()),
-                                const Spacer(),
-                              ],
-                            ),
-                            const Spacer(),
-                          ],
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          padding:  const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              const Spacer(),
+                              Row(
+                                children: [
+                                  const Spacer(),
+                                  Text(
+                                    dispensa.nome,
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  const Spacer(flex: 8),
+                                ],
+                              ),
+                              const Spacer(flex: 3,),
+                              Row(
+                                children: [
+                                  const Spacer(),
+                                  const Text("Articoli:"),
+                                  const Spacer(flex: 6),
+                                  Text(articoliContenuti.toString()),
+                                  const Spacer(),
+                                ],
+                              ),
+                              const Spacer(),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ]
+                    ]
+                ),
               ),
-            ),
-          )
+            )
+        ),
       ),
     );
   }
@@ -189,3 +186,4 @@ class DispensaCard extends StatelessWidget{
     manager.removeDispensa(dispensa);
   }
 }
+
