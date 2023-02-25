@@ -48,6 +48,7 @@ class GenericManager<T extends Identifiable> extends ChangeNotifier{
       }
     }
     elements.add(newElement);
+    this.notifyListeners();
   }
 
   /**
@@ -65,13 +66,14 @@ class GenericManager<T extends Identifiable> extends ChangeNotifier{
       throw Exception("Nessun elemento con questo ID");
     }
     elements.removeAt(index);
+    this.notifyListeners();
   }
 
   /**
    * Rimuovere un elemento dato l'id
    * Eccezione se l'elemento non è presente
    */
-  void removeElemetByCode(T element){
+  void removeElemet(T element){
     int index = -1;
     for(int i = 0; i<elements.length; i++){
       if (elements[i].checkCode(element.getCode())){
@@ -82,6 +84,7 @@ class GenericManager<T extends Identifiable> extends ChangeNotifier{
       throw Exception("Nessun elemento con questo ID");
     }
     elements.removeAt(index);
+    this.notifyListeners();
   }
 
   /**
@@ -92,6 +95,7 @@ class GenericManager<T extends Identifiable> extends ChangeNotifier{
     for(int i = 0; i<elements.length; i++){
       if (elements[i].checkCode(newElement.getCode())){
         elements[i] =  newElement;
+        this.notifyListeners();
         return;
       }
     }

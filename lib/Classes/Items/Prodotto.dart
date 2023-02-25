@@ -12,23 +12,21 @@ class Prodotto implements Identifiable{
   String _marca = "defaultName";
   String _imagePath = "placeHolderPath";
   String _descripion = "defaultDescription";
-  String _barcode = "default";
+  String? _barcode = "default";
 
-  Prodotto(String nome, String marca, String imagePath, String descripion, String barcode){
+  bool _alKg = false;
+
+  Prodotto(String nome, String marca, String imagePath, String descripion, String? barcode, bool alKg){
     this._nome = nome;
     this._marca = marca;
     this._imagePath = imagePath;
     this._descripion = descripion;
     this._barcode = barcode;
+    this._alKg = alKg;
   }
 
 
   static int get currentCode => _currentCode;
-
-  @override
-  bool checkCode(int code) {
-    return (code == _id);
-  }
 
   int get id => _id;
 
@@ -40,7 +38,17 @@ class Prodotto implements Identifiable{
 
   String get descripion => _descripion;
 
-  String get barcode => _barcode;
+  String? get barcode => _barcode;
+
+  bool get alKg => _alKg;
+
+  /**
+   * Identificazione
+   */
+  @override
+  bool checkCode(int code) {
+    return (code == _id);
+  }
 
   int getCode() {
     return this._id;

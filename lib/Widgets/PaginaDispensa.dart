@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:greet_food/Classes/GestioneDati/ElaboratoreArticoli.dart';
+import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Classes/Items/Articolo.dart';
 import 'package:greet_food/Classes/Items/Dispensa.dart';
 
@@ -7,7 +9,7 @@ import 'package:greet_food/Widgets/Factories/AppbarFactory.dart';
 import 'package:greet_food/Widgets/VisualizzazioneArticoli.dart';
 import 'package:provider/provider.dart';
 
-import '../Classes/Legacy/ManagerArticoli.dart';
+import '../Classes/Items/Prodotto.dart';
 
 
 /**
@@ -40,8 +42,8 @@ class PaginaDispensaStato extends State<PaginaDispensa> with SingleTickerProvide
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
 
-    ManagerArticoli managerArticoli = Provider.of<ManagerArticoli>(context, listen: false);
-    this._articoli_contenuti = managerArticoli.getArticoliDispensa(_dispensa);
+    GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
+    this._articoli_contenuti = (new EleboratoreArticoli(managerArticoli.getAllElements())).filtraPerDispensa(_dispensa);
 
     super.initState();
   }
@@ -53,7 +55,6 @@ class PaginaDispensaStato extends State<PaginaDispensa> with SingleTickerProvide
 
   @override
   Widget build(BuildContext context) {
-
         return Scaffold(
           appBar: AppBarFactory.getEmptyAppbar(),
           body: Column(
@@ -99,7 +100,7 @@ class PaginaDispensaStato extends State<PaginaDispensa> with SingleTickerProvide
  */
 class InformazioniDispensa extends StatelessWidget{
 
-  Dispensa _dispensa;
+  final Dispensa _dispensa;
 
   InformazioniDispensa(this._dispensa);
 
@@ -110,12 +111,32 @@ class InformazioniDispensa extends StatelessWidget{
     String prodottoPreferito;
     int contenutoCorrente;
 
-    ManagerArticoli managerArticoli = Provider.of<ManagerArticoli>(context, listen: false);
 
-    articoliScadutiFinoOggi = managerArticoli.getArticoliScadutiFinoOggi(_dispensa).length;
-    prodottoPreferito = managerArticoli.getProdottoPreferito(_dispensa).nome;
-    contenutoCorrente = managerArticoli.getArticoliDispensa(_dispensa).length;
+    /**
+     * Setup valori per compilare la pagina
+     */
+    GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
+    GenericManager<Prodotto> managerProdotti = Provider.of<GenericManager<Prodotto>>(context, listen: false);
 
+    EleboratoreArticoli eleboratoreArticoli = new EleboratoreArticoli(managerArticoli.getAllElements());
+    List<Articolo> articoliDispensaTotale = eleboratoreArticoli.filtraPerDispensa(this._dispensa);
+
+    //articoli lasciati scadere
+    eleboratoreArticoli.setListaArticoli(articoliDispensaTotale);
+    articoliScadutiFinoOggi = eleboratoreArticoli.filtraPerLasciatiScadere().length;
+
+    //prodotto preferito
+    //TODO
+    prodottoPreferito = "";
+
+    //contenutoCorrente
+    contenutoCorrente = eleboratoreArticoli.filtraPerConsumati(
+        consumato: false
+    ).length;
+
+    /**
+     * Costruizione del widget
+     */
 
     return Container(
       padding: const EdgeInsets.all(25.0),

@@ -18,7 +18,10 @@ class Articolo implements Identifiable{
   double _weight = 1;
   DateTime _dataScadenza = DateTime.now();
 
+  DateTime _dataInserimento = DateTime.now();
+
   bool consumed = false;
+  DateTime consumedDate = DateTime.now();
 
   /**
    * Costruttore
@@ -26,13 +29,15 @@ class Articolo implements Identifiable{
 
 
   Articolo(int idProdotto, int idDispensa, double prezzo,
-      double weight, DateTime dataScadenza){
+      double weight, DateTime dataScadenza, DateTime dataInserimento){
     this._id = _currentCode++;
     this._idProdotto = idProdotto;
     this._idDispensa = idDispensa;
     this._prezzo = prezzo;
     this._weight = weight;
     this.consumed = false;
+    this._dataInserimento = dataInserimento;
+    this._dataScadenza = dataScadenza;
   }
 
   @override
@@ -69,5 +74,25 @@ class Articolo implements Identifiable{
   @override
   int getCode() {
     return this._id;
+  }
+
+  /**
+   * Altri metodi
+   */
+  bool lasciatoScadere(){
+    if(consumed){
+      return consumedDate.isAfter(this.dataScadenza);
+    }
+    return DateTime.now().isAfter(this.dataScadenza);
+  }
+
+  /**
+   * Altri metodi
+   */
+  bool ScadutoNonConsumato(){
+    if(consumed){
+      return consumedDate.isAfter(this.dataScadenza);
+    }
+    return DateTime.now().isAfter(this.dataScadenza);
   }
 }

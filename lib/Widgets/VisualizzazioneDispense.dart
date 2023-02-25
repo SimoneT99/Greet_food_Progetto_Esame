@@ -2,14 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:greet_food/Widgets/CreateUpdateDispensa.dart';
+import 'package:greet_food/Classes/GestioneDati/ElaboratoreArticoli.dart';
+import 'package:greet_food/Classes/Items/Articolo.dart';
+import 'package:greet_food/Widgets/Forms/CreazioneDispensa.dart';
 import 'package:greet_food/Widgets/PaginaDispensa.dart';
 import 'package:provider/provider.dart';
 import 'package:greet_food/Classes/Items/Dispensa.dart';
 
-import '../Classes/Items/Prodotto.dart';
-import '../Classes/Legacy/ManagerArticoli.dart';
-import '../Classes/Legacy/ManagerDispense.dart';
+import '../Classes/GestioneDati/GenericManager.dart';
+
 
 /**
  * Widgets per la visualizzazione delle dispense nella sezione dispense
@@ -17,19 +18,18 @@ import '../Classes/Legacy/ManagerDispense.dart';
 
 class VisualizzazioneDispense extends StatelessWidget{
 
-  final ManagerDispense manager;
+  final GenericManager<Dispensa> manager_dispense;
 
-  const VisualizzazioneDispense({required this.manager, super.key});
+  const VisualizzazioneDispense({required this.manager_dispense, super.key});
 
   @override
   Widget build(BuildContext context) {
-    final _dispense = manager.getAllDispense();
-    if(_dispense != null){
+    final _dispense = manager_dispense.getAllElements();
       return ListView.builder(
-        itemCount: _dispense!.length+1,
+        itemCount: _dispense.length+1, //l'ultimo elemento è il pulsante per l'aggiunta
         itemBuilder: (BuildContext context, int index) {
-          if (index<_dispense!.length) {
-            return DispensaCard(manager: this.manager, dispensa: _dispense![index]);
+          if (index<_dispense.length) {
+            return DispensaCard(manager: this.manager_dispense, dispensa: _dispense[index]);
           }else{
             return Center(
                 child : SizedBox(
@@ -41,7 +41,7 @@ class VisualizzazioneDispense extends StatelessWidget{
                         debugPrint("debug: richiesta aggiunta dispensa");
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) {
-                              return PaginaCreazioneDispense();
+                              return PaginaCreazioneDispensa();
                             }));
                       },
                       child: Text("Aggiungi"),
@@ -52,23 +52,19 @@ class VisualizzazioneDispense extends StatelessWidget{
         },
       );
     }
-    else {
-      return Text("nessuna dispensa al momento");
-    }
-  }
 }
 
 class DispensaCard extends StatelessWidget{
 
-  final Dispensa dispensa;
-  final ManagerDispense manager;
+  final Dispensa _dispensa;
+  final GenericManager<Dispensa> manager;
 
-  const DispensaCard({required this.manager,required this.dispensa, super.key});
+  const DispensaCard({required this.manager,required Dispensa dispensa, super.key}) : _dispensa = dispensa;
 
   Widget build(BuildContext context) {
-
-    ManagerArticoli managerArticoli = Provider.of<ManagerArticoli>(context, listen: false);
-    final articoliContenuti = managerArticoli.getArticoliDispensa(dispensa).length;
+    final GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
+    final EleboratoreArticoli  eleboratoreArticoli = new EleboratoreArticoli(managerArticoli.getAllElements());
+    final int articoliContenuti = eleboratoreArticoli.filtraPerDispensa(_dispensa).length;
 
     return AspectRatio(
       aspectRatio: 2.5,
@@ -81,14 +77,14 @@ class DispensaCard extends StatelessWidget{
             //borderRadius: BorderRadius.circular(12),
             child: InkWell(
               onTap: () {
-                debugPrint('Short press: ${dispensa.toString()}');
+                debugPrint('Short press: ${_dispensa.toString()}');
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) {
-                      return PaginaDispensa(dispensa);
+                      return PaginaDispensa(_dispensa);
                     }));
               },
               onLongPress: () {
-                debugPrint('Long press: ${dispensa.toString()}');
+                debugPrint('Long press: ${_dispensa.toString()}');
                 this._showCancellationDialog(context);
               },
               child: Container(
@@ -100,7 +96,7 @@ class DispensaCard extends StatelessWidget{
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               fit: BoxFit.fill,
-                              image: AssetImage(dispensa.imagePath),
+                              image: AssetImage(_dispensa.imagePath),
                             ),
                           ),
                         ),
@@ -116,7 +112,7 @@ class DispensaCard extends StatelessWidget{
                                 children: [
                                   const Spacer(),
                                   Text(
-                                    dispensa.nome,
+                                    _dispensa.nome,
                                     textAlign: TextAlign.left,
                                   ),
                                   const Spacer(flex: 8),
@@ -145,7 +141,6 @@ class DispensaCard extends StatelessWidget{
       ),
     );
   }
-
 
   Future<void> _showCancellationDialog(BuildContext context) async {
       return showDialog<void>(
@@ -183,7 +178,7 @@ class DispensaCard extends StatelessWidget{
     }
 
   void _onDeleteRequested(BuildContext context) {
-    manager.removeDispensa(dispensa);
+    manager.removeElemet(_dispensa);
   }
 }
 

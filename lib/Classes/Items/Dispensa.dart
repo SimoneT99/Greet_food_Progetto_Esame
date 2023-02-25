@@ -12,18 +12,19 @@ class Dispensa implements Identifiable{
   String _nome = "defaultName";
   String _imagePath = "placeHolderPath";
   String _descripion = "defaultDescription";
+  String _posizione = "defaultPosition";
 
-  Dispensa(String nome, String imagePath, String descripion){
+  Dispensa(String nome, String imagePath, String descripion, String posizione){
     this._id = _currentCode++;
     this._nome = nome;
     this._imagePath = imagePath;
-    this._descripion = _descripion;
+    this._descripion = descripion;
+    this._posizione = posizione;
   }
 
   @override
   bool checkCode(int code) {
-    // TODO: implement checkCode
-    throw UnimplementedError();
+    return this._id == code;
   }
 
 /**
@@ -51,5 +52,5 @@ class Dispensa implements Identifiable{
 
 //TODO REMOVE
 Dispensa getDebugDispensa(){
-  return Dispensa("debug", "Assets/PlaceholderImage.png", "una dispensa di debug");
+  return Dispensa("debug", "Assets/PlaceholderImage.png", "una dispensa di debug", "posizioneDebug");
 }

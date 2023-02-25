@@ -1,17 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:greet_food/Classes/Items/Dispensa.dart';
+import 'package:greet_food/Classes/Items/Prodotto.dart';
 import 'package:greet_food/Widgets/VisualizzazioneDispense.dart';
-import 'package:greet_food/Widgets/SectionNavigator.dart';
 import 'package:provider/provider.dart';
-import 'Classes/Legacy/ManagerArticoli.dart';
-import 'Classes/Legacy/ManagerDispense.dart';
-import 'Classes/Legacy/ManagerProdotto.dart';
+import 'Classes/GestioneDati/GenericManager.dart';
+import 'Classes/Items/Articolo.dart';
 import 'Widgets/Factories/AppbarFactory.dart';
 import 'Widgets/HomeSection.dart';
-import 'Widgets/Enumerations.dart';
 import 'Widgets/PaginaScadenze.dart';
-import 'package:provider/provider.dart';
-import 'Widgets/Utility.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 String APP_NAME = "GreetFood";
@@ -26,9 +23,9 @@ class GreetFoodState extends State<GreetFood>{
    * Manager per gestire i dati
    */
 
-  ManagerArticoli _managerArticoli = ManagerArticoli();
-  ManagerDispense _managerDispense = ManagerDispense();
-  ManagerProdotti _managerProdotti = ManagerProdotti();
+  GenericManager<Articolo> _managerArticoli = GenericManager<Articolo>();
+  GenericManager<Dispensa> _managerDispense = GenericManager<Dispensa>();
+  GenericManager<Prodotto> _managerProdotti = GenericManager<Prodotto>();
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +98,7 @@ class _GreetFoodHomeState extends State<GreetFoodHome> {
     this._pages = [
       Scaffold(
         appBar: AppBarFactory.getEmptyAppbar(),
-        body: PaginaScadenze(),
+        body: PaginaScadenze()//PaginaScadenze(),
       ),
       Scaffold(
         appBar: AppBarFactory.getEmptyAppbar(),
@@ -109,8 +106,8 @@ class _GreetFoodHomeState extends State<GreetFoodHome> {
       ),
       Scaffold(
         appBar: AppBarFactory.getEmptyAppbar(),
-        body: Consumer<ManagerDispense>(builder: (context, manager, child){
-          return VisualizzazioneDispense(manager: manager);
+        body: Consumer<GenericManager<Dispensa>>(builder: (context, manager, child){
+          return VisualizzazioneDispense(manager_dispense: manager);
           },
         ),
       ),

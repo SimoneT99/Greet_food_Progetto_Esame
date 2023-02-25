@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Widgets/PaginaProdotto.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../Classes/Items/Articolo.dart';
 import '../Classes/Items/Dispensa.dart';
 import '../Classes/Items/Prodotto.dart';
-import '../Classes/Legacy/ManagerDispense.dart';
-import '../Classes/Legacy/ManagerProdotto.dart';
-
 
 /**
  * Widget per visualizzare gli articoli secondo le specifiche
@@ -77,8 +75,8 @@ class WidgetArticolo extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     
-    this._prodotto = Provider.of<ManagerProdotti>(context, listen: false).getProdotto(_articolo.idProdotto);
-    this._dispensa = Provider.of<ManagerDispense>(context, listen: false).getDispensa(_articolo.idDispensa);
+    this._prodotto = Provider.of<GenericManager<Prodotto>>(context, listen: false).getElementById(_articolo.idProdotto);
+    this._dispensa = Provider.of<GenericManager<Dispensa>>(context, listen: false).getElementById(_articolo.idDispensa);
 
     if(_isExpanded){
       return expanded(context);
