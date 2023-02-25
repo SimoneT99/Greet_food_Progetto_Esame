@@ -10,6 +10,12 @@ import '../../Classes/Items/Prodotto.dart';
 //widget con stato dato che dobbiamo gestire il multi inserimento degli articoli
 class CreazioneArticolo extends StatefulWidget{
 
+  late final Prodotto _prodotto;
+
+  CreazioneArticolo(Prodotto prodotto) {
+    this._prodotto = prodotto;
+  }
+
   @override
   State<StatefulWidget> createState() {
     return new CreazioneArticoloStato();
@@ -21,13 +27,8 @@ final formKey = GlobalKey<FormState>();
 class CreazioneArticoloStato extends State<CreazioneArticolo>{
 
   List<Articolo> _articoliInseriti = [];
-  late final Prodotto _prodotto;
   late final bool _alKg;
 
-  CreazioneArticoloStato(Prodotto prodotto){
-    this._prodotto = prodotto;
-    this._alKg = prodotto.alKg;
-  }
 
   /**
    * Parametri inseriti dall'utente, inizialmente a null
