@@ -36,6 +36,11 @@ dependencies:
   intl: ^0.18.0
   mobile_scanner: ^3.0.0
 
+  camera:
+  path_provider:
+  path:
+
+
 
 
   # The following adds the Cupertino Icons font to your application.

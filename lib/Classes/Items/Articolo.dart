@@ -10,26 +10,39 @@ class Articolo implements Identifiable{
 
   static int _currentCode = 0;
 
+  /**
+   * IDs
+   */
   int _id = 0;
   int _idProdotto = 0;
   int _idDispensa = 0;
 
+  /**
+   * Dati articolo obbligatori
+   */
   double _prezzo = 0;
-  double _weight = 1;
   DateTime _dataScadenza = DateTime.now();
-
   DateTime _dataInserimento = DateTime.now();
-
   bool consumed = false;
   DateTime consumedDate = DateTime.now();
+
+  /**
+   * Dati articolo opzionali
+   */
+  double _weight = -1;
+
 
   /**
    * Costruttore
    */
 
-
-  Articolo(int idProdotto, int idDispensa, double prezzo,
-      double weight, DateTime dataScadenza, DateTime dataInserimento){
+  Articolo(
+      {required int idProdotto,
+      required int idDispensa,
+      required double prezzo,
+        double peso = -1,
+      required DateTime dataScadenza,
+      required DateTime dataInserimento}){
     this._id = _currentCode++;
     this._idProdotto = idProdotto;
     this._idDispensa = idDispensa;

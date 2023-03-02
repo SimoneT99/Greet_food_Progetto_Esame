@@ -44,6 +44,9 @@ class Dispensa implements Identifiable{
     return this._id;
   }
 
+  //Serializzazione
+
+
 }
 
 

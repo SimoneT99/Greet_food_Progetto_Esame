@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Classes/Items/Prodotto.dart';
 import 'package:greet_food/Widgets/Factories/AppbarFactory.dart';
+import 'package:greet_food/Widgets/Forms/CreazioneArticolo.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 
@@ -43,6 +44,10 @@ class PaginaAggiuntaArticoloState extends State<PaginaAggiuntaArticolo>{
             child: AspectRatio(
               aspectRatio: 1,
               child: scannerActive ? MobileScanner(
+                controller: MobileScannerController(
+                  returnImage: false,
+                  detectionSpeed: DetectionSpeed.noDuplicates,
+                ),
                 onDetect: (BarcodeCapture capture){
                   _barcodeFound(context, capture);
                 },
@@ -173,7 +178,13 @@ class CardProdotto extends StatelessWidget{
             elevation: 5,
             //borderRadius: BorderRadius.circular(12),
             child: InkWell(
-              onTap: (){},
+              onTap: (){
+                Navigator.of(context).push(
+                  new MaterialPageRoute(builder: (context){
+                    return CreazioneArticolo(this._prodotto);
+                  })
+                );
+              },
               child: Container(
                 child: Row(
                     children: <Widget>[

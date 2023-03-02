@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
-import 'package:greet_food/Classes/Items/Dispensa.dart';
 import 'package:greet_food/Classes/Items/Prodotto.dart';
 import 'package:greet_food/Widgets/Factories/AppbarFactory.dart';
 import 'package:greet_food/Widgets/Forms/PagineEsito.dart';
