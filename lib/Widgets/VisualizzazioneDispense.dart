@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -90,17 +92,17 @@ class DispensaCard extends StatelessWidget{
               child: Container(
                 child: Row(
                     children: <Widget>[
-                      AspectRatio(
-                        aspectRatio: 1,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: AssetImage(_dispensa.imagePath),
+                          AspectRatio(
+                            aspectRatio: 1,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: FileImage(File(_dispensa.imagePath)),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
                       Expanded(
                         flex: 1,
                         child: Container(
@@ -141,6 +143,7 @@ class DispensaCard extends StatelessWidget{
       ),
     );
   }
+
 
   Future<void> _showCancellationDialog(BuildContext context) async {
       return showDialog<void>(

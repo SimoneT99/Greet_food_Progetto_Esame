@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:greet_food/Classes/GestioneDati/ElaboratoreArticoli.dart';
@@ -153,7 +155,7 @@ class InformazioniDispensa extends StatelessWidget{
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       image: DecorationImage(
                         fit: BoxFit.fill,
-                        image: AssetImage(_dispensa.imagePath),
+                        image: FileImage(File(_dispensa.imagePath)),
                       ),
                     ),
                   ),

@@ -44,7 +44,14 @@ class Dispensa implements Identifiable{
     return this._id;
   }
 
-  //Serializzazione
+/**
+ * Controlli
+ */
+  bool hasImage(){
+    return imagePath!="";
+  }
+
+//Serializzazione
 
 
 }
@@ -55,5 +62,5 @@ class Dispensa implements Identifiable{
 
 //TODO REMOVE
 Dispensa getDebugDispensa(){
-  return Dispensa("debug", "Assets/PlaceholderImage.png", "una dispensa di debug", "posizioneDebug");
+  return Dispensa("debug", "", "una dispensa di debug", "posizioneDebug");
 }

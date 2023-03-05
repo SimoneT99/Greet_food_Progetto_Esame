@@ -67,11 +67,6 @@ class PaginaAggiuntaArticoloState extends State<PaginaAggiuntaArticolo>{
   }
 
   void _barcodeFound(BuildContext context, BarcodeCapture code){
-    setState(() {
-      scannerActive = false;
-      barcode = code.barcodes[0].rawValue!;
-      debugPrint("Code found: ${code.barcodes[0].rawValue}");
-    });
 
     GenericManager<Prodotto> managerProdotti =  Provider.of<GenericManager<Prodotto>>(context, listen: false);
     ElaboratoreProdotti elaboratoreProdotti = ElaboratoreProdotti(managerProdotti.getAllElements());
@@ -79,12 +74,32 @@ class PaginaAggiuntaArticoloState extends State<PaginaAggiuntaArticolo>{
     //Se troviamo il prodotto con tale codice a barre possiamo passare all'inserimento
     try{
       Prodotto prodotto = elaboratoreProdotti.getProdottoByBarcode(barcode);
-      //TODO
+
+      Navigator.of(context).push(new MaterialPageRoute(
+          builder: (context) {
+            return CreazioneArticolo(prodotto);
+          }
+      ));
+
     }catch(exception){
       //TODO
       debugPrint("Nessun prodotto con questo codice a barre");
+
+      Navigator.of(context).push(new MaterialPageRoute(
+          builder: (context) {
+            return CreazioneArticolo(Prodotto(
+                'dsadada',
+                'asdda',
+                'Sdasda',
+                'Sdasda',
+                'Sdasda',
+                false
+            ));
+          }
+      ));
     }
   }
+  
 }
 
 class NoCodeButton extends StatelessWidget{
