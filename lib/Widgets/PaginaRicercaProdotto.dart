@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:greet_food/Classes/GestioneDati/ElaboratoreProdotti.dart';
+import 'package:greet_food/Widgets/Factories/AppbarFactory.dart';
+import 'package:greet_food/Widgets/VisualizzazioneProdotto.dart';
 import 'package:provider/provider.dart';
 
 import '../Classes/GestioneDati/GenericManager.dart';
@@ -16,6 +18,7 @@ class PaginaRicercaProdotto extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBarFactory.getBackAppbar(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Form(
@@ -59,8 +62,14 @@ class PaginaRicercaProdotto extends StatelessWidget{
                       if(_marca != ""){
                         listaProdotti = elaboratoreProdotti.filtraPerNome(_marca);
                       }
-                      //TODO
-                      print("Richiesta ricerca");
+                      Navigator.of(context).push(
+                          new MaterialPageRoute(builder: (context) {
+                            return Scaffold(
+                              appBar: AppBarFactory.getBackAppbar(),
+                              body: VisualizzazioneProdotti(listaProdotti, type: ProductVisualizationContext.standard,),
+                            );
+                          })
+                      );
                     }
                   },
                   child: Text("Cerca")

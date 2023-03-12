@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:greet_food/Widgets/Factories/AppbarFactory.dart';
 import 'package:flutter/foundation.dart';
 import 'package:greet_food/Widgets/PaginaAggiuntaArticolo.dart';
+import 'package:greet_food/Widgets/PaginaAiuto.dart';
 
 import 'PaginaRicercaProdotto.dart';
 
@@ -143,7 +144,13 @@ class Aiuto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {print("richiesta aggiunta articolo"); },
+      onPressed: () {
+        Navigator.of(context).push(new MaterialPageRoute(
+            builder: (context) {
+              return PaginaAiuto();
+            }
+        ));
+      },
       child: Text("Aiuto"),
     );
   }
