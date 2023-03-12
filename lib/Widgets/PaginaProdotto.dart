@@ -1,10 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:greet_food/Classes/GestioneDati/ElaboratoreArticoli.dart';
+import 'package:greet_food/Classes/GestioneDati/ElaboratoreProdotti.dart';
+import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Classes/Items/Prodotto.dart';
+import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../Classes/Items/Articolo.dart';
 import '../Classes/Items/Dispensa.dart';
 import 'Factories/AppbarFactory.dart';
+
 
 /**
  * Widget per la pagina prodotto
@@ -234,7 +240,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
    * Sezione con le informazioni sui prezzi
    */
   Widget _prezzi(){
-    return Text("//TODO");
+    return priceHistoryPage(_prodotto);
   }
 
   /**
@@ -243,5 +249,71 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
   Widget _dispenseContenenti(){
     return Text("//TODO");
   }
+}
+
+class priceHistoryPage extends StatelessWidget{
+
+  Prodotto _prodotto;
+
+  priceHistoryPage(this._prodotto);
+
+  @override
+  Widget build(BuildContext context) {
+
+    //Preparazione dati per popolare la pagina
+    GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
+    List<Articolo> articoliProdotto = new ElaboratoreArticoli(managerArticoli.getAllElements()).filtraPerProdotto(_prodotto);
+    double prezzoMassimo = articoliProdotto.reduce((current, next) => current.prezzo > next.prezzo ? current : next).prezzo;
+    double prezzoMinimo = articoliProdotto.reduce((current, next) => current.prezzo < next.prezzo ? current : next).prezzo;
+    double prezzoMedio = articoliProdotto.fold(.0, (current, next) => (current + next.prezzo))/articoliProdotto.length.toDouble();
+
+    return Column(
+      children: [
+        AspectRatio(
+          aspectRatio: 16/9,
+          child: Padding(
+            padding: const EdgeInsets.only(
+              right: 18,
+              left: 12,
+              top: 24,
+              bottom: 12,
+            ),
+            child: SfCartesianChart(
+                primaryXAxis: DateTimeAxis(),
+                title: ChartTitle(text: 'Storico prezzi'),
+                series: getGraphData(articoliProdotto),
+            ),
+          )
+        ),
+        Expanded(
+            child: Text(
+              "Massimo   ${prezzoMassimo.toStringAsFixed(2)}"
+            ),
+        ),
+        Expanded(
+            child: Text(
+                "Minimo   ${prezzoMinimo.toStringAsFixed(2)}"
+            )
+        ),
+        Expanded(
+            child: Text(
+                "Medio   ${prezzoMedio.toStringAsFixed(2)}"
+            )
+        ),
+      ],
+    );
+  }
+
+  getGraphData(List<Articolo> articoliProdotto) {
+    return <ChartSeries<Articolo, DateTime>>[
+      LineSeries<Articolo, DateTime>(
+        dataSource: articoliProdotto,
+        xValueMapper: (Articolo articolo, _) => articolo.dataInserimento,
+        yValueMapper: (Articolo articolo, _) => articolo.prezzo,
+        ),
+      ];
+
+  }
+
 }
 

@@ -45,7 +45,7 @@ class PaginaDispensaStato extends State<PaginaDispensa> with SingleTickerProvide
     _tabController = TabController(length: 2, vsync: this);
 
     GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
-    this._articoli_contenuti = (new EleboratoreArticoli(managerArticoli.getAllElements())).filtraPerDispensa(_dispensa);
+    this._articoli_contenuti = (new ElaboratoreArticoli(managerArticoli.getAllElements())).filtraPerDispensa(_dispensa);
 
     super.initState();
   }
@@ -120,7 +120,7 @@ class InformazioniDispensa extends StatelessWidget{
     GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
     GenericManager<Prodotto> managerProdotti = Provider.of<GenericManager<Prodotto>>(context, listen: false);
 
-    EleboratoreArticoli eleboratoreArticoli = new EleboratoreArticoli(managerArticoli.getAllElements());
+    ElaboratoreArticoli eleboratoreArticoli = new ElaboratoreArticoli(managerArticoli.getAllElements());
     List<Articolo> articoliDispensaTotale = eleboratoreArticoli.filtraPerDispensa(this._dispensa);
 
     //articoli lasciati scadere

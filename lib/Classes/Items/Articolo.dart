@@ -76,6 +76,8 @@ class Articolo implements Identifiable{
 
   DateTime get dataScadenza => _dataScadenza;
 
+  DateTime get dataInserimento => _dataInserimento;
+
   double get weight => _weight;
 
   double get prezzo => _prezzo;

@@ -1,8 +1,7 @@
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
+import 'package:greet_food/Classes/Items/Dispensa.dart';
 import 'package:greet_food/Widgets/Factories/AppbarFactory.dart';
 import 'package:greet_food/Widgets/Forms/PagineEsito.dart';
 import 'package:intl/intl.dart';
@@ -51,11 +50,9 @@ final formKey = GlobalKey<FormState>();
 class FormCreazioneArticoloStato extends State<FormsCreazioneArticolo>{
 
   List<Articolo> _articoliInseriti = [];
-  late final bool _alKg;
 
   @override
   void initState() {
-    _alKg = widget._prodotto.alKg;
     super.initState();
   }
 
@@ -64,7 +61,7 @@ class FormCreazioneArticoloStato extends State<FormsCreazioneArticolo>{
    */
 
   //Ultimi valori inseriti
-  int? _idDispensa = null;
+  Dispensa? _dispensa = null;
   double? _prezzo = 0;
   double? _weight = 1;
   DateTime? _dataScadenza = DateTime.now();
@@ -133,24 +130,26 @@ class FormCreazioneArticoloStato extends State<FormsCreazioneArticolo>{
               },
             ),
 
-            //Dispensa
-            TextFormField(
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Dispensa',
-              ),
-              validator: (value) {
-                if(value == null || value.isEmpty){
-                  return "errore";
+            Builder(
+                builder: (BuildContext context) {
+                  GenericManager<Dispensa> gestoreDispense = Provider.of<GenericManager<Dispensa>>(context, listen: false);
+                  List<Dispensa> dispense = gestoreDispense.getAllElements();
+                  return DropdownButtonFormField(
+                      items: dispense.map<DropdownMenuItem<Dispensa>>((Dispensa dispensa) {
+                        return DropdownMenuItem<Dispensa>(
+                          child: Text(dispensa.nome),
+                          value: dispensa,
+                        );
+                  }).toList(),
+                  onChanged: (value) {
+                    //TODO
+                  },
+                  onSaved: (value){
+                        this._dispensa = value;
+                  },
+                  );
                 }
-                return null;
-              },
-              onSaved: (value) {
-                this._idDispensa = 1;
-              },
             ),
-
             Row(
               children: [
                 ElevatedButton(
@@ -191,33 +190,25 @@ class FormCreazioneArticoloStato extends State<FormsCreazioneArticolo>{
                     child: Text("Fine"))
               ],
             ),
-
           ],
         ),
       ),
     );
   }
 
+  /**
+   * Genera un nuovo articolo
+   */
   Articolo _generaArticolo(){
     Articolo nuovoArticolo;
-    if(_alKg){
-      nuovoArticolo = new Articolo(
-        idProdotto: widget._prodotto.getCode(),
-        idDispensa: this._idDispensa!,
-        prezzo: this._prezzo!,
-        peso: this._weight!,
-        dataScadenza: this._dataScadenza!,
-        dataInserimento: DateTime.now(),
-      );
-    }else{
-      nuovoArticolo = new Articolo(
-        idProdotto: widget._prodotto.getCode(),
-        idDispensa: this._idDispensa!,
-        prezzo: this._prezzo!,
-        dataScadenza: this._dataScadenza!,
-        dataInserimento: DateTime.now(),
-      );
-    }
+    nuovoArticolo = new Articolo(
+      idProdotto: widget._prodotto.getCode(),
+      idDispensa: this._dispensa!.id,
+      prezzo: this._prezzo!,
+      peso: this._weight!,
+      dataScadenza: this._dataScadenza!,
+      dataInserimento: DateTime.now(),
+    );
     return nuovoArticolo;
   }
 }

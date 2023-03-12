@@ -72,7 +72,7 @@ class PaginaScadenzaStato extends State<PaginaScadenze> with SingleTickerProvide
                     children: [
                       Builder(
                           builder: (BuildContext context) {
-                            EleboratoreArticoli elaboratoreArticoli = new EleboratoreArticoli(_managerArticoli.getAllElements());
+                            ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(_managerArticoli.getAllElements());
                             elaboratoreArticoli.setListaArticoli(elaboratoreArticoli.filtraPerArticoliScaduti());
                             List<Articolo> articoliScaduti = elaboratoreArticoli.filtraPerConsumati(consumato: false);
                             return ViewArticoli(articoliScaduti);
@@ -80,7 +80,7 @@ class PaginaScadenzaStato extends State<PaginaScadenze> with SingleTickerProvide
                       ),
                       Builder(
                           builder: (BuildContext context) {
-                            EleboratoreArticoli elaboratoreArticoli = new EleboratoreArticoli(_managerArticoli.getAllElements());
+                            ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(_managerArticoli.getAllElements());
                             elaboratoreArticoli.setListaArticoli(elaboratoreArticoli.filtraPerArticoliInScadenza(7)); //TODO il tempo deve essere letto dalle impostazioni
                             List<Articolo> articoliInScadenza = elaboratoreArticoli.filtraPerConsumati(consumato: false);
                             return ViewArticoli(articoliInScadenza);

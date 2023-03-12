@@ -3,6 +3,8 @@ import 'package:greet_food/Widgets/Factories/AppbarFactory.dart';
 import 'package:flutter/foundation.dart';
 import 'package:greet_food/Widgets/PaginaAggiuntaArticolo.dart';
 
+import 'PaginaRicercaProdotto.dart';
+
 
 /**
  * Sezione home dell'applicazione
@@ -85,13 +87,20 @@ class CercaProdotto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: _button_pressed,
+      onPressed: () {
+        _button_pressed(context);
+      },
       child: Text("Cerca prodotto"),
     );
   }
 
-  void _button_pressed(){
+  void _button_pressed(BuildContext context){
     debugPrint("richiesta ricerca prodotto");
+    Navigator.of(context).push(new MaterialPageRoute(
+        builder: (context) {
+          return PaginaRicercaProdotto();
+        }
+    ));
   }
 }
 

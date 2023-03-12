@@ -65,7 +65,7 @@ class DispensaCard extends StatelessWidget{
 
   Widget build(BuildContext context) {
     final GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
-    final EleboratoreArticoli  eleboratoreArticoli = new EleboratoreArticoli(managerArticoli.getAllElements());
+    final ElaboratoreArticoli  eleboratoreArticoli = new ElaboratoreArticoli(managerArticoli.getAllElements());
     final int articoliContenuti = eleboratoreArticoli.filtraPerDispensa(_dispensa).length;
 
     return AspectRatio(
