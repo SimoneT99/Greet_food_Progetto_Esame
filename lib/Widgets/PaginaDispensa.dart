@@ -86,7 +86,7 @@ class PaginaDispensaStato extends State<PaginaDispensa> with SingleTickerProvide
                   child: TabBarView(
                     controller: _tabController,
                       children: [
-                        ViewArticoli(_articoli_contenuti),
+                        VisualizzazioneArticoli(_articoli_contenuti),
                         InformazioniDispensa(_dispensa),
                     ]
                   )

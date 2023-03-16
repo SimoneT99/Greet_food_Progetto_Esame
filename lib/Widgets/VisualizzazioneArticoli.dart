@@ -11,24 +11,24 @@ import '../Classes/Items/Prodotto.dart';
  * Widget per visualizzare gli articoli secondo le specifiche
  */
 
-class ViewArticoli extends StatefulWidget{
+class VisualizzazioneArticoli extends StatefulWidget{
 
   final List<Articolo> articoli;
 
-  ViewArticoli(this.articoli);
+  VisualizzazioneArticoli(this.articoli);
 
   @override
   State<StatefulWidget> createState() {
-    return ViewArticoliState(articoli);
+    return VisualizzazioneArticoliState(articoli);
   }
 }
 
-class ViewArticoliState extends State<ViewArticoli>{
+class VisualizzazioneArticoliState extends State<VisualizzazioneArticoli>{
 
   int _open_index = 2;
   List<Articolo> articoli;
 
-  ViewArticoliState(this.articoli);
+  VisualizzazioneArticoliState(this.articoli);
 
   /**
    * Utilizziamo _open_index per trattare diversamente gli articoli espansi da

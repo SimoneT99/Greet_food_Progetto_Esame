@@ -2,7 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:greet_food/Classes/Items/Dispensa.dart';
 import 'package:greet_food/Classes/Items/Prodotto.dart';
+import 'package:greet_food/Widgets/Themes.dart';
+import 'package:greet_food/Widgets/VisualizzazioneArticoli.dart';
 import 'package:greet_food/Widgets/VisualizzazioneDispense.dart';
+import 'package:greet_food/Widgets/VisualizzazioneProdotto.dart';
 import 'package:provider/provider.dart';
 import 'Classes/GestioneDati/GenericManager.dart';
 import 'Classes/Items/Articolo.dart';
@@ -44,18 +47,7 @@ class GreetFoodState extends State<GreetFood>{
       child: MaterialApp(
               debugShowCheckedModeBanner: false,
               title: "Let's Grab a Bite",
-              theme: ThemeData(
-              // This is the theme of your application.
-              //
-              // Try running your application with "flutter run". You'll see the
-              // application has a blue toolbar. Then, without quitting the app, try
-              // changing the primarySwatch below to Colors.green and then invoke
-              // "hot reload" (press "r" in the console where you ran "flutter run",
-              // or simply save your changes to "hot reload" in a Flutter IDE).
-              // Notice that the counter didn't reset back to zero; the application
-              // is not restarted.
-               primarySwatch: Colors.blue,
-               ),
+              theme: GreetFoodTheme.light(),
               home: SafeArea(child: const GreetFoodHome(title: "GreetFood")),
           ),
     );
@@ -97,14 +89,17 @@ class _GreetFoodHomeState extends State<GreetFoodHome> {
 
     this._pages = [
       Scaffold(
+        drawer: _sideDrawer(),
         appBar: AppBarFactory.getEmptyAppbar(),
         body: PaginaScadenze()//PaginaScadenze(),
       ),
       Scaffold(
+        drawer: _sideDrawer(),
         appBar: AppBarFactory.getEmptyAppbar(),
         body: Homepage(),
       ),
       Scaffold(
+        drawer: _sideDrawer(),
         appBar: AppBarFactory.getEmptyAppbar(),
         body: Consumer<GenericManager<Dispensa>>(builder: (context, manager, child){
           return VisualizzazioneDispense(manager_dispense: manager);
@@ -145,5 +140,60 @@ class _GreetFoodHomeState extends State<GreetFoodHome> {
    */
   _managePrimaryNavigation() {
 
+  }
+}
+
+
+/**
+ * Side drawer per le funzioni avanzate
+ */
+class _sideDrawer extends StatelessWidget{
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+
+      child: ListView(
+        children: [
+          ListTile(
+            title: const Text('Tutti gli articoli'),
+            onTap: (){
+              print('richiesti tutti gli articoli');
+              Navigator.pop(context);  //Chiudiamo il drawer
+
+              List<Articolo> articoli = Provider.of<GenericManager<Articolo>>(context, listen: false).getAllElements();
+
+              Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (context) {
+                    return Scaffold(
+                      appBar: AppBarFactory.getBackAppbar(),
+                      body: VisualizzazioneArticoli(articoli),
+                    );
+                  }
+              ));
+
+              },
+          ),
+          ListTile(
+            title: const Text('Tutti i prodotti'),
+            onTap: (){
+              print('richiesti tutti i prodotti');
+              Navigator.pop(context);  //Chiudiamo il drawer
+
+              List<Prodotto> prodotti = Provider.of<GenericManager<Prodotto>>(context, listen: false).getAllElements();
+
+              Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (context) {
+                    return Scaffold(
+                      appBar: AppBarFactory.getBackAppbar(),
+                      body: VisualizzazioneProdotti(prodotti),
+                    );
+                  }
+              ));
+              },
+          ),
+        ],
+      ),
+    );
   }
 }

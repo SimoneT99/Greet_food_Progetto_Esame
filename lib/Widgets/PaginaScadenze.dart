@@ -7,6 +7,7 @@ import 'package:greet_food/Classes/Items/Articolo.dart';
 import 'package:greet_food/Widgets/Factories/AppbarFactory.dart';
 import 'package:provider/provider.dart';
 
+import 'Empty.dart';
 import 'VisualizzazioneArticoli.dart';
 
 /**
@@ -75,7 +76,10 @@ class PaginaScadenzaStato extends State<PaginaScadenze> with SingleTickerProvide
                             ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(_managerArticoli.getAllElements());
                             elaboratoreArticoli.setListaArticoli(elaboratoreArticoli.filtraPerArticoliScaduti());
                             List<Articolo> articoliScaduti = elaboratoreArticoli.filtraPerConsumati(consumato: false);
-                            return ViewArticoli(articoliScaduti);
+                            if(articoliScaduti.length == 0){
+                              return NoScadutiAttualmente();
+                            }
+                            return VisualizzazioneArticoli(articoliScaduti);
                           }
                       ),
                       Builder(
@@ -83,7 +87,10 @@ class PaginaScadenzaStato extends State<PaginaScadenze> with SingleTickerProvide
                             ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(_managerArticoli.getAllElements());
                             elaboratoreArticoli.setListaArticoli(elaboratoreArticoli.filtraPerArticoliInScadenza(7)); //TODO il tempo deve essere letto dalle impostazioni
                             List<Articolo> articoliInScadenza = elaboratoreArticoli.filtraPerConsumati(consumato: false);
-                            return ViewArticoli(articoliInScadenza);
+                            if(articoliInScadenza.length == 0){
+                              return NoScadenzeInArrivo();
+                            }
+                            return VisualizzazioneArticoli(articoliInScadenza);
                           }
                       )
                     ]

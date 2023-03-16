@@ -77,3 +77,17 @@ class AppBarFactory{
     }
   }
 }
+
+
+/**
+ * Appbar del TOP level
+ */
+
+class TopLevelAppBar extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+
+    );
+  }
+}
