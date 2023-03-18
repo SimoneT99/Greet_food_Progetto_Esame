@@ -2,17 +2,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:greet_food/Classes/Items/Dispensa.dart';
 import 'package:greet_food/Classes/Items/Prodotto.dart';
-import 'package:greet_food/Widgets/Themes.dart';
-import 'package:greet_food/Widgets/VisualizzazioneArticoli.dart';
-import 'package:greet_food/Widgets/VisualizzazioneDispense.dart';
-import 'package:greet_food/Widgets/VisualizzazioneProdotto.dart';
+import 'package:greet_food/Widgets/Themes/Themes.dart';
+import 'package:greet_food/Widgets/VisualizzazioniCard/VisualizzazioneArticoli.dart';
+import 'package:greet_food/Widgets/VisualizzazioniCard/VisualizzazioneProdotto.dart';
 import 'package:provider/provider.dart';
 import 'Classes/GestioneDati/GenericManager.dart';
 import 'Classes/Items/Articolo.dart';
-import 'Widgets/Factories/AppbarFactory.dart';
+import 'Widgets/AppBars.dart';
 import 'Widgets/HomeSection.dart';
 import 'Widgets/PaginaScadenze.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'Widgets/VisualizzazioniCard/VisualizzazioneDispense.dart';
 
 String APP_NAME = "GreetFood";
 
@@ -46,9 +45,9 @@ class GreetFoodState extends State<GreetFood>{
       ],
       child: MaterialApp(
               debugShowCheckedModeBanner: false,
-              title: "Let's Grab a Bite",
+              title: "Let's avoid spoils",
               theme: GreetFoodTheme.light(),
-              home: SafeArea(child: const GreetFoodHome(title: "GreetFood")),
+              home: const SafeArea(child: GreetFoodHome(title: "GreetFood")),
           ),
     );
   }
@@ -77,7 +76,7 @@ class GreetFoodHome extends StatefulWidget {
 class _GreetFoodHomeState extends State<GreetFoodHome> {
 
   //old
-  int _appBarIndex = 1;
+  int _bottomBarIndex = 1;
   late List<Widget> _pages;
 
   @override
@@ -88,24 +87,11 @@ class _GreetFoodHomeState extends State<GreetFoodHome> {
     super.initState();
 
     this._pages = [
-      Scaffold(
-        drawer: _sideDrawer(),
-        appBar: AppBarFactory.getEmptyAppbar(),
-        body: PaginaScadenze()//PaginaScadenze(),
-      ),
-      Scaffold(
-        drawer: _sideDrawer(),
-        appBar: AppBarFactory.getEmptyAppbar(),
-        body: Homepage(),
-      ),
-      Scaffold(
-        drawer: _sideDrawer(),
-        appBar: AppBarFactory.getEmptyAppbar(),
-        body: Consumer<GenericManager<Dispensa>>(builder: (context, manager, child){
-          return VisualizzazioneDispense(manager_dispense: manager);
-          },
-        ),
-      ),
+      PaginaScadenze(),
+      Homepage(),
+      Consumer<GenericManager<Dispensa>>(builder: (context, manager, child){
+        return VisualizzazioneDispense(manager_dispense: manager);
+      }),
     ];
   }
 
@@ -113,33 +99,42 @@ class _GreetFoodHomeState extends State<GreetFoodHome> {
 
   @override
   Widget build(BuildContext context) {
-    return PersistentTabView(
-      context,
-      navBarStyle: NavBarStyle.style14,
-      screens: _pages,
-      onItemSelected: _managePrimaryNavigation(),
-      items: [
-        PersistentBottomNavBarItem(
-          icon: Icon(Icons.punch_clock),
-          title: 'Scadenze',
-        ),
-        PersistentBottomNavBarItem(
-          icon: Icon(Icons.home),
-          title: 'Home',
-        ),
-        PersistentBottomNavBarItem(
-          icon: Icon(Icons.home),
-          title: 'Dispense',
-        )
-      ],
+    return Scaffold(
+      appBar: emptyAppbar,
+      drawer: _sideDrawer(),
+      body: IndexedStack(
+        index: _bottomBarIndex,
+        children: _pages,
+      ),
+
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: _managePrimaryNavigation,
+        currentIndex: _bottomBarIndex,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_month),
+            label: 'Scadenze',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.kitchen),
+            label: 'Dispense',
+          )
+        ],
+      ),
     );
   }
 
   /**
    * Dobbiamo gestire tutti i casi partiolari delle schermate
    */
-  _managePrimaryNavigation() {
-
+  _managePrimaryNavigation(int index) {
+      setState(() {
+        _bottomBarIndex = index;
+      });
   }
 }
 
@@ -152,7 +147,6 @@ class _sideDrawer extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Drawer(
-
       child: ListView(
         children: [
           ListTile(
@@ -166,7 +160,7 @@ class _sideDrawer extends StatelessWidget{
               Navigator.of(context).push(new MaterialPageRoute(
                   builder: (context) {
                     return Scaffold(
-                      appBar: AppBarFactory.getBackAppbar(),
+                      appBar: backAppbar,
                       body: VisualizzazioneArticoli(articoli),
                     );
                   }
@@ -185,7 +179,7 @@ class _sideDrawer extends StatelessWidget{
               Navigator.of(context).push(new MaterialPageRoute(
                   builder: (context) {
                     return Scaffold(
-                      appBar: AppBarFactory.getBackAppbar(),
+                      appBar: backAppbar,
                       body: VisualizzazioneProdotti(prodotti),
                     );
                   }

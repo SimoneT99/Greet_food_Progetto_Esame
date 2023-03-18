@@ -1,40 +1,78 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 /**
  * Widget che fanno da body nelle schermate che ancora non contengono nulla
  */
 
-class NoScadenzeInArrivo extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-    return Container( //TODO immagine
-      padding: const EdgeInsets.all(10),
-      child: Text("Tranquillo, nessun articolo in scadenza"),
-    );
-  }
-}
-
 class NoScadutiAttualmente extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Container( //TODO immagine
-      padding: const EdgeInsets.all(10),
-      child: Text("Ottimo! Non hai fatto scadere nessun articolo"),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+      child: Column(
+        children: [
+          Container(
+            height: 200,
+              child: Image.asset("Assets/Images/Thumb_up.png")
+          ),
+          Text("Congratulazioni, nessun articolo scaduto al momento",
+              style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                  fontSize: 20
+              ),
+            textAlign: TextAlign.center
+          ),
+        ],
+      ),
     );
   }
 }
 
-class NoProdotti extends StatelessWidget{
-
-  late String _text;
-
-  NoProdotti(this._text);
-
+class NoScadenzeInArrivo extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Container( //TODO immagine
-      padding: const EdgeInsets.all(10),
-      child: Text(this._text),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+      child: Column(
+        children: [
+          Container(
+            height: 200,
+              child: Image.asset("Assets/Images/Calm.png")
+          ),
+          Text("Tranquillo, nessun articolo in scadenza al momento",
+              style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                  fontSize: 20,
+              ),
+              textAlign: TextAlign.center
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/**
+ * No prodotti o articoli
+ */
+class EmptyBody extends StatelessWidget{
+
+  late String _text;
+
+  EmptyBody(this._text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        children: [
+          Image.asset("Assets/Images/Empty.png"),
+          Text(_text,
+              style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                  fontSize: 20
+              )
+          ),
+        ],
+      ),
     );
   }
 }

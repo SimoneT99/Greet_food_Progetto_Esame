@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Classes/Items/Prodotto.dart';
-import 'package:greet_food/Widgets/Factories/AppbarFactory.dart';
+import 'package:greet_food/Widgets/AppBars.dart';
 import 'package:greet_food/Widgets/Forms/CreazioneArticolo.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 
 import '../Classes/GestioneDati/ElaboratoreProdotti.dart';
 import 'Forms/CreazioneProdotto.dart';
-import 'VisualizzazioneProdotto.dart';
+import 'VisualizzazioniCard/VisualizzazioneProdotto.dart';
 
 /**
  * Widget per il flusso di azioni di aggiunta articolo
@@ -34,7 +34,7 @@ class PaginaAggiuntaArticoloState extends State<PaginaAggiuntaArticolo>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarFactory.getBackAppbar(),
+      appBar: backAppbar,
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
         child: Column(

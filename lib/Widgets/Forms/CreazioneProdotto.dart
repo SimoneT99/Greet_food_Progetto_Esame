@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Classes/Items/Prodotto.dart';
-import 'package:greet_food/Widgets/Factories/AppbarFactory.dart';
+import 'package:greet_food/Widgets/AppBars.dart';
 import 'package:greet_food/Widgets/Forms/PagineEsito.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +14,7 @@ class PaginaCreazioneProdotto extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarFactory.getBackAppbar(),
+      appBar: backAppbar,
       body: FormCreazioneProdotto(),
     );
   }

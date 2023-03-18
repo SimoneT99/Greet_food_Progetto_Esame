@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:greet_food/Widgets/Factories/AppbarFactory.dart';
+import 'package:greet_food/Widgets/AppBars.dart';
 
 /**
  * Pagina con informazioni per l'utente
@@ -11,7 +11,7 @@ class PaginaAiuto extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarFactory.getBackAppbar(),
+      appBar: backAppbar,
       body: ListView.builder(
         itemCount: _tips.length,
           itemBuilder: (BuildContext context, int index) {

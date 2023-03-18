@@ -3,9 +3,10 @@ import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Widgets/PaginaProdotto.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../Classes/Items/Articolo.dart';
-import '../Classes/Items/Dispensa.dart';
-import '../Classes/Items/Prodotto.dart';
+import '../../Classes/Items/Articolo.dart';
+import '../../Classes/Items/Dispensa.dart';
+import '../../Classes/Items/Prodotto.dart';
+import '../Empty.dart';
 
 /**
  * Widget per visualizzare gli articoli secondo le specifiche
@@ -38,17 +39,20 @@ class VisualizzazioneArticoliState extends State<VisualizzazioneArticoli>{
    */
   @override
   Widget build(BuildContext context) {
+    if(articoli.length == 0){
+      return EmptyBody("Nessun articolo disponibile");
+    }
     return ListView.builder(
         itemCount: articoli.length,
-    itemBuilder: (BuildContext context, int index) {
-        if(index == _open_index){
-          return  WidgetArticolo(articoli[index], true);
-        }
+        itemBuilder: (BuildContext context, int index) {
+            if(index == _open_index){
+              return  WidgetArticolo(articoli[index], true);
+            }
         return GestureDetector(
           onTap: () {_onChangedIndex(index);},
           child:  WidgetArticolo(articoli[index], false),
         );
-    },
+      },
     );
   }
 

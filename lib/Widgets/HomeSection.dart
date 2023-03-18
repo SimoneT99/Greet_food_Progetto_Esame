@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:greet_food/Widgets/Factories/AppbarFactory.dart';
+import 'package:greet_food/Widgets/AppBars.dart';
 import 'package:flutter/foundation.dart';
 import 'package:greet_food/Widgets/PaginaAggiuntaArticolo.dart';
 import 'package:greet_food/Widgets/PaginaAiuto.dart';
@@ -162,7 +162,7 @@ class Impostazioni extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {print("richiesta aggiunta articolo"); },
-      child: Text("Settings"),
+      child: Icon(Icons.settings, size: 50),
     );
   }
 }

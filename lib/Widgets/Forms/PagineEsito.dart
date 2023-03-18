@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:greet_food/Widgets/Factories/AppbarFactory.dart';
+import 'package:greet_food/Widgets/AppBars.dart';
 
 /**
  * Pagina conferma
@@ -15,7 +15,7 @@ class PaginaConferma extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarFactory.getEmptyAppbar(),
+      appBar: emptyAppbar,
       body: Column(
         children: [
           Text(text),
@@ -48,7 +48,7 @@ class PaginaAlert extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarFactory.getEmptyAppbar(),
+      appBar: emptyAppbar,
       body: Column(
         children: [
           Text(text),

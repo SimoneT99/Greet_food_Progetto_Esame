@@ -4,11 +4,11 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:greet_food/Classes/GestioneDati/ElaboratoreArticoli.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Classes/Items/Articolo.dart';
-import 'package:greet_food/Widgets/Factories/AppbarFactory.dart';
+import 'package:greet_food/Widgets/AppBars.dart';
 import 'package:provider/provider.dart';
 
 import 'Empty.dart';
-import 'VisualizzazioneArticoli.dart';
+import 'VisualizzazioniCard/VisualizzazioneArticoli.dart';
 
 /**
  * Widget per la gestione delle scadenze
@@ -55,7 +55,7 @@ class PaginaScadenzaStato extends State<PaginaScadenze> with SingleTickerProvide
                 labelPadding: const EdgeInsets.symmetric(horizontal: 5),
                 controller: _tabController,
                 indicator: BoxDecoration(
-                  color: Colors.blue,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
                 tabs: [
                   Tab(

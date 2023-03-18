@@ -5,7 +5,8 @@ import 'package:greet_food/Classes/Items/Prodotto.dart';
 import 'package:greet_food/Widgets/PaginaProdotto.dart';
 import 'package:provider/provider.dart';
 
-import 'Forms/CreazioneArticolo.dart';
+import '../Empty.dart';
+import '../Forms/CreazioneArticolo.dart';
 
 enum ProductVisualizationContext{
   insertingProcess,
@@ -32,7 +33,7 @@ class VisualizzazioneProdotti extends StatelessWidget{
   Widget build(BuildContext context) {
     //Se vuota renderizziamo una schermata apposita
     if (_prodotti.length == 0){
-        return Text("TODO");
+        return EmptyBody("Nessun prodotto disponibile");
     }else{
       return ListView.builder(
           itemCount: _prodotti.length, //l'ultimo elemento è il pulsante per l'aggiunta

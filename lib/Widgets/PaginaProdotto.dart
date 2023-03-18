@@ -9,7 +9,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../Classes/Items/Articolo.dart';
 import '../Classes/Items/Dispensa.dart';
-import 'Factories/AppbarFactory.dart';
+import 'AppBars.dart';
 
 
 /**
@@ -61,7 +61,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
   Widget build(BuildContext context) {
 
     return Scaffold(
-        appBar: AppBarFactory.getEmptyAppbar(),
+        appBar: emptyAppbar,
         body: Column(
           children: [
             Container(
@@ -73,7 +73,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                 labelPadding: const EdgeInsets.symmetric(horizontal: 5),
                 controller: _tabController,
                 indicator: BoxDecoration(
-                  color: Colors.blue,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
                 tabs: [
                   Tab(

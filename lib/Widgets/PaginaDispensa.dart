@@ -7,8 +7,8 @@ import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Classes/Items/Articolo.dart';
 import 'package:greet_food/Classes/Items/Dispensa.dart';
 
-import 'package:greet_food/Widgets/Factories/AppbarFactory.dart';
-import 'package:greet_food/Widgets/VisualizzazioneArticoli.dart';
+import 'package:greet_food/Widgets/AppBars.dart';
+import 'package:greet_food/Widgets/VisualizzazioniCard/VisualizzazioneArticoli.dart';
 import 'package:provider/provider.dart';
 
 import '../Classes/Items/Prodotto.dart';
@@ -50,15 +50,17 @@ class PaginaDispensaStato extends State<PaginaDispensa> with SingleTickerProvide
     super.initState();
   }
 
+  //Overriding per eseguire il dispose del controller
   @override
   void dispose(){
+    super.dispose();
     _tabController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
         return Scaffold(
-          appBar: AppBarFactory.getEmptyAppbar(),
+          appBar: emptyAppbar,
           body: Column(
             children: [
               Container(
@@ -70,7 +72,7 @@ class PaginaDispensaStato extends State<PaginaDispensa> with SingleTickerProvide
                   labelPadding: const EdgeInsets.symmetric(horizontal: 5),
                   controller: _tabController,
                   indicator: BoxDecoration(
-                    color: Colors.blue,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                   tabs: [
                     Tab(
@@ -98,7 +100,7 @@ class PaginaDispensaStato extends State<PaginaDispensa> with SingleTickerProvide
 }
 
 /**
- * Pagina descrizione di una dispensa
+ * Widget descrizione di una dispensa
  */
 class InformazioniDispensa extends StatelessWidget{
 
@@ -165,18 +167,39 @@ class InformazioniDispensa extends StatelessWidget{
                       padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 10),
                       child: Column(
                         children: [
-                          Row(
-                            children: [
-                              Text(_dispensa.nome),
-                            ],
+                          Container(
+                            padding: EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.secondary,
+                              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  _dispensa.nome,
+                                  style: Theme.of(context).textTheme.headline5
+                                ),
+                              ],
+                            ),
                           ),
                           Spacer(),
-                          Row(
-                            children: [
-                              Text("Contenuti: "),
-                              Spacer(),
-                              Text(contenutoCorrente.toString()),
-                            ],
+                          Container(
+                            padding: EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.secondary,
+                              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                            ),
+                            child: Row(
+                              children: [
+                                Text("Contenuti: ",
+                                  style: Theme.of(context).textTheme.subtitle1,
+                                ),
+                                Spacer(),
+                                Text(contenutoCorrente.toString(),
+                                  style: Theme.of(context).textTheme.subtitle1,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -193,7 +216,9 @@ class InformazioniDispensa extends StatelessWidget{
                 children: [
                   Row(
                     children: [
-                      Text("Descrizione:"),
+                      Text("Descrizione:",
+                        style: Theme.of(context).textTheme.subtitle1,
+                      ),
                       Spacer()
                     ],
                   ),
@@ -213,28 +238,45 @@ class InformazioniDispensa extends StatelessWidget{
             flex: 1,
             child: Padding(
               padding: const EdgeInsets.all(10),
-              child: Row(
-                children: [
-                  Text("Articoli scaduti\nfino ad oggi:",
-                    overflow: TextOverflow.visible,
-                    textAlign: TextAlign.left,
-                  ),
-                  Spacer(),
-                  Text(articoliScadutiFinoOggi.toString())
-                ],
+              child: Container(
+                padding: EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondary,
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                ),
+                child: Row(
+                  children: [
+                    Text("Articoli scaduti\nfino ad oggi:",
+                      overflow: TextOverflow.visible,
+                      textAlign: TextAlign.left,
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                    Spacer(),
+                    Text(articoliScadutiFinoOggi.toString())
+                  ],
+                ),
               ),
             ),
           ),
           Expanded(
             flex: 1,
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Row(
-                children: [
-                  Text("Prodotto preferito:"),
-                  Spacer(),
-                  Text(prodottoPreferito.toString())
-                ],
+            child: Container(
+              padding: EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondary,
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  children: [
+                    Text("Prodotto preferito:",
+                      style: Theme.of(context).textTheme.subtitle1,),
+                    Spacer(),
+                    Text(prodottoPreferito.toString(),
+                      style: Theme.of(context).textTheme.subtitle1,)
+                  ],
+                ),
               ),
             ),
           )
@@ -243,3 +285,41 @@ class InformazioniDispensa extends StatelessWidget{
     );
   }
 }
+
+
+/***
+
+    Expanded(
+    child: Padding(
+    padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 10),
+    child: Column(
+    children: [
+    Container(
+    child: Row(
+    children: [
+    Text(
+    _dispensa.nome,
+    style: Theme.of(context).textTheme.headline5
+    ),
+    ],
+    ),
+    ),
+    Spacer(),
+    Row(
+    children: [
+    Text("Contenuti: ",
+    style: Theme.of(context).textTheme.subtitle1,
+    ),
+    Spacer(),
+    Text(contenutoCorrente.toString(),
+    style: Theme.of(context).textTheme.subtitle1,
+    ),
+    ],
+    ),
+    ],
+    ),
+    ),
+    )
+    ],
+
+ */
