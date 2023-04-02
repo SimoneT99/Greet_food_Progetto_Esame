@@ -1,9 +1,9 @@
-import 'package:greet_food/Classes/Interfaces/Identifiable.dart';
+import 'package:greet_food/Classes/Interfaces/Item.dart';
 
 /**
  * Classe rappresentante un prodotto nell'applicazione
  */
-class Prodotto implements Identifiable{
+class Prodotto implements Item{
 
   static int _currentCode = 0;
 
@@ -53,4 +53,43 @@ class Prodotto implements Identifiable{
   int getCode() {
     return this._id;
   }
+
+  /**
+   * Serializzazione
+   */
+
+  Prodotto.fromJson(Map<String, dynamic> json){
+    _id = json['_id'];
+    _nome = json['_nome'];
+    _marca = json['_marca'];
+    _imagePath = json['_imagePath'];
+    _descripion = json['_descripion'];
+    _barcode = json['_barcode'];
+  }
+
+  Map<String, dynamic> toJson() => {
+    '_id': _id,
+    '_nome': _nome,
+    '_marca': _marca,
+    '_imagePath': _imagePath,
+    '_descripion': _descripion,
+    '_barcode': _barcode,
+  };
+
+  @override
+  fromJson(Map<String, dynamic> json) {
+    _id = json['_id'];
+    _nome = json['_nome'];
+    _marca = json['_marca'];
+    _imagePath = json['_imagePath'];
+    _descripion = json['_descripion'];
+    _barcode = json['_barcode'];
+  }
+
+  @override
+  refreshCode(int code) {
+    this._id = code;
+    Prodotto._currentCode = code + 1;
+  }
+
 }

@@ -1,4 +1,6 @@
-import 'package:greet_food/Classes/Interfaces/Identifiable.dart';
+import 'package:greet_food/Classes/Interfaces/Item.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /**
  * Classe rappresentante un articolo
@@ -6,9 +8,28 @@ import 'package:greet_food/Classes/Interfaces/Identifiable.dart';
 
 String articoloTableName = 'Articolo';
 
-class Articolo implements Identifiable{
+class Articolo implements Item{
 
   static int _currentCode = 0;
+
+  //Si potrebbe fare meglio...
+  SharedPreferences? prefs;
+  Future<int> _getNewId() async{
+
+    if(prefs == null){
+      prefs = await SharedPreferences.getInstance();
+    }
+
+    int? code = await prefs!.getInt("CodiceArticolo");
+    if(code == null){
+      code = 0;
+    }
+    code++;
+    await prefs!.setInt("CodiceArticolo", code);
+
+    return code;
+
+  }
 
   /**
    * IDs
@@ -23,8 +44,8 @@ class Articolo implements Identifiable{
   double _prezzo = 0;
   DateTime _dataScadenza = DateTime.now();
   DateTime _dataInserimento = DateTime.now();
-  bool consumed = false;
-  DateTime consumedDate = DateTime.now();
+  bool _consumed = false;
+  DateTime _consumedDate = DateTime.now();
 
   /**
    * Dati articolo opzionali
@@ -40,15 +61,18 @@ class Articolo implements Identifiable{
       {required int idProdotto,
       required int idDispensa,
       required double prezzo,
-        double peso = -1,
+      required double peso,
       required DateTime dataScadenza,
       required DateTime dataInserimento}){
+
     this._id = _currentCode++;
+
+
     this._idProdotto = idProdotto;
     this._idDispensa = idDispensa;
     this._prezzo = prezzo;
     this._weight = weight;
-    this.consumed = false;
+    this._consumed = false;
     this._dataInserimento = dataInserimento;
     this._dataScadenza = dataScadenza;
   }
@@ -63,11 +87,11 @@ class Articolo implements Identifiable{
    */
 
   void consume(){
-    consumed = true;
+    _consumed = true;
   }
 
   bool isConsumed(){
-   return consumed;
+   return _consumed;
   }
 
   /**
@@ -95,8 +119,8 @@ class Articolo implements Identifiable{
    * Altri metodi
    */
   bool lasciatoScadere(){
-    if(consumed){
-      return consumedDate.isAfter(this.dataScadenza);
+    if(_consumed){
+      return _consumedDate.isAfter(this.dataScadenza);
     }
     return DateTime.now().isAfter(this.dataScadenza);
   }
@@ -105,9 +129,73 @@ class Articolo implements Identifiable{
    * Altri metodi
    */
   bool ScadutoNonConsumato(){
-    if(consumed){
-      return consumedDate.isAfter(this.dataScadenza);
+    if(_consumed){
+      return _consumedDate.isAfter(this.dataScadenza);
     }
     return DateTime.now().isAfter(this.dataScadenza);
+  }
+
+
+  /**
+ * Serializzazione
+ */
+
+  Articolo.fromJson(Map<String, dynamic> json){
+    _id = json['_id'];
+    _idProdotto = json['_idProdotto'];
+    _idDispensa = json['_idDispensa'];
+
+    /**
+     * Dati articolo obbligatori
+     */
+    _prezzo = json['_prezzo'];
+    _dataScadenza = json['_dataScadenza'];
+    _dataInserimento = json['_dataInserimento'];
+    _consumed = json['consumed'];
+    _consumedDate = json['consumedDate'];
+
+    /**
+     * Dati articolo opzionali
+     */
+    _weight = json['_weight'];
+  }
+
+  Map<String, dynamic> toJson() => {
+    '_id': _id,
+    '_idProdotto': _idProdotto,
+    '_idDispensa': _idDispensa,
+    '_prezzo': _prezzo,
+    '_dataScadenza': _dataScadenza.toString(),
+    '_dataInserimento': _dataInserimento.toString(),
+    '_consumed': _consumed,
+    '_consumedDate': _consumedDate.toString(),
+    '_weight': _weight,
+  };
+
+  @override
+  fromJson(Map<String, dynamic> json) {
+    _id = json['_id'];
+    _idProdotto = json['_idProdotto'];
+    _idDispensa = json['_idDispensa'];
+
+    /**
+     * Dati articolo obbligatori
+     */
+    _prezzo = json['_prezzo'];
+    _dataScadenza = DateTime.parse(json['_dataScadenza']);
+    _dataInserimento = DateTime.parse(json['_dataInserimento']);
+    _consumed = json['_consumed'];
+    _consumedDate = DateTime.parse(json['_consumedDate']);
+
+    /**
+     * Dati articolo opzionali
+     */
+    _weight = json['_weight'];
+  }
+
+  @override
+  refreshCode(int code) {
+    this._id = code;
+    Articolo._currentCode = code + 1;
   }
 }

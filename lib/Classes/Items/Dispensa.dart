@@ -1,10 +1,10 @@
-import 'package:greet_food/Classes/Interfaces/Identifiable.dart';
+import 'package:greet_food/Classes/Interfaces/Item.dart';
 
 /**
  * Classe rappresentante un prodotto nell'applicazione
  */
 
-class Dispensa implements Identifiable{
+class Dispensa implements Item{
 
   static int _currentCode = 0;
 
@@ -53,14 +53,35 @@ class Dispensa implements Identifiable{
 
 //Serializzazione
 
+  Dispensa.fromJson(Map<String, dynamic> json){
+    _id = json['_id'];
+    _nome = json['_nome'];
+    _imagePath = json['_imagePath'];
+    _descripion = json['_descripion'];
+    _posizione = json['_posizione'];
+  }
 
-}
+  Map<String, dynamic> toJson() => {
+    '_id': _id,
+    '_nome': _nome,
+    '_imagePath': _imagePath,
+    '_descripion': _descripion,
+    '_posizione': _posizione,
+  };
 
+  @override
+  fromJson(Map<String, dynamic> json) {
+    _id = json['_id'];
+    _nome = json['_nome'];
+    _imagePath = json['_imagePath'];
+    _descripion = json['_descripion'];
+    _posizione = json['_posizione'];
+  }
 
+  @override
+  refreshCode(int code) {
+    this._id = code;
+    Dispensa._currentCode = code + 1;
+  }
 
-
-
-//TODO REMOVE
-Dispensa getDebugDispensa(){
-  return Dispensa("debug", "", "una dispensa di debug", "posizioneDebug");
 }

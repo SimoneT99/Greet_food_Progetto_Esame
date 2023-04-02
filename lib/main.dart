@@ -19,15 +19,56 @@ void main() {
   runApp(const GreetFood());
 }
 
+String PATH_ARTICOLO = "gestoreArticoli.txt";
+String PATH_DISPENSA = "gestoreDispensa.txt";
+String PATH_PRODOTTO = "gestoreProdotto.txt";
+
+
 class GreetFoodState extends State<GreetFood>{
 
   /**
    * Manager per gestire i dati
    */
 
-  GenericManager<Articolo> _managerArticoli = GenericManager<Articolo>();
-  GenericManager<Dispensa> _managerDispense = GenericManager<Dispensa>();
-  GenericManager<Prodotto> _managerProdotti = GenericManager<Prodotto>();
+  late GenericManager<Articolo> _managerArticoli;
+  late GenericManager<Dispensa> _managerDispense;
+  late GenericManager<Prodotto> _managerProdotti;
+
+  @override
+  void initState() {
+
+    /**
+     * Inizializziamo i manager caricando da disco
+     */
+    //Articoli
+    _managerArticoli = GenericManager<Articolo>();
+    try{
+      _managerArticoli.fromDisk(PATH_ARTICOLO);
+    }catch(pathNotFoundException){
+      print("file non presente");
+    }
+    _managerArticoli.setSavingPath(PATH_ARTICOLO);
+
+    //Dispense
+    _managerDispense = GenericManager<Dispensa>();
+    try{
+      _managerDispense.fromDisk(PATH_DISPENSA);
+    }catch(pathNotFoundException){
+      print("file non presente");
+    }
+    _managerDispense.setSavingPath(PATH_DISPENSA);
+
+  //Prodotti
+    _managerProdotti = GenericManager<Prodotto>();
+    try{
+    _managerProdotti.fromDisk(PATH_PRODOTTO);
+    }catch(pathNotFoundException){
+      print("file non presente");
+    }
+    _managerProdotti.setSavingPath(PATH_PRODOTTO);
+    
+super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
