@@ -115,7 +115,6 @@ class DispensaCard extends StatelessWidget{
     this._dispensa = dispensa;
     this._deletionEnabled = deletionEnabled;
     this._accessEnabled = accessEnabled;
-
   }
 
   Widget build(BuildContext context) {

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Widgets/PaginaProdotto.dart';
@@ -42,17 +44,20 @@ class VisualizzazioneArticoliState extends State<VisualizzazioneArticoli>{
     if(articoli.length == 0){
       return EmptyBody("Nessun articolo disponibile");
     }
-    return ListView.builder(
-        itemCount: articoli.length,
-        itemBuilder: (BuildContext context, int index) {
-            if(index == _open_index){
-              return  WidgetArticolo(articoli[index], true);
-            }
-        return GestureDetector(
-          onTap: () {_onChangedIndex(index);},
-          child:  WidgetArticolo(articoli[index], false),
-        );
-      },
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ListView.builder(
+          itemCount: articoli.length,
+          itemBuilder: (BuildContext context, int index) {
+              if(index == _open_index){
+                return  WidgetArticolo(articoli[index], true);
+              }
+          return GestureDetector(
+            onTap: () {_onChangedIndex(index);},
+            child:  WidgetArticolo(articoli[index], false),
+          );
+        },
+      ),
     );
   }
 
@@ -86,20 +91,19 @@ class WidgetArticolo extends StatelessWidget{
       return expanded(context);
     }
     else{
-      return notExpanded();
+      return notExpanded(context);
     }
   }
 
-  Widget notExpanded(){
+  Widget notExpanded(BuildContext context){
     return AspectRatio(
       aspectRatio: 2.5,
       child: Container(
-        padding: const EdgeInsets.all(8.0),
         child: Card(
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
           elevation: 5,
-          child: _mainContent(),
+          child: _mainContent(context),
         ),
       ),
     );
@@ -109,7 +113,6 @@ class WidgetArticolo extends StatelessWidget{
     return AspectRatio(
       aspectRatio: 1.5,
       child: Container(
-        padding: const EdgeInsets.all(8.0),
         child: Card(
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -118,13 +121,13 @@ class WidgetArticolo extends StatelessWidget{
             children: [
               AspectRatio(
                 aspectRatio: 2.84,
-                child: _mainContent(),
+                child: _mainContent(context),
               ),
               Expanded(
                   child: Center(
                     child: Row(
                       children: [
-                        Spacer(),
+                        const Spacer(),
                         ElevatedButton(
                             onPressed: () {
                               debugPrint("debug: richiesto passaggio a pagina del prodotto");
@@ -135,15 +138,16 @@ class WidgetArticolo extends StatelessWidget{
                             },
                             child: Text("Prodotto")
                         ),
-                        Spacer(),
+                        const Spacer(),
                         ElevatedButton(
                             onPressed: () {
                               debugPrint("debug: richiesto consumo articolo");
                               this._articolo.consume();
+                              Provider.of<GenericManager<Articolo>>(context, listen: false).replaceElement(this._articolo);
                             },
                             child: Text("Consuma")
                         ),
-                        Spacer(),
+                        const Spacer(),
                       ],
                     )
                   )
@@ -160,7 +164,7 @@ class WidgetArticolo extends StatelessWidget{
    * Contenuto principale della card presente sia che questa sia estesa
    * sia che questa non lo sia
    */
-  Widget _mainContent(){
+  Widget _mainContent(BuildContext context){
     return Row(
         children: <Widget>[
           AspectRatio(
@@ -169,7 +173,7 @@ class WidgetArticolo extends StatelessWidget{
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.fill,
-                  image: AssetImage(_prodotto.imagePath),
+                  image: FileImage(File(_prodotto.imagePath)),
                 ),
               ),
             ),
@@ -185,7 +189,10 @@ class WidgetArticolo extends StatelessWidget{
                     children: [
                       Text(
                         _prodotto.nome,
-                        textAlign: TextAlign.left,
+                          textAlign: TextAlign.left,
+                          style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Theme.of(context).primaryColorDark,
+                          ),
                       ),
                     ],
                   ),
@@ -194,6 +201,9 @@ class WidgetArticolo extends StatelessWidget{
                       Text(
                         _prodotto.marca,
                         textAlign: TextAlign.left,
+                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                          color: Theme.of(context).primaryColorDark,
+                        ),
                       ),
                     ],
                   ),
@@ -204,6 +214,9 @@ class WidgetArticolo extends StatelessWidget{
                       Text(
                         (new DateFormat("dd-MM-yyyy")).format(_articolo.dataScadenza),
                         textAlign: TextAlign.right,
+                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                          color: Theme.of(context).primaryColorDark,
+                        ),
                       ),
                     ],
                   ),
@@ -213,6 +226,9 @@ class WidgetArticolo extends StatelessWidget{
                       Text(
                         _dispensa.nome,
                         textAlign: TextAlign.right,
+                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                          color: Theme.of(context).primaryColorDark,
+                        ),
                       ),
                     ],
                   ),
