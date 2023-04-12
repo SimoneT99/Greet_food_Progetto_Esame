@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:greet_food/Classes/GestioneDati/ElaboratoreArticoli.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
+import 'package:greet_food/Classes/Items/Articolo.dart';
 import 'package:greet_food/Classes/Items/Prodotto.dart';
 import 'package:greet_food/Widgets/PaginaProdotto.dart';
 import 'package:provider/provider.dart';
@@ -35,15 +39,18 @@ class VisualizzazioneProdotti extends StatelessWidget{
     if (_prodotti.length == 0){
         return EmptyBody("Nessun prodotto disponibile");
     }else{
-      return ListView.builder(
-          itemCount: _prodotti.length, //l'ultimo elemento è il pulsante per l'aggiunta
-          itemBuilder: (BuildContext context, int index){
-            return CardProdotto(
-              prodotto: _prodotti[index],
-              cardAction: _visualizationContext == ProductVisualizationContext.insertingProcess ? _CardAction.insertProduct : _CardAction.productPage,
-              allowElimintaion: false,
-            );
-          }
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.builder(
+            itemCount: _prodotti.length, //l'ultimo elemento è il pulsante per l'aggiunta
+            itemBuilder: (BuildContext context, int index){
+              return CardProdotto(
+                prodotto: _prodotti[index],
+                cardAction: _visualizationContext == ProductVisualizationContext.insertingProcess ? _CardAction.insertProduct : _CardAction.productPage,
+                allowElimintaion: false,
+              );
+            }
+        ),
       );
     }
   }
@@ -69,100 +76,117 @@ class CardProdotto extends StatelessWidget{
     this._prodotto = prodotto;
     this._cardType = cardAction;
     this._allowElimination = allowElimintaion;
+
   }
 
   @override
   Widget build(BuildContext context) {
+    GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
+    ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(managerArticoli.getAllElements());
+    elaboratoreArticoli.setListaArticoli(elaboratoreArticoli.filtraPerProdotto(this._prodotto));
+    int articoliPresenti = elaboratoreArticoli.filtraPerConsumati(consumato: false).length;
+
     return AspectRatio(
       aspectRatio: 2.5,
-      child: Container(
-        padding: const EdgeInsets.all(8.0),
-        child: Card(
-            semanticContainer: true,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            elevation: 5,
-            //borderRadius: BorderRadius.circular(12),
-            child: InkWell(
-              onTap: (){
-                if(_cardType == _CardAction.productPage){
-                  Navigator.of(context).push(
-                      new MaterialPageRoute(builder: (context) {
-                        return PaginaProdotto(this._prodotto);
-                      })
-                  );
-                }else if( _cardType == _CardAction.insertProduct) {
-                  Navigator.of(context).push(
-                      new MaterialPageRoute(builder: (context) {
-                        return FormCreazioneArticolo(this._prodotto);
-                      })
-                  );
-                }
-              },
-              onLongPress: !_allowElimination ? (){} : (){
-                GenericManager<Prodotto> managerProdotti = Provider.of<GenericManager<Prodotto>>(context, listen: false);
-                managerProdotti.removeElement(_prodotto);
-              },
-              child: Container(
-                child: Row(
-                    children: <Widget>[
-                      AspectRatio(
-                        aspectRatio: 1,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: AssetImage(_prodotto.imagePath),
+      child: Card(
+          semanticContainer: true,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          elevation: 5,
+          //borderRadius: BorderRadius.circular(12),
+          child: InkWell(
+            onTap: (){
+              if(_cardType == _CardAction.productPage){
+                Navigator.of(context).push(
+                    new MaterialPageRoute(builder: (context) {
+                      return PaginaProdotto(this._prodotto);
+                    })
+                );
+              }else if( _cardType == _CardAction.insertProduct) {
+                Navigator.of(context).push(
+                    new MaterialPageRoute(builder: (context) {
+                      return FormCreazioneArticolo(this._prodotto);
+                    })
+                );
+              }
+            },
+            onLongPress: !_allowElimination ? (){} : (){
+              GenericManager<Prodotto> managerProdotti = Provider.of<GenericManager<Prodotto>>(context, listen: false);
+              managerProdotti.removeElement(_prodotto);
+            },
+            child: Container(
+              child: Row(
+                  children: <Widget>[
+                    AspectRatio(
+                      aspectRatio: 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: FileImage(File(_prodotto.imagePath)),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        padding:  const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            const Spacer(),
+                            Row(
+                              children: [
+                                const Spacer(),
+                                Text(
+                                  _prodotto.nome,
+                                  textAlign: TextAlign.left,
+                                  style: Theme.of(context).textTheme.headline6?.copyWith(
+                                    color: Theme.of(context).primaryColorDark,
+                                  ),
+                                ),
+                                const Spacer(flex: 8),
+                              ],
                             ),
-                          ),
+                            Row(
+                              children: [
+                                const Spacer(),
+                                Text(
+                                  _prodotto.marca,
+                                  textAlign: TextAlign.left,
+                                  style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                    color: Theme.of(context).primaryColorDark,
+                                  ),
+                                ),
+                                const Spacer(flex: 8),
+                              ],
+                            ),
+                            const Spacer(flex: 3,),
+                            Row(
+                              children: [
+                                const Spacer(),
+                                Text("Articoli:",
+                                  style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                    color: Theme.of(context).primaryColorDark,
+                                  ),
+                                ),
+                                const Spacer(flex: 6),
+                                Text("$articoliPresenti",
+                                  style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                    color: Theme.of(context).primaryColorDark,
+                                  ),
+                                ),
+                                const Spacer(),
+                              ],
+                            ),
+                            const Spacer(),
+                          ],
                         ),
                       ),
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                          padding:  const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              const Spacer(),
-                              Row(
-                                children: [
-                                  const Spacer(),
-                                  Text(
-                                    _prodotto.nome,
-                                    textAlign: TextAlign.left,
-                                  ),
-                                  const Spacer(flex: 8),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  const Spacer(),
-                                  Text(
-                                    _prodotto.marca,
-                                    textAlign: TextAlign.left,
-                                  ),
-                                  const Spacer(flex: 8),
-                                ],
-                              ),
-                              const Spacer(flex: 3,),
-                              Row(
-                                children: [
-                                  const Spacer(),
-                                  const Text("Articoli:"),
-                                  const Spacer(flex: 6),
-                                  Text("//TODO"),
-                                  const Spacer(),
-                                ],
-                              ),
-                              const Spacer(),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ]
-                ),
+                    ),
+                  ]
               ),
-            )
-        ),
+            ),
+          )
       ),
     );
   }
