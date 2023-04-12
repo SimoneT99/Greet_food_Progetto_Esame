@@ -16,7 +16,13 @@ class Prodotto implements Item{
 
   bool _alKg = false;
 
-  Prodotto(String nome, String marca, String imagePath, String descripion, String? barcode, bool alKg){
+  Prodotto(
+      {required String nome,
+        required String marca,
+        required String imagePath,
+        required String descripion,
+        required String? barcode,
+        required bool alKg}){
     this._nome = nome;
     this._marca = marca;
     this._imagePath = imagePath;
@@ -25,6 +31,9 @@ class Prodotto implements Item{
     this._alKg = alKg;
   }
 
+  /**
+   * getter
+   */
 
   static int get currentCode => _currentCode;
 
@@ -41,6 +50,26 @@ class Prodotto implements Item{
   String? get barcode => _barcode;
 
   bool get alKg => _alKg;
+
+  /**
+   * Setter
+   */
+
+  set nome(String value) {
+    _nome = value;
+  }
+
+  set marca(String value) {
+    _marca = value;
+  }
+
+  set imagePath(String value) {
+    _imagePath = value;
+  }
+
+  set descripion(String value) {
+    _descripion = value;
+  }
 
   /**
    * Identificazione
@@ -91,5 +120,6 @@ class Prodotto implements Item{
     this._id = code;
     Prodotto._currentCode = code + 1;
   }
+
 
 }

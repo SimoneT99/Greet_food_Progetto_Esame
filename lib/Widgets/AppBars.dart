@@ -38,3 +38,37 @@ AppBar endFormAppbar (void Function()? action) {
     ],
   );
 }
+
+AppBar backAppbarEdit(void Function()? action) {
+  return AppBar(
+    toolbarHeight: HEIGHT,
+    title: Text(APP_NAME),
+    leading: BackButton(),
+    actions: [
+      Container(
+        padding: EdgeInsets.all(10),
+        child: OutlinedButton(
+          onPressed: action,
+          child: const Icon(Icons.edit),
+        ),
+      ),
+    ],
+  );
+}
+
+AppBar backAppbarAdd(void Function()? action){
+  return AppBar(
+    toolbarHeight: HEIGHT,
+    title: Text(APP_NAME),
+    leading: BackButton(),
+    actions: [
+      Container(
+        padding: EdgeInsets.all(10),
+        child: OutlinedButton(
+          onPressed: action,
+          child: const Icon(Icons.add),
+        ),
+      ),
+    ],
+  );
+}

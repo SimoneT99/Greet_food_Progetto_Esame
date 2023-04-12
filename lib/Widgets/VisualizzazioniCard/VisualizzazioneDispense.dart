@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:greet_food/Classes/Items/Dispensa.dart';
 
 import '../../Classes/GestioneDati/GenericManager.dart';
+import '../../Classes/Items/Prodotto.dart';
 
 
 
@@ -19,11 +20,44 @@ import '../../Classes/GestioneDati/GenericManager.dart';
  * Widgets per la visualizzazione delle dispense nella sezione dispense
  */
 
+enum _CardDispensaType{
+  elencoDispense,
+  paginaProdotto
+}
+
 class VisualizzazioneDispense extends StatelessWidget{
 
   final GenericManager<Dispensa> manager_dispense;
 
-  const VisualizzazioneDispense({required this.manager_dispense, super.key});
+  late bool _allowDeletion = false;
+  late bool _allowAccess = false;
+  late bool _allowCreation = false;
+
+  late _CardDispensaType _cardType;
+
+  late Prodotto _prodotto;
+
+
+  VisualizzazioneDispense({required this.manager_dispense, allowDeletion = true, allowAccess = true, allowCreation = true}){
+    this._allowAccess = allowAccess;
+    this._allowDeletion = allowDeletion;
+    this._allowCreation = allowCreation;
+    this._cardType = _CardDispensaType.elencoDispense;
+  }
+
+  VisualizzazioneDispense.paginaProdotto({required this.manager_dispense,
+    bool allowDeletion = false,
+    bool allowAccess = false,
+    bool allowCreation = false,
+    required Prodotto prodotto})
+  {
+    this._allowAccess = allowAccess;
+    this._allowDeletion = allowDeletion;
+    this._allowCreation = allowCreation;
+
+    this._prodotto = prodotto;
+    this._cardType = _CardDispensaType.paginaProdotto;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +68,12 @@ class VisualizzazioneDispense extends StatelessWidget{
           itemCount: _dispense.length+1, //l'ultimo elemento è il pulsante per l'aggiunta
           itemBuilder: (BuildContext context, int index) {
             if (index<_dispense.length) {
-              return DispensaCard(manager: this.manager_dispense, dispensa: _dispense[index]);
+              return DispensaCard(manager: this.manager_dispense,
+                  dispensa: _dispense[index],
+                  accessEnabled: this._allowAccess,
+                  deletionEnabled: this._allowDeletion,);
             }else{
-              return Center(
+              return _allowCreation ? Center(
                   child : SizedBox(
                     //TODO gestire questi parametri
                       width: 150, // <-- Your width
@@ -52,7 +89,7 @@ class VisualizzazioneDispense extends StatelessWidget{
                         child: Text("Aggiungi"),
                       )
                   )
-              );
+              ) : null;
             }
           },
         ),
@@ -62,15 +99,30 @@ class VisualizzazioneDispense extends StatelessWidget{
 
 class DispensaCard extends StatelessWidget{
 
-  final Dispensa _dispensa;
-  final GenericManager<Dispensa> manager;
+  late Dispensa _dispensa;
+  late GenericManager<Dispensa> manager;
 
-  const DispensaCard({required this.manager,required Dispensa dispensa, super.key}) : _dispensa = dispensa;
+  late bool _deletionEnabled;
+  late bool _accessEnabled;
+
+  late int? _articoliContenuti; //utile per evitare un ricalcolo
+
+  DispensaCard({required this.manager,
+    required Dispensa dispensa,
+    bool deletionEnabled = true,
+    bool accessEnabled = true}) {
+
+    this._dispensa = dispensa;
+    this._deletionEnabled = deletionEnabled;
+    this._accessEnabled = accessEnabled;
+
+  }
 
   Widget build(BuildContext context) {
     final GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
     final ElaboratoreArticoli  eleboratoreArticoli = new ElaboratoreArticoli(managerArticoli.getAllElements());
-    final int articoliContenuti = eleboratoreArticoli.filtraPerDispensa(_dispensa).length;
+    eleboratoreArticoli.filtraPerDispensa(_dispensa);
+    this._articoliContenuti = eleboratoreArticoli.filtraPerConsumati(consumato: false).length;
 
     return AspectRatio(
       aspectRatio: 2.5,
@@ -79,17 +131,17 @@ class DispensaCard extends StatelessWidget{
         clipBehavior: Clip.antiAliasWithSaveLayer,
         //borderRadius: BorderRadius.circular(12),
         child: InkWell(
-          onTap: () {
+          onTap: _accessEnabled ? () {
             debugPrint('Short press: ${_dispensa.toString()}');
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) {
                   return PaginaDispensa(_dispensa);
                 }));
-          },
-          onLongPress: () {
+          } : () {},
+          onLongPress: _deletionEnabled ? () {
             debugPrint('Long press: ${_dispensa.toString()}');
             this._showCancellationDialog(context);
-          },
+          } : () {},
           child: Container(
             child: Row(
                 children: <Widget>[
@@ -134,7 +186,7 @@ class DispensaCard extends StatelessWidget{
                                 ),
                               ),
                               const Spacer(flex: 6),
-                              Text(articoliContenuti.toString(),
+                              Text(_articoliContenuti.toString(),
                                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                   color: Theme.of(context).primaryColorDark,
                                 ),
@@ -156,6 +208,9 @@ class DispensaCard extends StatelessWidget{
     );
   }
 
+  /**
+   * Gestione cancellazione
+   */
 
   Future<void> _showCancellationDialog(BuildContext context) async {
       return showDialog<void>(
@@ -182,8 +237,8 @@ class DispensaCard extends StatelessWidget{
                 child: const Text("Cancella"),
                 onPressed: () {
                   debugPrint("Cancellazione confermata");
-                  this._onDeleteRequested(context);
                   Navigator.of(context).pop();
+                  this._onDeleteRequested(context);
                 },
               ),
             ],
@@ -193,7 +248,39 @@ class DispensaCard extends StatelessWidget{
     }
 
   void _onDeleteRequested(BuildContext context) {
-    manager.removeElemet(_dispensa);
+    if(this._articoliContenuti == 0){
+      manager.removeElement(_dispensa);
+    }else{
+      _showCancellationDisabledDialog(context);
+    }
   }
+
+  Future<void> _showCancellationDisabledDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Non puoi cancellare una dispensa che contiene degli articoli non ancora consumati'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Annulla'),
+              onPressed: () {
+                debugPrint("Cancellazione annullata");
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }
 

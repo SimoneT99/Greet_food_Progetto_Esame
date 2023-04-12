@@ -1,6 +1,4 @@
 import 'package:greet_food/Classes/Interfaces/Item.dart';
-import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 /**
  * Classe rappresentante un articolo
@@ -11,25 +9,6 @@ String articoloTableName = 'Articolo';
 class Articolo implements Item{
 
   static int _currentCode = 0;
-
-  //Si potrebbe fare meglio...
-  SharedPreferences? prefs;
-  Future<int> _getNewId() async{
-
-    if(prefs == null){
-      prefs = await SharedPreferences.getInstance();
-    }
-
-    int? code = await prefs!.getInt("CodiceArticolo");
-    if(code == null){
-      code = 0;
-    }
-    code++;
-    await prefs!.setInt("CodiceArticolo", code);
-
-    return code;
-
-  }
 
   /**
    * IDs
@@ -66,7 +45,6 @@ class Articolo implements Item{
       required DateTime dataInserimento}){
 
     this._id = _currentCode++;
-
 
     this._idProdotto = idProdotto;
     this._idDispensa = idDispensa;
@@ -149,10 +127,10 @@ class Articolo implements Item{
      * Dati articolo obbligatori
      */
     _prezzo = json['_prezzo'];
-    _dataScadenza = json['_dataScadenza'];
-    _dataInserimento = json['_dataInserimento'];
-    _consumed = json['consumed'];
-    _consumedDate = json['consumedDate'];
+    _dataScadenza =   DateTime.parse(json['_dataScadenza']);
+    _dataInserimento =  DateTime.parse(json['_dataInserimento']);
+    _consumed = json['_consumed'];
+    _consumedDate =  DateTime.parse(json['_consumedDate']);
 
     /**
      * Dati articolo opzionali

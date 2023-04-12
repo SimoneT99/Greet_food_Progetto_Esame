@@ -139,6 +139,7 @@ class WidgetArticolo extends StatelessWidget{
                         ElevatedButton(
                             onPressed: () {
                               debugPrint("debug: richiesto consumo articolo");
+                              this._articolo.consume();
                             },
                             child: Text("Consuma")
                         ),

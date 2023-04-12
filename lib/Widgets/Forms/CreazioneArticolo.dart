@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
@@ -25,17 +27,17 @@ class CreazioneArticolo extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: backAppbar,
-      body: FormsCreazioneArticolo(_prodotto),
+      body: FormCreazioneArticolo(_prodotto),
     );
   }
 }
 
 //widget con stato dato che dobbiamo gestire il multi inserimento degli articoli
-class FormsCreazioneArticolo extends StatefulWidget{
+class FormCreazioneArticolo extends StatefulWidget{
 
   late final Prodotto _prodotto;
 
-  FormsCreazioneArticolo(Prodotto prodotto) {
+  FormCreazioneArticolo(Prodotto prodotto) {
     this._prodotto = prodotto;
   }
 
@@ -47,8 +49,9 @@ class FormsCreazioneArticolo extends StatefulWidget{
 
 final formKey = GlobalKey<FormState>();
 
-class FormCreazioneArticoloStato extends State<FormsCreazioneArticolo>{
+class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
 
+  //per la ripetizione degli inserimenti
   List<Articolo> _articoliInseriti = [];
 
   @override
@@ -62,11 +65,11 @@ class FormCreazioneArticoloStato extends State<FormsCreazioneArticolo>{
 
   //Ultimi valori inseriti
   Dispensa? _dispensa = null;
-  double? _prezzo = 0;
-  double? _weight = 1;
-  DateTime? _dataScadenza = DateTime.now();
+  double? _prezzo = null;
+  double? _peso = null;
+  DateTime? _dataScadenza = null;
 
-  List<Articolo> articoliInseriti = [];
+  List<Articolo> articoliInseriti = []; //sarebbe più sensato uno stack...
 
 
   //DatePicker
@@ -75,122 +78,202 @@ class FormCreazioneArticoloStato extends State<FormsCreazioneArticolo>{
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Form(
-        key: formKey,
-        child: ListView(
-          children: [
-
-            //Prezzo
-            TextFormField(
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Prezzo',
-              ),
-              validator: (value) {
-                if(value == null || value.isEmpty){
-                  return "errore";
-                }
-                return null;
-              },
-              onSaved: (value) {
-                this._prezzo = double.parse(value!);
-              },
-            ),
-
-            //Data di scadenza
-            TextFormField(
-              controller: dataScadenzaController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Data di scadenza',
-              ),
-              validator: (value) {
-                if(value == null || value.isEmpty){
-                  return "errore";
-                }
-                return null;
-              },
-              onTap: () async {
-                // Below line stops keyboard from appearing
-                FocusScope.of(context).requestFocus(new FocusNode());
-
-                // Show Date Picker Here
-                DateTime? datePicked = await showDatePicker(
-                    context: context,
-                    initialDate: new DateTime.now(),
-                    firstDate: new DateTime(2016),
-                    lastDate: new DateTime(3000)
-                );
-                dataScadenzaController.text = (new DateFormat("dd/MM/yyyy")).format(datePicked!);
-                this._dataScadenza = datePicked;
-              },
-            ),
-
-            Builder(
-                builder: (BuildContext context) {
-                  GenericManager<Dispensa> gestoreDispense = Provider.of<GenericManager<Dispensa>>(context, listen: false);
-                  List<Dispensa> dispense = gestoreDispense.getAllElements();
-                  return DropdownButtonFormField(
-                      items: dispense.map<DropdownMenuItem<Dispensa>>((Dispensa dispensa) {
-                        return DropdownMenuItem<Dispensa>(
-                          child: Text(dispensa.nome),
-                          value: dispensa,
-                        );
-                  }).toList(),
-                  onChanged: (value) {
-                    //TODO
-                  },
-                  onSaved: (value){
-                        this._dispensa = value;
-                  },
-                  );
-                }
-            ),
-            Row(
-              children: [
-                ElevatedButton(
-                    onPressed: (){
-                      debugPrint("Richiesta ripetizione inserimento");
-                      if(formKey.currentState!.validate()){
-                        Articolo nuovoArticolo = _generaArticolo();
-                        this.articoliInseriti.add(nuovoArticolo);
-                      }
-                    },
-                    child: Text("Ripeti")
+    return Scaffold(
+      appBar: endFormAppbar(saveData),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+        child: Form(
+          key: formKey,
+          child: ListView(
+            children: [
+              //introduzione prodotto
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                child: AspectRatio(
+                  aspectRatio: 2.8,
+                  child: Row(
+                    children: [
+                      AspectRatio(
+                        aspectRatio: 1,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: FileImage(File(widget._prodotto.imagePath)),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              widget._prodotto.nome,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.headline6
+                            ),
+                          Text(
+                              widget._prodotto.marca,
+                              style: Theme.of(context).textTheme.subtitle2
+                          ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-                ElevatedButton(
-                    onPressed: (){
-                      if(formKey.currentState!.validate()){
-                        debugPrint("Richiesta fine inserimento");
-                        formKey.currentState!.save();
-                        //inserimento nuovi articoli
-                        Articolo nuovoArticolo = _generaArticolo();
-                        GenericManager<Articolo> gestoreArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
-                        gestoreArticoli.addElement(nuovoArticolo);
-                        for(Articolo articolo in articoliInseriti){
-                          gestoreArticoli.addElement(articolo);
-                        }
+              ),
 
-                        Navigator.of(context).pop();
-                        Navigator.of(context).push(
-                            new MaterialPageRoute(
-                                builder: (context) {
-                                  return PaginaConferma(
-                                      "Articolo/i inseriti correttamente"
-                                  );
-                                }
-                            )
-                        );
-                      }
-                    },
-                    child: Text("Fine"))
-              ],
-            ),
-          ],
+              //Prezzo
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      suffixIcon: Icon(Icons.euro),
+                      fillColor: Theme.of(context).colorScheme.secondary,
+                      filled: true,
+                      border: OutlineInputBorder(
+
+                      ),
+                      labelText: 'Prezzo',
+                    ),
+                  validator: (value) {
+                    if(value == null || value.isEmpty){
+                      return "Devi inserire un prezzo";
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    this._prezzo = double.parse(value!);
+                  },
+                ),
+              ),
+
+              //Data di scadenza
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: TextFormField(
+                  controller: dataScadenzaController,
+                  keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      suffixIcon: Icon(Icons.schedule),
+                      fillColor: Theme.of(context).colorScheme.secondary,
+                      filled: true,
+                      border: OutlineInputBorder(
+
+                      ),
+
+                      labelText: 'Dada di scadenza',
+                    ),
+                  validator: (value) {
+                    if(value == null || value.isEmpty){
+                      return "Devi inserire una data di scadenza";
+                    }
+                    return null;
+                  },
+                  onTap: () async {
+                    // Below line stops keyboard from appearing
+                    FocusScope.of(context).requestFocus(new FocusNode());
+
+                    // Show Date Picker Here
+                    DateTime? datePicked = await showDatePicker(
+                        context: context,
+                        initialDate: new DateTime.now(),
+                        firstDate: new DateTime(2016),
+                        lastDate: new DateTime(3000)
+                    );
+                    dataScadenzaController.text = (new DateFormat("dd/MM/yyyy")).format(datePicked!);
+                    this._dataScadenza = datePicked;
+                  },
+                ),
+              ),
+
+              //Peso dell'articolo
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    suffixIcon: Icon(Icons.scale),
+                    fillColor: Theme.of(context).colorScheme.secondary,
+                    filled: true,
+                    border: OutlineInputBorder(
+
+                    ),
+
+                    labelText: 'Peso dell\'articolo (grammi)',
+                  ),
+                  validator: (value) {
+                    if(value == null || value.isEmpty){
+                      return "Devi inserire un peso";
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => {
+                    this._peso = double.parse(value!)
+                  },
+                ),
+              ),
+
+              //Dispensa
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Builder(
+                    builder: (BuildContext context) {
+                      GenericManager<Dispensa> gestoreDispense = Provider.of<GenericManager<Dispensa>>(context, listen: false);
+                      List<Dispensa> dispense = gestoreDispense.getAllElements();
+                      return DropdownButtonFormField(
+                        decoration: InputDecoration(
+                          suffixIcon: Icon(Icons.kitchen),
+                          fillColor: Theme.of(context).colorScheme.secondary,
+                          filled: true,
+                          border: OutlineInputBorder(
+
+                          ),
+
+                          labelText: 'Dispensa',
+                        ),
+                          items: dispense.map<DropdownMenuItem<Dispensa>>((Dispensa dispensa) {
+                            return DropdownMenuItem<Dispensa>(
+                              child: Text(dispensa.nome),
+                              value: dispensa,
+                            );
+                      }).toList(),
+                      onChanged: (value) {
+                        //TODO
+                      },
+                      onSaved: (value){
+                            this._dispensa = value;
+                      },
+                      );
+                    }
+                ),
+              ),
+
+              /**
+               * Bottone ripeti: per ripetere gli inserimenti
+               */
+              Center(
+                child:
+                  ElevatedButton(
+                      onPressed: (){
+                        debugPrint("Richiesta ripetizione inserimento");
+                        if(formKey.currentState!.validate()){
+                          formKey.currentState!.save();
+                          Articolo nuovoArticolo = _generaArticolo();
+                          this.articoliInseriti.add(nuovoArticolo);
+                        }
+                        setState(() {
+                        });
+                      },
+                      child: Text("Ripeti  (${articoliInseriti.length + 1})")
+                  ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -201,14 +284,46 @@ class FormCreazioneArticoloStato extends State<FormsCreazioneArticolo>{
    */
   Articolo _generaArticolo(){
     Articolo nuovoArticolo;
+
+
+
     nuovoArticolo = new Articolo(
-      idProdotto: widget._prodotto.getCode(),
+      idProdotto: widget._prodotto!.getCode(),
       idDispensa: this._dispensa!.id,
       prezzo: this._prezzo!,
-      peso: this._weight!,
+      peso: this._peso!,
       dataScadenza: this._dataScadenza!,
       dataInserimento: DateTime.now(),
     );
     return nuovoArticolo;
+  }
+
+  /**
+   * Salvataggio dei dati inseriti
+   */
+
+  void saveData(){
+    if(formKey.currentState!.validate()){
+      debugPrint("Richiesta fine inserimento");
+      formKey.currentState!.save();
+      //inserimento nuovi articoli
+      Articolo nuovoArticolo = _generaArticolo();
+      GenericManager<Articolo> gestoreArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
+      gestoreArticoli.addElement(nuovoArticolo);
+      for(Articolo articolo in articoliInseriti){
+        gestoreArticoli.addElement(articolo);
+      }
+
+      Navigator.of(context).pop();
+      Navigator.of(context).push(
+          new MaterialPageRoute(
+              builder: (context) {
+                return PaginaConferma(
+                    "Articolo/i inseriti correttamente"
+                );
+              }
+          )
+      );
+    }
   }
 }

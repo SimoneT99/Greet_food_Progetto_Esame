@@ -69,7 +69,7 @@ class GenericManager<T extends Item> extends ChangeNotifier{
    * Rimuovere un elemento dato l'id
    * Eccezione se l'elemento non è presente
    */
-  void removeElemetById(int code){
+  void removeElementById(int code){
     int index = -1;
     for(int i = 0; i<_elements.length; i++){
       if (_elements[i].checkCode(code)){
@@ -88,7 +88,7 @@ class GenericManager<T extends Item> extends ChangeNotifier{
    * Rimuovere un elemento dato l'id
    * Eccezione se l'elemento non è presente
    */
-  void removeElemet(T element){
+  void removeElement(T element){
     int index = -1;
     for(int i = 0; i<_elements.length; i++){
       if (_elements[i].checkCode(element.getCode())){
@@ -156,6 +156,7 @@ class GenericManager<T extends Item> extends ChangeNotifier{
        print(exeption);
        throw Exception();
      }
+     this.notifyListeners();
    }
 
   /**

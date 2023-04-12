@@ -36,6 +36,8 @@ class Dispensa implements Item{
 
   String get nome => _nome;
 
+  String get posizione => _posizione;
+
   int get id => _id;
 
   static int get currentCode => _currentCode;
@@ -44,9 +46,30 @@ class Dispensa implements Item{
     return this._id;
   }
 
-/**
- * Controlli
- */
+  /**
+   * Setter
+   */
+
+  set nome(String value) {
+    _nome = value;
+  }
+
+  set imagePath(String value) {
+    _imagePath = value;
+  }
+
+  set descripion(String value) {
+    _descripion = value;
+  }
+
+  set posizione(String value) {
+    _posizione = value;
+  }
+
+
+  /**
+    * Controlli
+    */
   bool hasImage(){
     return imagePath!="";
   }

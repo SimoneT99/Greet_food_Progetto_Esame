@@ -4,6 +4,8 @@ import 'package:greet_food/Classes/GestioneDati/ElaboratoreArticoli.dart';
 import 'package:greet_food/Classes/GestioneDati/ElaboratoreProdotti.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Classes/Items/Prodotto.dart';
+import 'package:greet_food/Widgets/Forms/CreazioneProdotto.dart';
+import 'package:greet_food/Widgets/VisualizzazioniCard/VisualizzazioneDispense.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -61,7 +63,18 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
   Widget build(BuildContext context) {
 
     return Scaffold(
-        appBar: emptyAppbar,
+        appBar: backAppbarEdit(() {
+          Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) {
+                    return FormCreazioneProdotto.edit(
+                      prodotto: this._prodotto,
+                      followUpArticolo: false,
+                    );
+                  }
+              )
+          );
+        }),
         body: Column(
           children: [
             Container(
@@ -247,7 +260,10 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
    * Sezione conle dispense che contengono il articoli del prodotto
    */
   Widget _dispenseContenenti(){
-    return Text("//TODO");
+    return VisualizzazioneDispense.paginaProdotto(
+      manager_dispense: Provider.of<GenericManager<Dispensa>>(context, listen: false),
+      prodotto: this._prodotto
+    );
   }
 }
 

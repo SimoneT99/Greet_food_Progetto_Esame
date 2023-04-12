@@ -8,6 +8,7 @@ import 'package:greet_food/Classes/Items/Articolo.dart';
 import 'package:greet_food/Classes/Items/Dispensa.dart';
 
 import 'package:greet_food/Widgets/AppBars.dart';
+import 'package:greet_food/Widgets/Forms/CreazioneDispensa.dart';
 import 'package:greet_food/Widgets/VisualizzazioniCard/VisualizzazioneArticoli.dart';
 import 'package:provider/provider.dart';
 
@@ -46,6 +47,7 @@ class PaginaDispensaStato extends State<PaginaDispensa> with SingleTickerProvide
 
     GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
     this._articoli_contenuti = (new ElaboratoreArticoli(managerArticoli.getAllElements())).filtraPerDispensa(_dispensa);
+    this._articoli_contenuti = (ElaboratoreArticoli(this._articoli_contenuti).filtraPerConsumati(consumato: false));
 
     super.initState();
   }
@@ -60,7 +62,15 @@ class PaginaDispensaStato extends State<PaginaDispensa> with SingleTickerProvide
   @override
   Widget build(BuildContext context) {
         return Scaffold(
-          appBar: emptyAppbar,
+          appBar: backAppbarEdit(() {
+            Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) {
+                      return FormCreazioneDispensa.edit(dispensa: this._dispensa);
+                    }
+                )
+            );
+          }),
           body: Column(
             children: [
               Container(

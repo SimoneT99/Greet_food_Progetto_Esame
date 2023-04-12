@@ -11,31 +11,23 @@ import 'package:provider/provider.dart';
 
 import 'CameraWidget.dart';
 
-
-/**
- * Form per la creazione di una dispensa
- */
-
-class PaginaCreazioneDispensa extends StatelessWidget{
-
-  late FormCreazioneDispensa form;
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: endFormAppbar(()=>{}),
-      body: FormCreazioneDispensa(),
-    );
-  }
-}
-
 final formKey = GlobalKey<FormState>();
 
 /**
  * Statefull widget perchè cambia l'immagine
  */
+//TODO delete
 class FormCreazioneDispensa extends StatefulWidget{
+
+  //per trattare il caso di modifiche
+  Dispensa? _dispensa;
+
+  FormCreazioneDispensa(){}
+
+  FormCreazioneDispensa.edit({required Dispensa dispensa}){
+    this._dispensa = dispensa;
+  }
+
   @override
   State<StatefulWidget> createState() {
     return FormCreazioneDispensaState();
@@ -51,6 +43,17 @@ class FormCreazioneDispensaState extends State<FormCreazioneDispensa>{
   late String descrizioneDispensa;
   late String posizioneDispensa;
   String? pathImmagine;
+
+  /*
+    Ci serve solo per settare correttamente l'immagine in caso di edit
+   */
+  @override
+  void initState(){
+    if(widget._dispensa != null){
+      this.imageProvider = FileImage(File(widget._dispensa!.imagePath));
+      this.pathImmagine = widget._dispensa!.imagePath;
+    }
+  }
 
   /**
    * Image provider
@@ -93,6 +96,8 @@ class FormCreazioneDispensaState extends State<FormCreazioneDispensa>{
                   ),
                 ),
               ),
+
+              //Nome
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: TextFormField(
@@ -114,8 +119,11 @@ class FormCreazioneDispensaState extends State<FormCreazioneDispensa>{
                   onSaved: (value) {
                     this.nomeDispensa = value!;
                   },
+                  initialValue: widget._dispensa != null ? widget._dispensa!.nome : null,
                 ),
               ),
+
+              //Descrizione
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: TextFormField(
@@ -135,8 +143,11 @@ class FormCreazioneDispensaState extends State<FormCreazioneDispensa>{
                   onSaved: (value) {
                     this.descrizioneDispensa = value!;
                   },
+                  initialValue: widget._dispensa != null ? widget._dispensa!.descripion : null,
                 ),
               ),
+
+              //Posizione
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: TextFormField(
@@ -156,6 +167,7 @@ class FormCreazioneDispensaState extends State<FormCreazioneDispensa>{
                   onSaved: (value) {
                     this.posizioneDispensa = value!;
                   },
+                  initialValue: widget._dispensa != null ? widget._dispensa!.posizione : null,
                 ),
               ),
             ],
@@ -169,17 +181,38 @@ class FormCreazioneDispensaState extends State<FormCreazioneDispensa>{
     if(formKey.currentState!.validate()){
       formKey.currentState!.save();
       Navigator.of(context).pop();
-      Dispensa nuovaDispensa = Dispensa(
-          this.nomeDispensa,
-          this.pathImmagine != null ? this.pathImmagine! : "Assets/PlaceholderImage.png", //TODO permettere un immmagine custom
-          this.descrizioneDispensa,
-          this.posizioneDispensa);
+
+      Dispensa nuovaDispensa;
+      String message;
       GenericManager<Dispensa> managerDispense = Provider.of<GenericManager<Dispensa>>(context, listen: false);
-      managerDispense.addElement(nuovaDispensa);
+
+      if(widget._dispensa == null){
+        nuovaDispensa = Dispensa(
+            this.nomeDispensa,
+            this.pathImmagine != null ? this.pathImmagine! : "Assets/PlaceholderImage.png", //TODO permettere un immmagine custom
+            this.descrizioneDispensa,
+            this.posizioneDispensa);
+
+        managerDispense.addElement(nuovaDispensa);
+
+        message = "Dispensa inserita con successo";
+
+      }else{
+        nuovaDispensa = widget._dispensa!;
+        nuovaDispensa.nome = this.nomeDispensa;
+        nuovaDispensa.imagePath = this.pathImmagine!; //Non può essere nulla se arriviamo qua
+        nuovaDispensa.descripion = this.descrizioneDispensa;
+        nuovaDispensa.posizione = this.posizioneDispensa;
+
+        managerDispense.replaceElement(nuovaDispensa);
+
+        message = "Dispensa modificata con successo";
+      }
+
       Navigator.of(context).push(
           MaterialPageRoute(
               builder: (context) {
-                return PaginaConferma("Dispensa inserita con successo");
+                return PaginaConferma(message);
               }
           )
       );

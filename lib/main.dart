@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:greet_food/Classes/GestioneDati/ElaboratoreArticoli.dart';
 import 'package:greet_food/Classes/Items/Dispensa.dart';
 import 'package:greet_food/Classes/Items/Prodotto.dart';
 import 'package:greet_food/Widgets/Themes/Themes.dart';
@@ -67,7 +68,7 @@ class GreetFoodState extends State<GreetFood>{
     }
     _managerProdotti.setSavingPath(PATH_PRODOTTO);
     
-super.initState();
+  super.initState();
   }
 
   @override
@@ -128,7 +129,9 @@ class _GreetFoodHomeState extends State<GreetFoodHome> {
     super.initState();
 
     this._pages = [
-      PaginaScadenze(),
+      Consumer<GenericManager<Articolo>>(builder: (context, manager, child){
+        return PaginaScadenze();
+      }),
       Homepage(),
       Consumer<GenericManager<Dispensa>>(builder: (context, manager, child){
         return VisualizzazioneDispense(manager_dispense: manager);
@@ -197,6 +200,7 @@ class _sideDrawer extends StatelessWidget{
               Navigator.pop(context);  //Chiudiamo il drawer
 
               List<Articolo> articoli = Provider.of<GenericManager<Articolo>>(context, listen: false).getAllElements();
+              articoli = new ElaboratoreArticoli(articoli).filtraPerConsumati(consumato: false);
 
               Navigator.of(context).push(new MaterialPageRoute(
                   builder: (context) {

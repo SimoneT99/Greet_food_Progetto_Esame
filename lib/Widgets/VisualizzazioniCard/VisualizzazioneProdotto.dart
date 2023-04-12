@@ -93,14 +93,14 @@ class CardProdotto extends StatelessWidget{
                 }else if( _cardType == _CardAction.insertProduct) {
                   Navigator.of(context).push(
                       new MaterialPageRoute(builder: (context) {
-                        return CreazioneArticolo(this._prodotto);
+                        return FormCreazioneArticolo(this._prodotto);
                       })
                   );
                 }
               },
               onLongPress: !_allowElimination ? (){} : (){
                 GenericManager<Prodotto> managerProdotti = Provider.of<GenericManager<Prodotto>>(context, listen: false);
-                managerProdotti.removeElemet(_prodotto);
+                managerProdotti.removeElement(_prodotto);
               },
               child: Container(
                 child: Row(
