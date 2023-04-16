@@ -145,7 +145,7 @@ class WidgetArticolo extends StatelessWidget{
                               this._articolo.consume();
                               Provider.of<GenericManager<Articolo>>(context, listen: false).replaceElement(this._articolo);
                             },
-                            child: Text("Consuma")
+                            child: Text("Consuma"),
                         ),
                         const Spacer(),
                       ],

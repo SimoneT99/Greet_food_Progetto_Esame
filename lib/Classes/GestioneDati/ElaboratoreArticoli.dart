@@ -22,6 +22,13 @@ class ElaboratoreArticoli{
   }
 
   /**
+   * Prendiamo la lista dopo l'applicazione dei filtri
+   */
+  List<Articolo> getCurrentList(){
+    return this.lista_articoli;
+  }
+
+  /**
    * Ottenere gli articoli scaduti
    */
   List<Articolo> filtraPerArticoliScaduti({bool changeState  = false}){

@@ -26,9 +26,7 @@ class Articolo implements Item{
   bool _consumed = false;
   DateTime _consumedDate = DateTime.now();
 
-  /**
-   * Dati articolo opzionali
-   */
+  //grammi
   double _weight = -1;
 
 

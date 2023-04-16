@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:greet_food/Classes/GestioneDati/ElaboratoreArticoli.dart';
@@ -105,7 +106,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                 child: TabBarView(
                     controller: _tabController,
                     children: [
-                      _infoProdotto(),
+                      _infoProdotto(context),
                       _prezzi(),
                       _dispenseContenenti(),
                     ]
@@ -119,132 +120,208 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
   /**
    * Sezione con le informazioni sul prodotto
    */
-  Widget _infoProdotto(){
-    return Container(
-      padding: const EdgeInsets.all(25.0),
-      child: Column(
-        children: [
-          Expanded(
-            flex: 3,
-            child: Row(
-              children: [
-                AspectRatio(
-                  aspectRatio: 1,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: AssetImage(_prodotto.imagePath),
+  Widget _infoProdotto(BuildContext context){
+
+    int posseduti;
+    int dispensa_preferita;
+    double ultimo_prezzo;
+    int inScadenza;
+
+    /**
+     * Prendiamo le informazioni da mostrare nella pagina
+     */
+
+    GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
+    ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(managerArticoli.getAllElements());
+
+    elaboratoreArticoli.filtraPerConsumati(consumato: true, changeState: true);
+    elaboratoreArticoli.filtraPerProdotto(_prodotto, changeState: true);
+    posseduti = elaboratoreArticoli.getCurrentList().length;
+    elaboratoreArticoli.filtraPerArticoliInScadenza(5); //TODO usare le impostazioni!
+    inScadenza = elaboratoreArticoli.getCurrentList().length;
+
+
+    elaboratoreArticoli.setListaArticoli(managerArticoli.getAllElements());
+    elaboratoreArticoli.filtraPerProdotto(_prodotto, changeState: true);
+
+    ultimo_prezzo = _getLatestPrice(elaboratoreArticoli.getCurrentList());
+    dispensa_preferita = getFavouriteDispensaId(elaboratoreArticoli.getCurrentList());
+
+
+
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              Expanded(
+                flex: 3,
+                child: Row(
+                  children: [
+                    //Immagine
+                    AspectRatio(
+                      aspectRatio: 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: FileImage(File(_prodotto.imagePath)),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    //Testo immagine
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 10),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Text(_prodotto.nome,
+                                  textAlign: TextAlign.left,
+                                  style: Theme.of(context).textTheme.headline6?.copyWith(
+                                    color: Theme.of(context).primaryColorDark,
+                                  ),
+
+                                ),
+
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  _prodotto.marca,
+                                  textAlign: TextAlign.left,
+                                  style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                    color: Theme.of(context).primaryColorDark,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Spacer(),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 10),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Text(_prodotto.nome),
-                          ],
-                        ),
-                        Spacer(),
-                        Row(
-                          children: [
-                            Text("Contenuti: "),
-                            Spacer(),
-                            Text("xx"),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10, top: 25, bottom: 10, right: 10),
-              child: Column(
-                children: [
-                  Row(
+              ),
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10, top: 25, bottom: 10, right: 10),
+                  child: Column(
                     children: [
-                      Text("Descrizione:"),
-                      Spacer()
+                      Row(
+                        children: [
+                          Text("Descrizione:",
+                            style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                              color: Theme.of(context).primaryColorDark,
+                            ),),
+                          Spacer()
+                        ],
+                      ),
+                      Spacer(),
+                      Center(
+                        child: Text(
+                          _prodotto.descripion,
+                          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                            color: Theme.of(context).primaryColorDark,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ),
+                      Spacer(flex: 2,),
                     ],
                   ),
-                  Spacer(),
-                  Center(
-                    child: Text(
-                      _prodotto.descripion,
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      Text("In possesso:",
+                        overflow: TextOverflow.visible,
+                        textAlign: TextAlign.left,
+                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                          color: Theme.of(context).primaryColorDark,
+                        ),
+                      ),
+                      Spacer(),
+                      Text("$posseduti",
+                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                          color: Theme.of(context).primaryColorDark,
+                        ),)
+                    ],
                   ),
-                  Spacer(flex: 2,),
-                ],
+                ),
               ),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Row(
-                children: [
-                  Text("In possesso:",
-                    overflow: TextOverflow.visible,
-                    textAlign: TextAlign.left,
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      Text("Dispensa preferita:",
+                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                        color: Theme.of(context).primaryColorDark,
+                      ),),
+                      Spacer(),
+                      Text("$dispensa_preferita",
+                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                          color: Theme.of(context).primaryColorDark,
+                        ),)
+                    ],
                   ),
-                  Spacer(),
-                  Text("xx")
-                ],
+                ),
               ),
-            ),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      Text("Ultimo prezzo:",
+                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                          color: Theme.of(context).primaryColorDark,
+                        ),),
+                      Spacer(),
+                      Text("€ $ultimo_prezzo",
+                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                          color: Theme.of(context).primaryColorDark,
+                        ),)
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      Text("In Scadenza:",
+                          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                            color: Theme.of(context).primaryColorDark,
+                          )),
+                      Spacer(),
+                      Text("$inScadenza",
+                          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                            color: Theme.of(context).primaryColorDark,
+                          ))
+                    ],
+                  ),
+                ),
+              )
+            ],
           ),
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Row(
-                children: [
-                  Text("Dispensa preferita:"),
-                  Spacer(),
-                  Text("xx")
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Row(
-                children: [
-                  Text("Ultimo prezzo:"),
-                  Spacer(),
-                  Text("xx")
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Row(
-                children: [
-                  Text("In Scadenza:"),
-                  Spacer(),
-                  Text("In scadenza")
-                ],
-              ),
-            ),
-          )
-        ],
+        ),
       ),
     );
   }
@@ -265,71 +342,191 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
       prodotto: this._prodotto
     );
   }
+
+
+  int getFavouriteDispensaId(List<Articolo> articoli){
+    //TODO
+    return 1;
+  }
+
+  double _getLatestPrice(List<Articolo> articoli, {bool alKg = false}){
+    articoli.sort((Articolo articolo1, Articolo articolo2) {
+      if(articolo1.dataInserimento.isBefore(articolo2.dataInserimento)){
+        return -1;
+      }else if (articolo1.dataInserimento.isAfter(articolo2.dataInserimento)){
+        return 1;
+      }else{
+      return 0;
+    }
+    });
+
+    return alKg ?
+    ((articoli.last.prezzo / articoli.last.weight) * 1000)
+        : articoli.last.prezzo;
+  }
+
+  double _getBiggestPrice(List<Articolo> articoli, {bool alKg = false}){
+    List<double> prices = [];
+
+    for(int i = 0; i<articoli.length; i++){
+      prices.add(
+        alKg ?
+        ((articoli[i].prezzo / articoli[i].weight) * 1000)
+            : articoli[i].prezzo);
+    }
+
+    prices.sort();
+
+    return prices.first;
+  }
+
 }
 
-class priceHistoryPage extends StatelessWidget{
+/**
+ * Gestione grafico prezzi
+ */
 
-  Prodotto _prodotto;
+class priceHistoryPage extends StatefulWidget{
 
-  priceHistoryPage(this._prodotto);
+  late Prodotto _prodotto;
+
+  priceHistoryPage(Prodotto prodotto){
+    this._prodotto = prodotto;
+  }
+
+  @override
+  State<StatefulWidget> createState() {
+    return  priceHistoryPageState();
+  }
+
+}
+
+
+
+class priceHistoryPageState extends State<priceHistoryPage>{
+
+  bool _alKg = false;
 
   @override
   Widget build(BuildContext context) {
 
     //Preparazione dati per popolare la pagina
     GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
-    List<Articolo> articoliProdotto = new ElaboratoreArticoli(managerArticoli.getAllElements()).filtraPerProdotto(_prodotto);
+    List<Articolo> articoliProdotto = new ElaboratoreArticoli(managerArticoli.getAllElements()).filtraPerProdotto(widget._prodotto);
     double prezzoMassimo = articoliProdotto.reduce((current, next) => current.prezzo > next.prezzo ? current : next).prezzo;
     double prezzoMinimo = articoliProdotto.reduce((current, next) => current.prezzo < next.prezzo ? current : next).prezzo;
     double prezzoMedio = articoliProdotto.fold(.0, (current, next) => (current + next.prezzo))/articoliProdotto.length.toDouble();
 
-    return Column(
-      children: [
-        AspectRatio(
-          aspectRatio: 16/9,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              right: 18,
-              left: 12,
-              top: 24,
-              bottom: 12,
-            ),
-            child: SfCartesianChart(
-                primaryXAxis: DateTimeAxis(),
-                title: ChartTitle(text: 'Storico prezzi'),
-                series: getGraphData(articoliProdotto),
-            ),
-          )
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              AspectRatio(
+                aspectRatio: 4/3,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    right: 18,
+                    left: 12,
+                    top: 24,
+                    bottom: 12,
+                  ),
+                  child: SfCartesianChart(
+                      primaryXAxis: DateTimeAxis(),
+                      title: ChartTitle(text: 'Storico prezzi${_alKg ? " (€/kg)":''}'),
+                      series: _getGraphData(articoliProdotto),
+                  ),
+                )
+              ),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      Text("Massimo${_alKg ? " (€/kg)":''}:",
+                          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                            color: Theme.of(context).primaryColorDark,
+                          )),
+                      Spacer(),
+                      Text("${prezzoMassimo.toStringAsFixed(2)}",
+                          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                            color: Theme.of(context).primaryColorDark,
+                          ))
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      Text("Minimo${_alKg ? " (€/kg)":''}:",
+                          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                            color: Theme.of(context).primaryColorDark,
+                          )),
+                      Spacer(),
+                      Text("${prezzoMinimo.toStringAsFixed(2)}",
+                          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                            color: Theme.of(context).primaryColorDark,
+                          ))
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      Text("Medio${_alKg ? " (€/kg)":''}:",
+                          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                            color: Theme.of(context).primaryColorDark,
+                          )),
+                      Spacer(),
+                      Text("${prezzoMedio.toStringAsFixed(2)}",
+                          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                            color: Theme.of(context).primaryColorDark,
+                          ))
+                    ],
+                  ),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: _switchPrices,
+                child: this._alKg ? Text("Ignora peso") : Text("Vai al Kg"),
+              ),
+            ],
+          ),
         ),
-        Expanded(
-            child: Text(
-              "Massimo   ${prezzoMassimo.toStringAsFixed(2)}"
-            ),
-        ),
-        Expanded(
-            child: Text(
-                "Minimo   ${prezzoMinimo.toStringAsFixed(2)}"
-            )
-        ),
-        Expanded(
-            child: Text(
-                "Medio   ${prezzoMedio.toStringAsFixed(2)}"
-            )
-        ),
-      ],
+      ),
     );
   }
 
-  getGraphData(List<Articolo> articoliProdotto) {
+  _getGraphData(List<Articolo> articoliProdotto) {
     return <ChartSeries<Articolo, DateTime>>[
       LineSeries<Articolo, DateTime>(
         dataSource: articoliProdotto,
         xValueMapper: (Articolo articolo, _) => articolo.dataInserimento,
-        yValueMapper: (Articolo articolo, _) => articolo.prezzo,
+        yValueMapper: (Articolo articolo, _) {
+          if (_alKg) {
+            return (articolo.prezzo/articolo.weight) * 1000;
+          }
+          return articolo.prezzo;
+        },
         ),
       ];
-
   }
 
+  _switchPrices(){
+    setState(() {
+      _alKg = !_alKg;
+    });
+  }
 }
 

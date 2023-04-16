@@ -152,145 +152,143 @@ class InformazioniDispensa extends StatelessWidget{
      * Costruizione del widget
      */
 
-    return Container(
-      padding: const EdgeInsets.all(25.0),
-      child: Column(
-        children: [
-          Expanded(
-            flex: 2,
-            child: Row(
-              children: [
-                AspectRatio(
-                  aspectRatio: 1,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: FileImage(File(_dispensa.imagePath)),
+    return Padding(
+      padding: const EdgeInsets.all(5),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Row(
+                  children: [
+                    AspectRatio(
+                      aspectRatio: 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: FileImage(File(_dispensa.imagePath)),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 10),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    _dispensa.nome,
+                                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                                      color: Theme.of(context).primaryColorDark,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Spacer(),
+                              Row(
+                                children: [
+                                  Text("Contenuti: ",
+                                      style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                        color: Theme.of(context).primaryColorDark,
+                                      )
+                                  ),
+                                  Spacer(),
+                                  Text(contenutoCorrente.toString(),
+                                      style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                        color: Theme.of(context).primaryColorDark,
+                                      )
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                    )
+                  ],
                 ),
-                Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 10),
-                      child: Column(
+              ),
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10, top: 25, bottom: 10, right: 10),
+                  child: Column(
+                    children: [
+                      Row(
                         children: [
-                          Container(
-                            padding: EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.secondary,
-                              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                            ),
-                            child: Row(
-                              children: [
-                                Text(
-                                  _dispensa.nome,
-                                  style: Theme.of(context).textTheme.headline5
-                                ),
-                              ],
+                          Text("Descrizione:",
+                            style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                              color: Theme.of(context).primaryColorDark,
                             ),
                           ),
-                          Spacer(),
-                          Container(
-                            padding: EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.secondary,
-                              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                            ),
-                            child: Row(
-                              children: [
-                                Text("Contenuti: ",
-                                  style: Theme.of(context).textTheme.subtitle1,
-                                ),
-                                Spacer(),
-                                Text(contenutoCorrente.toString(),
-                                  style: Theme.of(context).textTheme.subtitle1,
-                                ),
-                              ],
-                            ),
-                          ),
+                          Spacer()
                         ],
                       ),
-                    ),
-                )
-              ],
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10, top: 25, bottom: 10, right: 10),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Text("Descrizione:",
-                        style: Theme.of(context).textTheme.subtitle1,
+                      Spacer(),
+                      Center(
+                        child: Text(
+                          _dispensa.descripion,
+                          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                            color: Theme.of(context).primaryColorDark,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
                       ),
-                      Spacer()
+                      Spacer(flex: 2,),
                     ],
                   ),
-                  Spacer(),
-                  Center(
-                    child: Text(
-                      _dispensa.descripion,
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      Text("Articoli scaduti\nfino ad oggi:",
+                        overflow: TextOverflow.visible,
+                        textAlign: TextAlign.left,
+                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                          color: Theme.of(context).primaryColorDark,
+                        ),
+                      ),
+                      Spacer(),
+                      Text(articoliScadutiFinoOggi.toString(),
+                          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                            color: Theme.of(context).primaryColorDark,
+                          ))
+                    ],
                   ),
-                  Spacer(flex: 2,),
-                ],
+                ),
               ),
-            ),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      Text("Prodotto preferito:",
+                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                          color: Theme.of(context).primaryColorDark,
+                        ),
+                      ),
+                      Spacer(),
+                      Text(prodottoPreferito.toString(),
+                          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                            color: Theme.of(context).primaryColorDark,
+                          ))
+                    ],
+                  ),
+                ),
+              )
+            ],
           ),
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Container(
-                padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.secondary,
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                ),
-                child: Row(
-                  children: [
-                    Text("Articoli scaduti\nfino ad oggi:",
-                      overflow: TextOverflow.visible,
-                      textAlign: TextAlign.left,
-                      style: Theme.of(context).textTheme.subtitle1,
-                    ),
-                    Spacer(),
-                    Text(articoliScadutiFinoOggi.toString())
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              padding: EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary,
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  children: [
-                    Text("Prodotto preferito:",
-                      style: Theme.of(context).textTheme.subtitle1,),
-                    Spacer(),
-                    Text(prodottoPreferito.toString(),
-                      style: Theme.of(context).textTheme.subtitle1,)
-                  ],
-                ),
-              ),
-            ),
-          )
-        ],
+        ),
       ),
     );
   }
