@@ -18,6 +18,7 @@ import '../../Classes/Items/Prodotto.dart';
 
 /**
  * Widgets per la visualizzazione delle dispense nella sezione dispense
+ * //TODO refactoring per gestire meglio le responsabilità
  */
 
 enum _CardDispensaType{
@@ -61,13 +62,16 @@ class VisualizzazioneDispense extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    final _dispense = manager_dispense.getAllElements();
+
+    List<Dispensa> _dispense = _listaDispense(context);
+
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView.builder(
           itemCount: _dispense.length+1, //l'ultimo elemento è il pulsante per l'aggiunta
           itemBuilder: (BuildContext context, int index) {
             if (index<_dispense.length) {
+              //dobbiamo escludere quelle che non contengono articoli di questo prodotto
               return DispensaCard(manager: this.manager_dispense,
                   dispensa: _dispense[index],
                   accessEnabled: this._allowAccess,
@@ -95,6 +99,34 @@ class VisualizzazioneDispense extends StatelessWidget{
         ),
       );
     }
+
+  List<Dispensa> _listaDispense(BuildContext context) {
+    GenericManager<Articolo> genericManager = Provider.of<GenericManager<Articolo>>(context, listen: false);
+    ElaboratoreArticoli elaboratoreArticoli;
+    List<Dispensa> _dispense;
+
+    //filtraggio per rimuovere quelle non valide
+    if(_cardType == _CardDispensaType.paginaProdotto){
+
+      List<Dispensa> _potenzialiDispense = manager_dispense.getAllElements();
+      _dispense = [];
+
+      for(int i = 0; i < _potenzialiDispense.length; i++){
+        List<Articolo>  articoli = genericManager.getAllElements();
+        elaboratoreArticoli = ElaboratoreArticoli(articoli);
+        elaboratoreArticoli.filtraPerProdotto(this._prodotto, changeState: true);
+        elaboratoreArticoli.filtraPerDispensa(_potenzialiDispense[i], changeState: true);
+        elaboratoreArticoli.filtraPerConsumati(consumato: false, changeState: true);
+
+        if(elaboratoreArticoli.getCurrentList().length > 0){
+          _dispense.add(_potenzialiDispense[i]);
+        }
+      }
+    }else{
+      _dispense = manager_dispense.getAllElements();
+    }
+    return _dispense;
+  }
 }
 
 class DispensaCard extends StatelessWidget{
@@ -190,7 +222,6 @@ class DispensaCard extends StatelessWidget{
                                   color: Theme.of(context).primaryColorDark,
                                 ),
                               ),
-
                               const Spacer(),
                             ],
                           ),

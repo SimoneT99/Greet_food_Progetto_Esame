@@ -144,7 +144,7 @@ class _GreetFoodHomeState extends State<GreetFoodHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: emptyAppbar,
+      appBar: drawerAppbar,
       drawer: _sideDrawer(),
       body: IndexedStack(
         index: _bottomBarIndex,

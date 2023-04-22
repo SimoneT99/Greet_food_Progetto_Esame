@@ -58,6 +58,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
   @override
   void dispose(){
     _tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -337,6 +338,8 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
    * Sezione conle dispense che contengono il articoli del prodotto
    */
   Widget _dispenseContenenti(){
+
+    //Non dovrebbe essere della VisualizzazioneDispense la responsabilità di filtrarle correttamente...
     return VisualizzazioneDispense.paginaProdotto(
       manager_dispense: Provider.of<GenericManager<Dispensa>>(context, listen: false),
       prodotto: this._prodotto

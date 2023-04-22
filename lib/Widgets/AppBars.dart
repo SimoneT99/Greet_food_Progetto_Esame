@@ -3,6 +3,7 @@ import 'Enumerations.dart';
 
 /**
  * Appbar solo con il titolo dell'applicazione
+ * //TODO migliorare la gestione delle appBar
  */
 
 const String APP_NAME = "GreetFood";
@@ -12,6 +13,12 @@ const double HEIGHT = 50;
  * Appbar preimpostate
  */
 AppBar emptyAppbar = AppBar(
+  automaticallyImplyLeading: false,
+  toolbarHeight: HEIGHT,
+  title: Text(APP_NAME),
+);
+
+AppBar drawerAppbar = AppBar(
   toolbarHeight: HEIGHT,
   title: Text(APP_NAME),
 );
