@@ -150,10 +150,6 @@ class DispensaCard extends StatelessWidget{
   }
 
   Widget build(BuildContext context) {
-    final GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
-    final ElaboratoreArticoli  eleboratoreArticoli = new ElaboratoreArticoli(managerArticoli.getAllElements());
-    eleboratoreArticoli.filtraPerDispensa(_dispensa);
-    this._articoliContenuti = eleboratoreArticoli.filtraPerConsumati(consumato: false).length;
 
     return AspectRatio(
       aspectRatio: 2.5,
@@ -217,11 +213,19 @@ class DispensaCard extends StatelessWidget{
                                 ),
                               ),
                               const Spacer(flex: 6),
-                              Text(_articoliContenuti.toString(),
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: Theme.of(context).primaryColorDark,
-                                ),
-                              ),
+                              Consumer<GenericManager<Articolo>>(builder: (context, manager, child){ //aggiorniamo il contenuto
+
+                                final GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
+                                final ElaboratoreArticoli  eleboratoreArticoli = new ElaboratoreArticoli(managerArticoli.getAllElements());
+                                eleboratoreArticoli.filtraPerDispensa(_dispensa, changeState: true);
+                                this._articoliContenuti = eleboratoreArticoli.filtraPerConsumati(consumato: false).length;
+
+                                return Text(_articoliContenuti.toString(),
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context).primaryColorDark,
+                                  ),
+                                );
+                              }),
                               const Spacer(),
                             ],
                           ),

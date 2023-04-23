@@ -129,9 +129,7 @@ class _GreetFoodHomeState extends State<GreetFoodHome> {
     super.initState();
 
     this._pages = [
-      Consumer<GenericManager<Articolo>>(builder: (context, manager, child){
-        return PaginaScadenze();
-      }),
+      PaginaScadenze(),
       Homepage(),
       Consumer<GenericManager<Dispensa>>(builder: (context, manager, child){
         return VisualizzazioneDispense(manager_dispense: manager);
@@ -199,18 +197,18 @@ class _sideDrawer extends StatelessWidget{
               print('richiesti tutti gli articoli');
               Navigator.pop(context);  //Chiudiamo il drawer
 
-              List<Articolo> articoli = Provider.of<GenericManager<Articolo>>(context, listen: false).getAllElements();
-              articoli = new ElaboratoreArticoli(articoli).filtraPerConsumati(consumato: false);
-
               Navigator.of(context).push(new MaterialPageRoute(
                   builder: (context) {
-                    return Scaffold(
-                      appBar: backAppbar,
-                      body: VisualizzazioneArticoli(articoli),
+                    List<Articolo> articoli = Provider.of<GenericManager<Articolo>>(context, listen: false).getAllElements();
+                    articoli = new ElaboratoreArticoli(articoli).filtraPerConsumati(consumato: false);
+                    return Consumer<GenericManager<Articolo>>(builder: (context, manager, child){
+                        return Scaffold(
+                          appBar: backAppbar,
+                          body: VisualizzazioneArticoli(articoli, manager),
+                          );},
                     );
                   }
               ));
-
               },
           ),
           ListTile(

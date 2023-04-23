@@ -37,18 +37,12 @@ class PaginaDispensaStato extends State<PaginaDispensa> with SingleTickerProvide
   PaginaDispensaStato(this._dispensa);
 
   //Gli articoli contenuti nella dispensa
-  late List<Articolo> _articoli_contenuti;
 
   late TabController _tabController;
 
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
-
-    GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
-    this._articoli_contenuti = (new ElaboratoreArticoli(managerArticoli.getAllElements())).filtraPerDispensa(_dispensa);
-    this._articoli_contenuti = (ElaboratoreArticoli(this._articoli_contenuti).filtraPerConsumati(consumato: false));
-
     super.initState();
   }
 
@@ -95,16 +89,20 @@ class PaginaDispensaStato extends State<PaginaDispensa> with SingleTickerProvide
                 ),
               ),
               Expanded(
-                  child: TabBarView(
-                    controller: _tabController,
-                      children: [
-                        VisualizzazioneArticoli(_articoli_contenuti),
-                        InformazioniDispensa(_dispensa),
-                    ]
-                  )
+                  child:
+                        Consumer<GenericManager<Articolo>>(builder: (context, manager, child){
+                                List<Articolo> _articoli_contenuti = (new ElaboratoreArticoli(manager.getAllElements())).filtraPerDispensa(_dispensa);
+                                _articoli_contenuti = (ElaboratoreArticoli(_articoli_contenuti).filtraPerConsumati(consumato: false));
+                                return TabBarView(
+                                  controller: _tabController,
+                                    children: [
+                                      VisualizzazioneArticoli(_articoli_contenuti, manager),
+                                      InformazioniDispensa(_dispensa)
+                                    ]);})
+
+
               )
-            ],
-          )
+          ])
         );
   }
 }

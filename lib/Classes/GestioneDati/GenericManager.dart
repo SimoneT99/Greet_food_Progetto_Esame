@@ -10,6 +10,7 @@ import '../Interfaces/Item.dart';
 
 /**
  * Classe generica per gestire i dati senza duplicazione di codice
+ * -> Probabilmente sarebbe meglio passare ad un database
  */
 
 class GenericManager<T extends Item> extends ChangeNotifier{
@@ -111,8 +112,8 @@ class GenericManager<T extends Item> extends ChangeNotifier{
     for(int i = 0; i<_elements.length; i++){
       if (_elements[i].checkCode(newElement.getCode())){
         _elements[i] =  newElement;
-        this.notifyListeners();
         this.saveToDisk();
+        this.notifyListeners();
         return;
       }
     }

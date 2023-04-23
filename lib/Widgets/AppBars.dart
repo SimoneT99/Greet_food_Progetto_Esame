@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'Enumerations.dart';
 
 /**
  * Appbar solo con il titolo dell'applicazione

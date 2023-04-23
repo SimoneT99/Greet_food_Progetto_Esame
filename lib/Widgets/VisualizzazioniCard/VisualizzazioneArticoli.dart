@@ -17,21 +17,24 @@ import '../Empty.dart';
 class VisualizzazioneArticoli extends StatefulWidget{
 
   final List<Articolo> articoli;
+  final GenericManager<Articolo> managerArticoli;
 
-  VisualizzazioneArticoli(this.articoli);
+  VisualizzazioneArticoli(this.articoli, this.managerArticoli);
 
   @override
   State<StatefulWidget> createState() {
-    return VisualizzazioneArticoliState(articoli);
+    return VisualizzazioneArticoliState();
   }
 }
 
 class VisualizzazioneArticoliState extends State<VisualizzazioneArticoli>{
 
   int _open_index = 2;
-  List<Articolo> articoli;
 
-  VisualizzazioneArticoliState(this.articoli);
+  @override
+  void initState(){
+    super.initState();
+  }
 
   /**
    * Utilizziamo _open_index per trattare diversamente gli articoli espansi da
@@ -41,20 +44,21 @@ class VisualizzazioneArticoliState extends State<VisualizzazioneArticoli>{
    */
   @override
   Widget build(BuildContext context) {
-    if(articoli.length == 0){
+    if(widget.articoli.length == 0){
       return EmptyBody("Nessun articolo disponibile");
     }
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListView.builder(
-          itemCount: articoli.length,
+          itemCount: widget.articoli.length,
           itemBuilder: (BuildContext context, int index) {
               if(index == _open_index){
-                return  WidgetArticolo(articoli[index], true);
+                return  WidgetArticolo(widget.articoli[index], true, widget.managerArticoli);
               }
           return GestureDetector(
             onTap: () {_onChangedIndex(index);},
-            child:  WidgetArticolo(articoli[index], false),
+            child:  WidgetArticolo(widget.articoli[index], false, widget.managerArticoli),
           );
         },
       ),
@@ -74,16 +78,17 @@ class WidgetArticolo extends StatelessWidget{
   late bool _isExpanded;
   late Dispensa _dispensa;
   late Prodotto _prodotto;
+  late GenericManager<Articolo> _managerArticoli;
 
-
-  WidgetArticolo(Articolo articolo, bool isExpanded) {
+  WidgetArticolo(Articolo articolo, bool isExpanded, GenericManager<Articolo> managerArticoli) {
     this._articolo = articolo;
     this._isExpanded = isExpanded;
+    this._managerArticoli = managerArticoli;
   }
 
   @override
   Widget build(BuildContext context) {
-    
+
     this._prodotto = Provider.of<GenericManager<Prodotto>>(context, listen: false).getElementById(_articolo.idProdotto);
     this._dispensa = Provider.of<GenericManager<Dispensa>>(context, listen: false).getElementById(_articolo.idDispensa);
 
@@ -143,7 +148,7 @@ class WidgetArticolo extends StatelessWidget{
                             onPressed: () {
                               debugPrint("debug: richiesto consumo articolo");
                               this._articolo.consume();
-                              Provider.of<GenericManager<Articolo>>(context, listen: false).replaceElement(this._articolo);
+                              this._managerArticoli.replaceElement(this._articolo);
                             },
                             child: Text("Consuma"),
                         ),

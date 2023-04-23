@@ -73,24 +73,28 @@ class PaginaScadenzaStato extends State<PaginaScadenze> with SingleTickerProvide
                     children: [
                       Builder(
                           builder: (BuildContext context) {
-                            ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(_managerArticoli.getAllElements());
-                            elaboratoreArticoli.setListaArticoli(elaboratoreArticoli.filtraPerArticoliScaduti());
-                            List<Articolo> articoliScaduti = elaboratoreArticoli.filtraPerConsumati(consumato: false);
-                            if(articoliScaduti.length == 0){
-                              return NoScadutiAttualmente();
-                            }
-                            return VisualizzazioneArticoli(articoliScaduti);
+                            return Consumer<GenericManager<Articolo>>(builder: (context, manager, child){
+                              ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(_managerArticoli.getAllElements());
+                              elaboratoreArticoli.setListaArticoli(elaboratoreArticoli.filtraPerArticoliScaduti());
+                              List<Articolo> articoliScaduti = elaboratoreArticoli.filtraPerConsumati(consumato: false);
+                              if(articoliScaduti.length == 0){
+                                return NoScadutiAttualmente();
+                              }
+                              return VisualizzazioneArticoli(articoliScaduti, manager);
+                            });
                           }
                       ),
                       Builder(
                           builder: (BuildContext context) {
-                            ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(_managerArticoli.getAllElements());
-                            elaboratoreArticoli.setListaArticoli(elaboratoreArticoli.filtraPerArticoliInScadenza(7)); //TODO il tempo deve essere letto dalle impostazioni
-                            List<Articolo> articoliInScadenza = elaboratoreArticoli.filtraPerConsumati(consumato: false);
-                            if(articoliInScadenza.length == 0){
-                              return NoScadenzeInArrivo();
-                            }
-                            return VisualizzazioneArticoli(articoliInScadenza);
+                            return Consumer<GenericManager<Articolo>>(builder: (context, manager, child){
+                              ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(_managerArticoli.getAllElements());
+                              elaboratoreArticoli.setListaArticoli(elaboratoreArticoli.filtraPerArticoliInScadenza(7)); //TODO il tempo deve essere letto dalle impostazioni
+                              List<Articolo> articoliInScadenza = elaboratoreArticoli.filtraPerConsumati(consumato: false);
+                              if(articoliInScadenza.length == 0){
+                                return NoScadenzeInArrivo();
+                              }
+                               return VisualizzazioneArticoli(articoliInScadenza, manager);
+                            });
                           }
                       )
                     ]
