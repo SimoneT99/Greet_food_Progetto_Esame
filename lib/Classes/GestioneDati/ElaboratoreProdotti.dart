@@ -2,6 +2,7 @@ import '../Items/Prodotto.dart';
 
 /**
  * Classe con la responsabilità di eseguire delle operazioni sulle liste di prodotti
+ * TODO rimuvere in caso di passaggio ad un database
  */
 
 class ElaboratoreProdotti{

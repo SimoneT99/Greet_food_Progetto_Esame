@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:greet_food/Classes/GestioneDati/ElaboratoreArticoli.dart';
 import 'package:greet_food/Classes/GestioneDati/ElaboratoreProdotti.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
+import 'package:greet_food/Classes/GestioneDati/Settings.dart';
 import 'package:greet_food/Classes/Items/Prodotto.dart';
 import 'package:greet_food/Widgets/Forms/CreazioneProdotto.dart';
 import 'package:greet_food/Widgets/VisualizzazioniCard/VisualizzazioneDispense.dart';
@@ -124,7 +125,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
   Widget _infoProdotto(BuildContext context){
 
     int posseduti;
-    int dispensa_preferita;
+    String dispensa_preferita;
     double ultimo_prezzo;
     int inScadenza;
 
@@ -135,20 +136,29 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
     GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
     ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(managerArticoli.getAllElements());
 
-    elaboratoreArticoli.filtraPerConsumati(consumato: true, changeState: true);
+    elaboratoreArticoli.filtraPerConsumati(consumato: false, changeState: true);
     elaboratoreArticoli.filtraPerProdotto(_prodotto, changeState: true);
     posseduti = elaboratoreArticoli.getCurrentList().length;
-    elaboratoreArticoli.filtraPerArticoliInScadenza(5); //TODO usare le impostazioni!
+
+    elaboratoreArticoli.filtraPerArticoliInScadenza(Provider.of<Settings>(context, listen: false).giorniInScadenza);
     inScadenza = elaboratoreArticoli.getCurrentList().length;
 
 
     elaboratoreArticoli.setListaArticoli(managerArticoli.getAllElements());
     elaboratoreArticoli.filtraPerProdotto(_prodotto, changeState: true);
-
     ultimo_prezzo = _getLatestPrice(elaboratoreArticoli.getCurrentList());
-    dispensa_preferita = getFavouriteDispensaId(elaboratoreArticoli.getCurrentList());
+
+    GenericManager<Dispensa> managerDispensa = Provider.of<GenericManager<Dispensa>>(context, listen: false);
 
 
+    try{
+      dispensa_preferita = managerDispensa.getElementById(
+          getFavouriteDispensaId(elaboratoreArticoli.getCurrentList())
+      ).nome;
+    }
+    catch(exception){
+      dispensa_preferita = "Non disponibile";
+    }
 
     return Padding(
       padding: const EdgeInsets.all(5.0),

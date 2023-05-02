@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:greet_food/Classes/GestioneDati/ElaboratoreArticoli.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
+import 'package:greet_food/Classes/GestioneDati/Settings.dart';
 import 'package:greet_food/Classes/Items/Articolo.dart';
 import 'package:greet_food/Widgets/AppBars.dart';
 import 'package:provider/provider.dart';
@@ -39,6 +40,7 @@ class PaginaScadenzaStato extends State<PaginaScadenze> with SingleTickerProvide
   @override
   void dispose(){
     _tabController.dispose();
+    super.dispose();
   }
 
 @override
@@ -86,9 +88,9 @@ class PaginaScadenzaStato extends State<PaginaScadenze> with SingleTickerProvide
                       ),
                       Builder(
                           builder: (BuildContext context) {
-                            return Consumer<GenericManager<Articolo>>(builder: (context, manager, child){
+                            return Consumer2<GenericManager<Articolo>, Settings>(builder: (context, manager, settings, child){
                               ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(_managerArticoli.getAllElements());
-                              elaboratoreArticoli.setListaArticoli(elaboratoreArticoli.filtraPerArticoliInScadenza(7)); //TODO il tempo deve essere letto dalle impostazioni
+                              elaboratoreArticoli.setListaArticoli(elaboratoreArticoli.filtraPerArticoliInScadenza(settings.giorniInScadenza)); //TODO il tempo deve essere letto dalle impostazioni
                               List<Articolo> articoliInScadenza = elaboratoreArticoli.filtraPerConsumati(consumato: false);
                               if(articoliInScadenza.length == 0){
                                 return NoScadenzeInArrivo();

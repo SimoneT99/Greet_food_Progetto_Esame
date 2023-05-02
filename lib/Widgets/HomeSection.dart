@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:greet_food/Classes/GestioneDati/Settings.dart';
 import 'package:greet_food/Widgets/AppBars.dart';
 import 'package:flutter/foundation.dart';
 import 'package:greet_food/Widgets/PaginaAggiuntaArticolo.dart';
 import 'package:greet_food/Widgets/PaginaAiuto.dart';
+import 'package:provider/provider.dart';
 
 import 'Impostazioni.dart';
 import 'PaginaRicercaProdotto.dart';
@@ -165,7 +167,9 @@ class Impostazioni extends StatelessWidget {
       onPressed: () {
         Navigator.of(context).push(new MaterialPageRoute(
             builder: (context) {
-              return PaginaImpostazioni();
+              return Consumer<Settings>(builder: (context, manager, child){
+                return PaginaImpostazioni(manager);
+              });
             }
         ));
       },

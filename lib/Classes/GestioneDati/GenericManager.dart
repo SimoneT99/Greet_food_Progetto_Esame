@@ -155,7 +155,6 @@ class GenericManager<T extends Item> extends ChangeNotifier{
        }
      }catch(exeption){
        print(exeption);
-       throw Exception();
      }
      this.notifyListeners();
    }

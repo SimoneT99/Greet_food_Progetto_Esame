@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class NoScadutiAttualmente extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-    return Container( //TODO immagine
+    return Container(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
       child: Column(
         children: [

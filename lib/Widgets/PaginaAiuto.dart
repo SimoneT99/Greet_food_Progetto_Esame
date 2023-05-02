@@ -54,27 +54,8 @@ List<_Help> _tips = <_Help>[
               "a destra nella schermata che appare premendo su no codice"
   ),
   _Help(
-      problem: "TODO",
-      answer: "TODO"
-  ),
-  _Help(
-      problem: "TODO",
-      answer: "TODO"
-  ),
-  _Help(
-      problem: "TODO",
-      answer: "TODO"
-  ),
-  _Help(
-      problem: "TODO",
-      answer: "TODO"
-  ),
-  _Help(
-      problem: "TODO",
-      answer: "TODO"
-  ),
-  _Help(
-      problem: "TODO",
-      answer: "TODO"
+      problem: "Come cambio il numero di giorni usati per considerare un alimento in scadenza?",
+      answer: "Puoi cambiare il numero di giorni dalle impostazioni modificando il campo \"Giorni anticipo scadenza\"."
+          "Puoi accedere a questo menù dalla home screen cliccando sull'icona a forma di ingranaggio"
   ),
 ];

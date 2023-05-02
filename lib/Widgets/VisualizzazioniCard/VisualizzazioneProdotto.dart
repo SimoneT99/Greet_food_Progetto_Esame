@@ -83,7 +83,7 @@ class CardProdotto extends StatelessWidget{
   Widget build(BuildContext context) {
     GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
     ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(managerArticoli.getAllElements());
-    elaboratoreArticoli.setListaArticoli(elaboratoreArticoli.filtraPerProdotto(this._prodotto));
+    elaboratoreArticoli.filtraPerProdotto(this._prodotto, changeState: true);
     int articoliPresenti = elaboratoreArticoli.filtraPerConsumati(consumato: false).length;
 
     return AspectRatio(

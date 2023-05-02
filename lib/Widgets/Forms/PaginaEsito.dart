@@ -6,11 +6,38 @@ import 'package:greet_food/Widgets/AppBars.dart';
  * Pagina conferma
  */
 
-class PaginaConferma extends StatelessWidget {
+enum Esito{
+  positive,
+  negative,
+  warning
+}
 
-  final String text;
+class PaginaEsito extends StatelessWidget {
 
-  PaginaConferma(this.text);
+  late String _text;
+  late Esito _esito;
+
+  late Image _image;
+
+
+  PaginaEsito(String text, Esito esito){
+    this._text = text;
+    this._esito = esito;
+    switch(esito){
+      case Esito.positive:{
+        _image = Image.asset("Assets/Images/Affermativo.png");
+      }
+      break;
+      case Esito.negative:{
+        _image = Image.asset("Assets/Images/Negative.png");
+      }
+      break;
+      case Esito.warning:{
+        _image = Image.asset("Assets/Images/Warning.png");
+      }
+      break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +51,7 @@ class PaginaConferma extends StatelessWidget {
                 height: 200,
                 child: Image.asset("Assets/Images/Affermativo.png")
             ),
-            Text(this.text,
+            Text(this._text,
                 style: Theme
                     .of(context)
                     .textTheme

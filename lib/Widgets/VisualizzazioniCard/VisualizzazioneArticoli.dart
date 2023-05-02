@@ -54,6 +54,7 @@ class VisualizzazioneArticoliState extends State<VisualizzazioneArticoli>{
           itemCount: widget.articoli.length,
           itemBuilder: (BuildContext context, int index) {
               if(index == _open_index){
+                _open_index = -1; //usato l'indice lo cancelliamo
                 return  WidgetArticolo(widget.articoli[index], true, widget.managerArticoli);
               }
           return GestureDetector(
@@ -149,6 +150,14 @@ class WidgetArticolo extends StatelessWidget{
                               debugPrint("debug: richiesto consumo articolo");
                               this._articolo.consume();
                               this._managerArticoli.replaceElement(this._articolo);
+
+                              SnackBar snackBar = SnackBar(
+                                content: Text("Articolo consumato"),
+                                backgroundColor: Theme.of(context).primaryColor,
+                                duration: Duration(seconds: 1),
+                              );
+
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
                             },
                             child: Text("Consuma"),
                         ),

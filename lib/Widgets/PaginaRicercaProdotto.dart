@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../Classes/GestioneDati/GenericManager.dart';
 import '../Classes/Items/Prodotto.dart';
+import 'PaginaScansione.dart';
 
 
 final formKey = GlobalKey<FormState>();
@@ -77,7 +78,10 @@ class PaginaRicercaProdotto extends StatelessWidget{
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                           onPressed: () {
-                            //TODO
+                            Navigator.of(context).push(
+                                new MaterialPageRoute(builder: (context) {
+                                  return RicercaConScansione();
+                                }));
                           },
                           child: Text("Scan")
                       ),
@@ -126,3 +130,4 @@ class PaginaRicercaProdotto extends StatelessWidget{
     );
   }
 }
+

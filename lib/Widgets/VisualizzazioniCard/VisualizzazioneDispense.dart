@@ -13,6 +13,7 @@ import 'package:greet_food/Classes/Items/Dispensa.dart';
 
 import '../../Classes/GestioneDati/GenericManager.dart';
 import '../../Classes/Items/Prodotto.dart';
+import '../Empty.dart';
 
 
 
@@ -64,6 +65,10 @@ class VisualizzazioneDispense extends StatelessWidget{
   Widget build(BuildContext context) {
 
     List<Dispensa> _dispense = _listaDispense(context);
+
+      if(_dispense.isEmpty && this._cardType == _CardDispensaType.paginaProdotto){
+        return EmptyBody("Nessuna dispensa disponibile");
+      }
 
       return Padding(
         padding: const EdgeInsets.all(8.0),

@@ -139,7 +139,8 @@ class InformazioniDispensa extends StatelessWidget{
 
     //prodotto preferito
     //TODO
-    prodottoPreferito = "";
+    int idProdottoPreferito = _idProdottoPreferito(managerArticoli);
+    prodottoPreferito = managerProdotti.getElementById(idProdottoPreferito).nome;
 
     //contenutoCorrente
     contenutoCorrente = eleboratoreArticoli.filtraPerConsumati(
@@ -289,5 +290,31 @@ class InformazioniDispensa extends StatelessWidget{
         ),
       ),
     );
+  }
+
+  //Ci serve per trovare il prodotto più inserito in questa dispensa
+  //Con un database sarebbe molto più semplice...
+  //in caso di pareggio ne ritorna uno solo arbitrariamente (in futuro sarebbe
+  // una buona idea far notare all'utente il pareggio)
+  int _idProdottoPreferito(GenericManager<Articolo> managerArticoli) {
+    List<Articolo> articoli = managerArticoli.getAllElements();
+    ElaboratoreArticoli elaboratoreArticoli = ElaboratoreArticoli(articoli);
+    elaboratoreArticoli.filtraPerDispensa(this._dispensa, changeState: true);
+    Set<int> idProdotti = Set<int>();
+    for(Articolo articolo in articoli){
+      idProdotti.add(articolo.idProdotto);
+    }
+
+    int idProdotto = -1;
+    int max = -1;
+
+    elaboratoreArticoli.setListaArticoli(articoli);
+    for(int id in idProdotti){
+      int currentNumber = elaboratoreArticoli.filtraPerIdProdotto(id).length;
+      if(currentNumber > max){
+        idProdotto = id;
+      }
+    }
+    return idProdotto;
   }
 }

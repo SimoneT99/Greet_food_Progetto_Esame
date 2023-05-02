@@ -40,6 +40,7 @@ dependencies:
   camera:
   path_provider:
   path:
+  flutter_local_notifications: ^14.0.0+1
 
 
 

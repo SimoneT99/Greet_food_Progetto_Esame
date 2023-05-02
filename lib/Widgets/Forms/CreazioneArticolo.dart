@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Classes/Items/Dispensa.dart';
 import 'package:greet_food/Widgets/AppBars.dart';
-import 'package:greet_food/Widgets/Forms/PagineEsito.dart';
+import 'package:greet_food/Widgets/Forms/PaginaEsito.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -318,8 +318,9 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
       Navigator.of(context).push(
           new MaterialPageRoute(
               builder: (context) {
-                return PaginaConferma(
-                    "Articolo/i inseriti correttamente"
+                return PaginaEsito(
+                    "Articolo/i inseriti correttamente",
+                  Esito.positive
                 );
               }
           )

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Classes/Items/Dispensa.dart';
 import 'package:greet_food/Widgets/AppBars.dart';
-import 'package:greet_food/Widgets/Forms/PagineEsito.dart';
+import 'package:greet_food/Widgets/Forms/PaginaEsito.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -212,7 +212,7 @@ class FormCreazioneDispensaState extends State<FormCreazioneDispensa>{
       Navigator.of(context).push(
           MaterialPageRoute(
               builder: (context) {
-                return PaginaConferma(message);
+                return PaginaEsito(message, Esito.positive);
               }
           )
       );
