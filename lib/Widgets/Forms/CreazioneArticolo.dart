@@ -79,7 +79,7 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: endFormAppbar(saveData),
+      appBar: endFormAppbarAvvertimento(saveData, context, text: "Attenzione gli articoli che stai inserendo non verranno salvati"),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
         child: Form(
@@ -166,7 +166,7 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
 
                       ),
 
-                      labelText: 'Dada di scadenza',
+                      labelText: 'Data di scadenza',
                     ),
                   validator: (value) {
                     if(value == null || value.isEmpty){
@@ -269,7 +269,7 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
                         setState(() {
                         });
                       },
-                      child: Text("Ripeti  (${articoliInseriti.length + 1})")
+                      child: Text("Prossimo  (${articoliInseriti.length + 1})")
                   ),
               ),
             ],

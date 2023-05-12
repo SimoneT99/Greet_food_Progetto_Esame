@@ -99,7 +99,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                     text: "Prezzi",
                   ),
                   Tab(
-                    text: "In casa",
+                    text: "Posizione",
                   )
                 ],
               ),

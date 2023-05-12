@@ -195,18 +195,22 @@ class DispensaCard extends StatelessWidget{
                       child: Column(
                         children: [
                           const Spacer(),
-                          Row(
-                            children: [
-                              const Spacer(),
-                              Text(
-                                _dispensa.nome,
-                                textAlign: TextAlign.left,
-                                style: Theme.of(context).textTheme.headline6?.copyWith(
-                                  color: Theme.of(context).primaryColorDark,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Row(
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    _dispensa.nome,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.left,
+                                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                                      color: Theme.of(context).primaryColorDark,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              const Spacer(flex: 8),
-                            ],
+                              ],
+                            ),
                           ),
                           const Spacer(flex: 3,),
                           Row(

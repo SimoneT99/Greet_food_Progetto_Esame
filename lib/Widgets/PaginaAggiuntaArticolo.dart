@@ -9,6 +9,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 
 import '../Classes/GestioneDati/ElaboratoreProdotti.dart';
+import 'Empty.dart';
 import 'Forms/CreazioneProdotto.dart';
 import 'VisualizzazioniCard/VisualizzazioneProdotto.dart';
 
@@ -88,7 +89,7 @@ class PaginaAggiuntaArticoloState extends State<PaginaAggiuntaArticolo>{
                   onPressed: (){
                     _button_pressed(context);
                   },
-                  child: Text("No codice"),
+                  child: Text("Sfoglia prodotti"),
                 ),
               ),
             ),
@@ -218,7 +219,14 @@ class PaginaElencoProdotti extends StatelessWidget{
             )
         );
       },),
-      body: VisualizzazioneProdotti(prodottiDisponibili, type: ProductVisualizationContext.insertingProcess,)
+
+      body: Consumer<GenericManager<Prodotto>>(builder: (context, manager, child){
+        List<Prodotto> prodottiDisponibili = manager.getAllElements();
+        if(prodottiDisponibili.length == 0){
+          return EmptyBody("Nessun prodotto disponibile al momento");
+        }
+        return VisualizzazioneProdotti(prodottiDisponibili, type: ProductVisualizationContext.insertingProcess,);
+      }),
     );
   }
 }

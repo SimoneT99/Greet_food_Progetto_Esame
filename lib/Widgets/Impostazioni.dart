@@ -82,7 +82,7 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
                       },
                       initialValue: this._currentDays.toString(),
                     ),
-                  ),
+                  ),/*
                   Row(
                     children: [
                       Text("Notifiche attive:",
@@ -101,6 +101,7 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
                           }),
                     ],
                   ),
+                  */
 
                   ElevatedButton(
                       onPressed: (){

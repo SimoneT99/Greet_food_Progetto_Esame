@@ -4,7 +4,6 @@ import 'package:greet_food/Classes/GestioneDati/ElaboratoreArticoli.dart';
 import 'package:greet_food/Classes/GestioneDati/Settings.dart';
 import 'package:greet_food/Classes/Items/Dispensa.dart';
 import 'package:greet_food/Classes/Items/Prodotto.dart';
-import 'package:greet_food/Widgets/Notifiche.dart';
 import 'package:greet_food/Widgets/Themes/Themes.dart';
 import 'package:greet_food/Widgets/VisualizzazioniCard/VisualizzazioneArticoli.dart';
 import 'package:greet_food/Widgets/VisualizzazioniCard/VisualizzazioneProdotto.dart';
@@ -136,8 +135,6 @@ class _GreetFoodHomeState extends State<GreetFoodHome> {
         return VisualizzazioneDispense(manager_dispense: manager);
       }),
     ];
-
-    Notifica.initialize(flutterLocalNotificationsPlugin);
 
     super.initState();
   }

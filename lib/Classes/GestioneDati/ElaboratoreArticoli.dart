@@ -179,4 +179,22 @@ class ElaboratoreArticoli{
 
     return articoli;
   }
+
+  /**
+   * Ordina gli articoli attuali per data (default dalla più vicina alla più lontana)
+   * Cambia sempre lo stati interno dell'elaboratore
+   */
+
+  List<Articolo> orderByDate({bool reverse = false}){
+
+    int Function(Articolo, Articolo) ascending = (a, b) => a.dataScadenza.isAtSameMomentAs(b.dataScadenza) ? 0 : (a.dataScadenza.isBefore(b.dataScadenza) ? -1 : 1);
+    int Function(Articolo, Articolo) descending = (a, b) => a.dataScadenza.isAtSameMomentAs(b.dataScadenza) ? 0 : (a.dataScadenza.isBefore(b.dataScadenza) ? 1 : -1);
+
+    lista_articoli.sort(
+        reverse ? descending : ascending
+    );
+
+    return lista_articoli;
+  }
+
 }

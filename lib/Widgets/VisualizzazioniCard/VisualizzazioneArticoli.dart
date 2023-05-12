@@ -16,10 +16,15 @@ import '../Empty.dart';
 
 class VisualizzazioneArticoli extends StatefulWidget{
 
-  final List<Articolo> articoli;
-  final GenericManager<Articolo> managerArticoli;
+  late List<Articolo> _articoli;
+  late GenericManager<Articolo> _managerArticoli;
+  late String _removeText;
 
-  VisualizzazioneArticoli(this.articoli, this.managerArticoli);
+  VisualizzazioneArticoli(List<Articolo> articoli, final GenericManager<Articolo> managerArticoli, {String removeText = "Consuma"}){
+    this._articoli = articoli;
+    this._managerArticoli = managerArticoli;
+    this._removeText = removeText;
+  }
 
   @override
   State<StatefulWidget> createState() {
@@ -44,22 +49,22 @@ class VisualizzazioneArticoliState extends State<VisualizzazioneArticoli>{
    */
   @override
   Widget build(BuildContext context) {
-    if(widget.articoli.length == 0){
+    if(widget._articoli.length == 0){
       return EmptyBody("Nessun articolo disponibile");
     }
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListView.builder(
-          itemCount: widget.articoli.length,
+          itemCount: widget._articoli.length,
           itemBuilder: (BuildContext context, int index) {
               if(index == _open_index){
                 _open_index = -1; //usato l'indice lo cancelliamo
-                return  WidgetArticolo(widget.articoli[index], true, widget.managerArticoli);
+                return  WidgetArticolo(widget._articoli[index], true, widget._managerArticoli, widget._removeText);
               }
           return GestureDetector(
             onTap: () {_onChangedIndex(index);},
-            child:  WidgetArticolo(widget.articoli[index], false, widget.managerArticoli),
+            child:  WidgetArticolo(widget._articoli[index], false, widget._managerArticoli, widget._removeText),
           );
         },
       ),
@@ -80,11 +85,13 @@ class WidgetArticolo extends StatelessWidget{
   late Dispensa _dispensa;
   late Prodotto _prodotto;
   late GenericManager<Articolo> _managerArticoli;
+  late String _removeText;
 
-  WidgetArticolo(Articolo articolo, bool isExpanded, GenericManager<Articolo> managerArticoli) {
+  WidgetArticolo(Articolo articolo, bool isExpanded, GenericManager<Articolo> managerArticoli, String removeText) {
     this._articolo = articolo;
     this._isExpanded = isExpanded;
     this._managerArticoli = managerArticoli;
+    this._removeText = removeText;
   }
 
   @override
@@ -159,7 +166,7 @@ class WidgetArticolo extends StatelessWidget{
 
                               ScaffoldMessenger.of(context).showSnackBar(snackBar);
                             },
-                            child: Text("Consuma"),
+                            child: Text(this._removeText),
                         ),
                         const Spacer(),
                       ],

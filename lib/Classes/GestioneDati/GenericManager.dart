@@ -25,6 +25,8 @@ class GenericManager<T extends Item> extends ChangeNotifier{
    */
   String _path = '';
 
+  int _next_code = 0;
+
   /**
    * Metodi del manager
    */
@@ -54,14 +56,22 @@ class GenericManager<T extends Item> extends ChangeNotifier{
    * Aggiungere un'elemento alla lista degli elementi gestiti
    */
   void addElement(T newElement){
+
+    if(newElement.getCode() < _next_code){
+      debugPrint("duplicated code, trying to correct error");
+      newElement.refreshCode(this._next_code);
+    }
+
     for(int i = 0; i<_elements.length; i++){
       if (_elements[i].checkCode(newElement.getCode())){
         //Soluzione MOLTO brutta ma per ora funziona...
-        debugPrint("duplicated code, trying to correct error");
-        newElement.refreshCode(this._maxCode() + 1);
+        int max_code = this._maxCode();
+        newElement.refreshCode(max_code + 1);
+        this._next_code = max_code + 1;
       }
     }
     _elements.add(newElement);
+    this._next_code++;
     this.notifyListeners();
     this.saveToDisk();
   }
@@ -133,6 +143,7 @@ class GenericManager<T extends Item> extends ChangeNotifier{
        jsonFile = await file.readAsString();
        print("$jsonFile");
        print("${jsonDecode(jsonFile)}");
+       final data = jsonDecode(jsonFile);
 
        /**
         * Soluzione brutta... ...ma dart non permette di istanziare T direttamente
@@ -143,16 +154,20 @@ class GenericManager<T extends Item> extends ChangeNotifier{
         */
        if (_elements is List<Dispensa>){
          print("TYPE = Dispensa");
-         this._elements = jsonDecode(jsonFile).map((model) => Dispensa.fromJson(model)).toList().cast<Dispensa>();
+         this._elements = data["_elements"].map((model) => Dispensa.fromJson(model)).toList().cast<Dispensa>();
        } else if (_elements is List<Articolo>){
          print("TYPE = Articolo");
-         this._elements = jsonDecode(jsonFile).map((model) => Articolo.fromJson(model)).toList().cast<Articolo>();
+         this._elements = data["_elements"].map((model) => Articolo.fromJson(model)).toList().cast<Articolo>();
        } else if (_elements is List<Prodotto>){
          print("TYPE = Prodotto");
-         this._elements = jsonDecode(jsonFile).map((model) => Prodotto.fromJson(model)).toList().cast<Prodotto>();
+         this._elements = data["_elements"].map((model) => Prodotto.fromJson(model)).toList().cast<Prodotto>();
        }else{
          throw Exception("Item non gestibile");
        }
+
+       this._next_code = data["_next_code"];
+       debugPrint("${this._next_code}");
+
      }catch(exeption){
        print(exeption);
      }
@@ -175,7 +190,16 @@ class GenericManager<T extends Item> extends ChangeNotifier{
     }
 
     final directory = await getApplicationDocumentsDirectory();
-    String jsonData = jsonEncode(this._elements);
+
+    Map<String, dynamic> dictionary = {'_elements' : this._elements,
+      '_next_code' : this._next_code,
+    };
+
+
+    String jsonData = jsonEncode(dictionary);
+
+
+
     String completePath = directory.path + '/' + this._path;
     File file = File(completePath);
     await file.writeAsString(jsonData);

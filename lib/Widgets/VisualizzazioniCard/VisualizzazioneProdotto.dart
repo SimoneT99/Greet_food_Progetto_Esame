@@ -133,19 +133,22 @@ class CardProdotto extends StatelessWidget{
                         padding:  const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
-                            const Spacer(),
-                            Row(
-                              children: [
-                                const Spacer(),
-                                Text(
-                                  _prodotto.nome,
-                                  textAlign: TextAlign.left,
-                                  style: Theme.of(context).textTheme.headline6?.copyWith(
-                                    color: Theme.of(context).primaryColorDark,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Row(
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      _prodotto.nome,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.left,
+                                      style: Theme.of(context).textTheme.headline6?.copyWith(
+                                        color: Theme.of(context).primaryColorDark,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                                const Spacer(flex: 8),
-                              ],
+                                ],
+                              ),
                             ),
                             Row(
                               children: [

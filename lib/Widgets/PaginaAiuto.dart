@@ -58,4 +58,19 @@ List<_Help> _tips = <_Help>[
       answer: "Puoi cambiare il numero di giorni dalle impostazioni modificando il campo \"Giorni anticipo scadenza\"."
           "Puoi accedere a questo menù dalla home screen cliccando sull'icona a forma di ingranaggio"
   ),
+  _Help(
+      problem: "Come elimino una dispensa?",
+      answer: "Puoi eliminare una dispensa tenendone premuta la card nella sezione dispense"
+  ),
+  _Help(
+      problem: "Come modifico una dispensa o un prodotto?",
+      answer: "Puo modificare una dispensa o un prodotto cliccando nell'icona in alto a destra nella"
+          " pagina della dispensa o del prodotto che vui modificare"
+  ),
+  _Help(
+      problem: "Come rimuovo un articolo da quelli che possiedo?",
+      answer: "Innanzitutto trova l'articolo che vuoi rimuovere, puo cercarlo in una specifica dispensa "
+          "o tra gli articoli scaduti/in scadeza. Quando lo hai trovato puoi cliccarci sopra e selezionare consuma/butta via"
+  ),
+
 ];

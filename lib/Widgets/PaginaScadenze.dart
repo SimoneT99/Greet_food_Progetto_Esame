@@ -73,32 +73,27 @@ class PaginaScadenzaStato extends State<PaginaScadenze> with SingleTickerProvide
                 child: TabBarView(
                     controller: _tabController,
                     children: [
-                      Builder(
-                          builder: (BuildContext context) {
-                            return Consumer<GenericManager<Articolo>>(builder: (context, manager, child){
-                              ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(_managerArticoli.getAllElements());
-                              elaboratoreArticoli.setListaArticoli(elaboratoreArticoli.filtraPerArticoliScaduti());
-                              List<Articolo> articoliScaduti = elaboratoreArticoli.filtraPerConsumati(consumato: false);
-                              if(articoliScaduti.length == 0){
-                                return NoScadutiAttualmente();
-                              }
-                              return VisualizzazioneArticoli(articoliScaduti, manager);
-                            });
-                          }
-                      ),
-                      Builder(
-                          builder: (BuildContext context) {
-                            return Consumer2<GenericManager<Articolo>, Settings>(builder: (context, manager, settings, child){
-                              ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(_managerArticoli.getAllElements());
-                              elaboratoreArticoli.setListaArticoli(elaboratoreArticoli.filtraPerArticoliInScadenza(settings.giorniInScadenza)); //TODO il tempo deve essere letto dalle impostazioni
-                              List<Articolo> articoliInScadenza = elaboratoreArticoli.filtraPerConsumati(consumato: false);
-                              if(articoliInScadenza.length == 0){
-                                return NoScadenzeInArrivo();
-                              }
-                               return VisualizzazioneArticoli(articoliInScadenza, manager);
-                            });
-                          }
-                      )
+                      Consumer<GenericManager<Articolo>>(builder: (context, manager, child){
+                        ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(_managerArticoli.getAllElements());
+                        elaboratoreArticoli.filtraPerArticoliScaduti(changeState: true);
+                        List<Articolo> articoliScaduti = elaboratoreArticoli.filtraPerConsumati(consumato: false, changeState: true);
+                        if(articoliScaduti.length == 0){
+                          return NoScadutiAttualmente();
+                        }
+
+                        articoliScaduti = elaboratoreArticoli.orderByDate();
+                        return VisualizzazioneArticoli(articoliScaduti, manager, removeText: "Butta via",);
+                      }),
+                      Consumer2<GenericManager<Articolo>, Settings>(builder: (context, manager, settings, child){
+                        ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(_managerArticoli.getAllElements());
+                        elaboratoreArticoli.filtraPerArticoliInScadenza(settings.giorniInScadenza, changeState: true);
+                        List<Articolo> articoliInScadenza = elaboratoreArticoli.filtraPerConsumati(consumato: false, changeState: true);
+                        if(articoliInScadenza.length == 0){
+                          return NoScadenzeInArrivo();
+                        }
+                        articoliInScadenza = elaboratoreArticoli.orderByDate();
+                        return VisualizzazioneArticoli(articoliInScadenza, manager);
+                      })
                     ]
                 )
             )

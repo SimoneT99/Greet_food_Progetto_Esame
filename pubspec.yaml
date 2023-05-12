@@ -32,15 +32,12 @@ dependencies:
     sdk: flutter
 
   provider: ^6.0.5
-  persistent_bottom_nav_bar: any
-  intl: ^0.18.0
   mobile_scanner: ^3.2.0
   syncfusion_flutter_charts: ^20.4.53
   google_fonts:
   camera:
   path_provider:
   path:
-  flutter_local_notifications: ^14.0.0+1
 
 
 
