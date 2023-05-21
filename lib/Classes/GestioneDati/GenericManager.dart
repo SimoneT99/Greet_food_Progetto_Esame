@@ -55,7 +55,7 @@ class GenericManager<T extends Item> extends ChangeNotifier{
   /**
    * Aggiungere un'elemento alla lista degli elementi gestiti
    */
-  void addElement(T newElement){
+  void addElement(T newElement, {bool notifyListeners = true, bool saveToDisk = true}){
 
     if(newElement.getCode() < _next_code){
       debugPrint("duplicated code, trying to correct error");
@@ -72,8 +72,12 @@ class GenericManager<T extends Item> extends ChangeNotifier{
     }
     _elements.add(newElement);
     this._next_code++;
-    this.notifyListeners();
-    this.saveToDisk();
+    if(notifyListeners){
+      this.notifyListeners();
+    }
+    if(saveToDisk){
+      this.saveToDisk();
+    }
   }
 
   /**
@@ -127,6 +131,8 @@ class GenericManager<T extends Item> extends ChangeNotifier{
         return;
       }
     }
+    this.notifyListeners();
+    this.saveToDisk();
     throw Exception("Nessun elemento con questo ID");
   }
 

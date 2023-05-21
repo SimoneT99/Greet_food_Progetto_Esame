@@ -241,14 +241,10 @@ class FormCreazioneDispensaState extends State<FormCreazioneDispensa>{
         )
     );
 
-    this.pathImmagine = imagePath;
-
-    /*
     File image = File(imagePath);
     Directory directory = await getApplicationDocumentsDirectory();
     File newFile = await image.copy('${directory.path}/${imagePath.split('/').last}');
     this.pathImmagine = newFile.path;
-     */
 
     setState(() {
       this.imageProvider = FileImage(File(imagePath));

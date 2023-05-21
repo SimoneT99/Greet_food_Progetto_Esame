@@ -8,6 +8,7 @@ import 'package:greet_food/Widgets/AppBars.dart';
 import 'package:greet_food/Widgets/Forms/CreazioneArticolo.dart';
 import 'package:greet_food/Widgets/Forms/PaginaEsito.dart';
 import 'package:greet_food/Widgets/PaginaAggiuntaArticolo.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'CameraWidget.dart';
@@ -274,7 +275,11 @@ class FormCreazioneProdottoState extends State<FormCreazioneProdotto>{
             }
         )
     );
-    this.pathImmagine = imagePath;
+
+    File image = File(imagePath);
+    Directory directory = await getApplicationDocumentsDirectory();
+    File newFile = await image.copy('${directory.path}/${imagePath.split('/').last}');
+    this.pathImmagine = newFile.path;
 
     setState(() {
       this.imageProvider = FileImage(File(imagePath));

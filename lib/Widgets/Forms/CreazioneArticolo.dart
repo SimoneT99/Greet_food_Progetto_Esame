@@ -336,11 +336,13 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
       //inserimento nuovi articoli
       Articolo nuovoArticolo = _generaArticolo();
       GenericManager<Articolo> gestoreArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
-      gestoreArticoli.addElement(nuovoArticolo);
+
       for(Articolo articolo in articoliInseriti){
-        gestoreArticoli.addElement(articolo);
+        gestoreArticoli.addElement(articolo, notifyListeners: false, saveToDisk: false); //evitiamo sia la scrittura che il rebuild
+                                                                      //dei widget ad ogni articolo
       }
 
+      gestoreArticoli.addElement(nuovoArticolo);
       Navigator.of(context).pop();
       Navigator.of(context).push(
           new MaterialPageRoute(
