@@ -32,10 +32,10 @@ class ElaboratoreProdotti{
    * Dato un nome di un prodotto viene ritornata la lista dei prodotti con
    * quel nome
    */
-  List<Prodotto> filtraPerNome(String nome, {bool changeState  = false}){
+  List<Prodotto> filtraPerNome(String nome, {bool changeState  = false, caseSensitive = true}){
     List<Prodotto> prodotti = [];
     for(int i = 0; i<_currentList.length; i++){
-      if(_currentList[i].nome == nome){
+      if(caseSensitive ? _currentList[i].nome == nome : _currentList[i].nome.toLowerCase() == nome.toLowerCase()){
         prodotti.add(_currentList[i]);
       }
     }

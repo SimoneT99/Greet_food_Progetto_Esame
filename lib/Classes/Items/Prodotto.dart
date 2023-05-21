@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:greet_food/Classes/Interfaces/Item.dart';
 
 /**
@@ -5,6 +8,7 @@ import 'package:greet_food/Classes/Interfaces/Item.dart';
  */
 class Prodotto implements Item{
 
+  static String _DEFAULT_PRODOTTO_IMAGE = "Assets/Images/Picture.png";
   static int _currentCode = 0;
 
   int _id = 0;
@@ -19,12 +23,17 @@ class Prodotto implements Item{
   Prodotto(
       {required String nome,
         required String marca,
-        required String imagePath,
+        String imagePath = "",
         required String descripion,
         required String? barcode,
         required bool alKg}){
     this._nome = nome;
     this._marca = marca;
+    if(imagePath == "") {
+      this._imagePath = _DEFAULT_PRODOTTO_IMAGE;
+    }else{
+      this._imagePath = imagePath;
+    }
     this._imagePath = imagePath;
     this._descripion = descripion;
     this._barcode = barcode;
@@ -121,5 +130,18 @@ class Prodotto implements Item{
     Prodotto._currentCode = code + 1;
   }
 
+
+  Image getImage(){
+    Image image;
+    if(this._imagePath != _DEFAULT_PRODOTTO_IMAGE) {
+      File file = File(this._imagePath);
+      image = Image.file(file);
+    }
+    else{
+      image = Image.asset(_DEFAULT_PRODOTTO_IMAGE);
+    }
+
+    return image;
+  }
 
 }

@@ -122,7 +122,7 @@ class CardProdotto extends StatelessWidget{
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             fit: BoxFit.fill,
-                            image: FileImage(File(_prodotto.imagePath)),
+                            image: _prodotto.getImage().image,
                           ),
                         ),
                       ),

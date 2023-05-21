@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -11,6 +12,7 @@ import 'package:provider/provider.dart';
 
 import '../../Classes/Items/Articolo.dart';
 import '../../Classes/Items/Prodotto.dart';
+import 'Utility.dart';
 
 /**
  * Pagine che implementano l'inserimento di un articolo
@@ -78,206 +80,231 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: endFormAppbarAvvertimento(saveData, context, text: "Attenzione gli articoli che stai inserendo non verranno salvati"),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-        child: Form(
-          key: formKey,
-          child: ListView(
-            children: [
-              //introduzione prodotto
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
-                child: AspectRatio(
-                  aspectRatio: 2.8,
-                  child: Row(
-                    children: [
-                      AspectRatio(
-                        aspectRatio: 1,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: FileImage(File(widget._prodotto.imagePath)),
+    return WillPopScope(
+      child: Scaffold(
+        appBar: endFormAppbarAvvertimento(saveData, context, text: "Attenzione gli articoli che stai inserendo non verranno salvati"),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+          child: Form(
+            key: formKey,
+            child: ListView(
+              children: [
+                //introduzione prodotto
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.0),
+                  child: AspectRatio(
+                    aspectRatio: 2.8,
+                    child: Row(
+                      children: [
+                        AspectRatio(
+                          aspectRatio: 1,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: FileImage(File(widget._prodotto.imagePath)),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Text(
-                              widget._prodotto.nome,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.headline6
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Column(
+                              children: [
+                                Text(
+                                  widget._prodotto.nome,
+                                  style: Theme.of(context).textTheme.headline6
+                                ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                        widget._prodotto.marca,
+                                        textAlign: TextAlign.left,
+                                        style: Theme.of(context).textTheme.subtitle2
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              ],
                             ),
-                          Text(
-                              widget._prodotto.marca,
-                              style: Theme.of(context).textTheme.subtitle2
                           ),
-                          ],
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
 
-              //Prezzo
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      suffixIcon: Icon(Icons.euro),
-                      fillColor: Theme.of(context).colorScheme.secondary,
-                      filled: true,
-                      border: OutlineInputBorder(
+                //Prezzo
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: TextFormField(
+                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                      decoration: InputDecoration(
+                        suffixIcon: Icon(Icons.euro),
+                        fillColor: Theme.of(context).colorScheme.secondary,
+                        filled: true,
+                        border: OutlineInputBorder(
 
-                      ),
-                      labelText: 'Prezzo',
-                    ),
-                  validator: (value) {
-                    if(value == null || value.isEmpty){
-                      return "Devi inserire un prezzo";
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    this._prezzo = double.parse(value!);
-                  },
-                ),
-              ),
-
-              //Data di scadenza
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: TextFormField(
-                  controller: dataScadenzaController,
-                  keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      suffixIcon: Icon(Icons.schedule),
-                      fillColor: Theme.of(context).colorScheme.secondary,
-                      filled: true,
-                      border: OutlineInputBorder(
-
-                      ),
-
-                      labelText: 'Data di scadenza',
-                    ),
-                  validator: (value) {
-                    if(value == null || value.isEmpty){
-                      return "Devi inserire una data di scadenza";
-                    }
-                    return null;
-                  },
-                  onTap: () async {
-                    // Below line stops keyboard from appearing
-                    FocusScope.of(context).requestFocus(new FocusNode());
-
-                    // Show Date Picker Here
-                    DateTime? datePicked = await showDatePicker(
-                        context: context,
-                        initialDate: new DateTime.now(),
-                        firstDate: new DateTime(2016),
-                        lastDate: new DateTime(3000)
-                    );
-                    dataScadenzaController.text = (new DateFormat("dd/MM/yyyy")).format(datePicked!);
-                    this._dataScadenza = datePicked;
-                  },
-                ),
-              ),
-
-              //Peso dell'articolo
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    suffixIcon: Icon(Icons.scale),
-                    fillColor: Theme.of(context).colorScheme.secondary,
-                    filled: true,
-                    border: OutlineInputBorder(
-
-                    ),
-
-                    labelText: 'Peso dell\'articolo (grammi)',
-                  ),
-                  validator: (value) {
-                    if(value == null || value.isEmpty){
-                      return "Devi inserire un peso";
-                    }
-                    return null;
-                  },
-                  onSaved: (value) => {
-                    this._peso = double.parse(value!)
-                  },
-                ),
-              ),
-
-              //Dispensa
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Builder(
-                    builder: (BuildContext context) {
-                      GenericManager<Dispensa> gestoreDispense = Provider.of<GenericManager<Dispensa>>(context, listen: false);
-                      List<Dispensa> dispense = gestoreDispense.getAllElements();
-                      return DropdownButtonFormField(
-                        decoration: InputDecoration(
-                          suffixIcon: Icon(Icons.kitchen),
-                          fillColor: Theme.of(context).colorScheme.secondary,
-                          filled: true,
-                          border: OutlineInputBorder(
-
-                          ),
-
-                          labelText: 'Dispensa',
                         ),
-                          items: dispense.map<DropdownMenuItem<Dispensa>>((Dispensa dispensa) {
-                            return DropdownMenuItem<Dispensa>(
-                              child: Text(dispensa.nome),
-                              value: dispensa,
-                            );
-                      }).toList(),
-                      onChanged: (value) {
-                        //TODO
-                      },
-                      onSaved: (value){
-                            this._dispensa = value;
-                      },
+                        labelText: 'Prezzo (euro.cent)',
+                      ),
+                    validator: (value) {
+                      if(value == null || value.isEmpty){
+                        return "Devi inserire un prezzo";
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      this._prezzo = double.parse(value!);
+                    },
+                  ),
+                ),
+
+                //Data di scadenza
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: TextFormField(
+                    controller: dataScadenzaController,
+                    keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        suffixIcon: Icon(Icons.schedule),
+                        fillColor: Theme.of(context).colorScheme.secondary,
+                        filled: true,
+                        border: OutlineInputBorder(
+
+                        ),
+
+                        labelText: 'Data di scadenza',
+                      ),
+                    validator: (value) {
+                      if(value == null || value.isEmpty){
+                        return "Devi inserire una data di scadenza";
+                      }
+                      return null;
+                    },
+                    onTap: () async {
+                      // Below line stops keyboard from appearing
+                      FocusScope.of(context).requestFocus(new FocusNode());
+
+                      // Show Date Picker Here
+                      DateTime? datePicked = await showDatePicker(
+                          context: context,
+                          initialDate: new DateTime.now(),
+                          firstDate: new DateTime(2016),
+                          lastDate: new DateTime(3000)
                       );
-                    }
-                ),
-              ),
-
-              /**
-               * Bottone ripeti: per ripetere gli inserimenti
-               */
-              Center(
-                child:
-                  ElevatedButton(
-                      onPressed: (){
-                        debugPrint("Richiesta ripetizione inserimento");
-                        if(formKey.currentState!.validate()){
-                          formKey.currentState!.save();
-                          Articolo nuovoArticolo = _generaArticolo();
-                          this.articoliInseriti.add(nuovoArticolo);
-                        }
-                        setState(() {
-                        });
-                      },
-                      child: Text("Prossimo  (${articoliInseriti.length + 1})")
+                      dataScadenzaController.text = (new DateFormat("dd/MM/yyyy")).format(datePicked!);
+                      this._dataScadenza = datePicked;
+                    },
                   ),
-              ),
-            ],
+                ),
+
+                //Peso dell'articolo
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      suffixIcon: Icon(Icons.scale),
+                      fillColor: Theme.of(context).colorScheme.secondary,
+                      filled: true,
+                      border: OutlineInputBorder(
+
+                      ),
+
+                      labelText: 'Peso dell\'articolo (grammi)',
+                    ),
+                    validator: (value) {
+                      if(value == null || value.isEmpty){
+                        return "Devi inserire un peso";
+                      }
+                      return null;
+                    },
+                    onSaved: (value) => {
+                      this._peso = double.parse(value!)
+                    },
+                  ),
+                ),
+
+                //Dispensa
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Builder(
+                      builder: (BuildContext context) {
+                        GenericManager<Dispensa> gestoreDispense = Provider.of<GenericManager<Dispensa>>(context, listen: false);
+                        List<Dispensa> dispense = gestoreDispense.getAllElements();
+                        return DropdownButtonFormField(
+                          decoration: InputDecoration(
+                            suffixIcon: Icon(Icons.kitchen),
+                            fillColor: Theme.of(context).colorScheme.secondary,
+                            filled: true,
+                            border: OutlineInputBorder(
+
+                            ),
+
+                            labelText: 'Dispensa',
+                          ),
+                            items: dispense.map<DropdownMenuItem<Dispensa>>((Dispensa dispensa) {
+                              return DropdownMenuItem<Dispensa>(
+                                child: Text(dispensa.nome),
+                                value: dispensa,
+                              );
+                        }).toList(),
+                        onChanged: (value) {
+                          //TODO
+                        },
+                        onSaved: (value){
+                              this._dispensa = value;
+                        },
+                        );
+                      }
+                  ),
+                ),
+
+                /**
+                 * Bottone ripeti: per ripetere gli inserimenti
+                 */
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:[
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(9.0),
+                        child: Text("Inseriti: ${articoliInseriti.length}",
+                          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                            color: Theme.of(context).primaryColorDark,
+                          ),
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                        onPressed: (){
+                          debugPrint("Richiesta ripetizione inserimento");
+                          if(formKey.currentState!.validate()){
+                            formKey.currentState!.save();
+                            Articolo nuovoArticolo = _generaArticolo();
+                            this.articoliInseriti.add(nuovoArticolo);
+                          }
+                          setState(() {
+                          });
+                        },
+                        child: Text("Prossimo")
+                    ),
+                  ]
+                ),
+              ],
+            ),
           ),
         ),
       ),
+      onWillPop: () => askConfirmationDialog(context, "Attenzione gli articoli che stai inserendo non verranno salvati"),
     );
   }
+
 
   /**
    * Genera un nuovo articolo
@@ -319,7 +346,7 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
           new MaterialPageRoute(
               builder: (context) {
                 return PaginaEsito(
-                    "Articolo/i inseriti correttamente",
+                    "${articoliInseriti.length + 1} Articolo/i inseriti correttamente",
                   Esito.positive
                 );
               }

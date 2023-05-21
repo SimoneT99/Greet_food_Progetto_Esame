@@ -183,7 +183,7 @@ class DispensaCard extends StatelessWidget{
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           fit: BoxFit.fill,
-                          image: FileImage(File(_dispensa.imagePath)),
+                          image: _dispensa.getImage().image,
                         ),
                       ),
                     ),

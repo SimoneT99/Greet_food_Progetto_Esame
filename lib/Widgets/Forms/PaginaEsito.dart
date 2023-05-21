@@ -18,9 +18,11 @@ class PaginaEsito extends StatelessWidget {
   late Esito _esito;
 
   late Image _image;
+  late String _buttonText;
+  Function()? _function;
 
 
-  PaginaEsito(String text, Esito esito){
+  PaginaEsito(String text, Esito esito, {String testoPulsante = "Avanti", Function()? function = null}){
     this._text = text;
     this._esito = esito;
     switch(esito){
@@ -37,6 +39,8 @@ class PaginaEsito extends StatelessWidget {
       }
       break;
     }
+    this._buttonText = testoPulsante;
+    this._function = function;
   }
 
   @override
@@ -49,7 +53,7 @@ class PaginaEsito extends StatelessWidget {
           children: [
             Container(
                 height: 200,
-                child: Image.asset("Assets/Images/Affermativo.png")
+                child: this._image
             ),
             Text(this._text,
                 style: Theme
@@ -62,11 +66,11 @@ class PaginaEsito extends StatelessWidget {
                 textAlign: TextAlign.center
             ),
             ElevatedButton(
-                onPressed: () {
+                onPressed: _function == null ? () {
                   Navigator.of(context).pop();
-                },
+                } : _function!,
                 child: Text(
-                  "Avanti",
+                  this._buttonText,
                 )
             )
           ],

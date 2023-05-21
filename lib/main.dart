@@ -199,7 +199,6 @@ class _GreetFoodHomeState extends State<GreetFoodHome> {
   //per l'onboarding, sarebbe più sensato usare il consumer invece che passare una funzione
   _done(){
     setState(() {
-
     });;
   }
 }

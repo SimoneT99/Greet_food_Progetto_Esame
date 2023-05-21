@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'CameraWidget.dart';
+import 'Utility.dart';
 
 final formKey = GlobalKey<FormState>();
 
@@ -62,32 +63,34 @@ class FormCreazioneDispensaState extends State<FormCreazioneDispensa>{
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: endFormAppbar(saveData),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-        child: Form(
-          key: formKey,
-          child: ListView(
-            children: [
-              Center(
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  width: 125,
-                  child: InkWell(
-                    onTap: () {
-                      _takePicture(context);
-                    },
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: Card(
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        margin:  EdgeInsets.all(0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: imageProvider,
+    return WillPopScope(
+      child: Scaffold(
+        appBar: endFormAppbarAvvertimento(saveData, context, text: "Attenzione la dispensa che stai creando non verrà salvata"),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+          child: Form(
+            key: formKey,
+            child: ListView(
+              children: [
+                Center(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    width: 125,
+                    child: InkWell(
+                      onTap: () {
+                        _takePicture(context);
+                      },
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: Card(
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          margin:  EdgeInsets.all(0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: imageProvider,
+                              ),
                             ),
                           ),
                         ),
@@ -95,85 +98,86 @@ class FormCreazioneDispensaState extends State<FormCreazioneDispensa>{
                     ),
                   ),
                 ),
-              ),
 
-              //Nome
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    fillColor: Theme.of(context).colorScheme.secondary,
-                    filled: true,
-                    border: OutlineInputBorder(
+                //Nome
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      fillColor: Theme.of(context).colorScheme.secondary,
+                      filled: true,
+                      border: OutlineInputBorder(
 
+                      ),
+
+                      labelText: 'Nome',
                     ),
-
-                    labelText: 'Nome',
+                    validator: (value) {
+                      if(value == null || value.isEmpty){
+                        return "Devi inserire un nome";
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      this.nomeDispensa = value!;
+                    },
+                    initialValue: widget._dispensa != null ? widget._dispensa!.nome : null,
                   ),
-                  validator: (value) {
-                    if(value == null || value.isEmpty){
-                      return "Devi inserire un nome";
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    this.nomeDispensa = value!;
-                  },
-                  initialValue: widget._dispensa != null ? widget._dispensa!.nome : null,
                 ),
-              ),
 
-              //Descrizione
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    fillColor: Theme.of(context).colorScheme.secondary,
-                    filled: true,
-                    border: OutlineInputBorder(
+                //Descrizione
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      fillColor: Theme.of(context).colorScheme.secondary,
+                      filled: true,
+                      border: OutlineInputBorder(
+                      ),
+                      labelText: 'Descrizione',
                     ),
-                    labelText: 'Descrizione',
+                    validator: (value) {
+                      if(value == null || value.isEmpty){
+                        return "Devi inserire una descrizione";
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      this.descrizioneDispensa = value!;
+                    },
+                    initialValue: widget._dispensa != null ? widget._dispensa!.descripion : null,
                   ),
-                  validator: (value) {
-                    if(value == null || value.isEmpty){
-                      return "Devi inserire una descrizione";
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    this.descrizioneDispensa = value!;
-                  },
-                  initialValue: widget._dispensa != null ? widget._dispensa!.descripion : null,
                 ),
-              ),
 
-              //Posizione
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    fillColor: Theme.of(context).colorScheme.secondary,
-                    filled: true,
-                    border: OutlineInputBorder(
+                //Posizione
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      fillColor: Theme.of(context).colorScheme.secondary,
+                      filled: true,
+                      border: OutlineInputBorder(
+                      ),
+                      labelText: 'Posizione',
                     ),
-                    labelText: 'Posizione',
+                    validator: (value) {
+                      if(value == null || value.isEmpty){
+                        return "Devi inserire una posizione";
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      this.posizioneDispensa = value!;
+                    },
+                    initialValue: widget._dispensa != null ? widget._dispensa!.posizione : null,
                   ),
-                  validator: (value) {
-                    if(value == null || value.isEmpty){
-                      return "Devi inserire una posizione";
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    this.posizioneDispensa = value!;
-                  },
-                  initialValue: widget._dispensa != null ? widget._dispensa!.posizione : null,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
+      onWillPop: () => askConfirmationDialog(context, "Attenzione la dispensa che stai creando non verrà salvata"),
     );
   }
 
@@ -189,7 +193,7 @@ class FormCreazioneDispensaState extends State<FormCreazioneDispensa>{
       if(widget._dispensa == null){
         nuovaDispensa = Dispensa(
             this.nomeDispensa,
-            this.pathImmagine != null ? this.pathImmagine! : "Assets/PlaceholderImage.png", //TODO permettere un immmagine custom
+            this.pathImmagine != null ? this.pathImmagine! : "",
             this.descrizioneDispensa,
             this.posizioneDispensa);
 
@@ -236,7 +240,15 @@ class FormCreazioneDispensaState extends State<FormCreazioneDispensa>{
             }
         )
     );
+
     this.pathImmagine = imagePath;
+
+    /*
+    File image = File(imagePath);
+    Directory directory = await getApplicationDocumentsDirectory();
+    File newFile = await image.copy('${directory.path}/${imagePath.split('/').last}');
+    this.pathImmagine = newFile.path;
+     */
 
     setState(() {
       this.imageProvider = FileImage(File(imagePath));

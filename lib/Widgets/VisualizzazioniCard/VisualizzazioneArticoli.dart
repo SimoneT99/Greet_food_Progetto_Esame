@@ -194,7 +194,7 @@ class WidgetArticolo extends StatelessWidget{
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.fill,
-                  image: FileImage(File(_prodotto.imagePath)),
+                  image: _prodotto.getImage().image,
                 ),
               ),
             ),
@@ -208,12 +208,15 @@ class WidgetArticolo extends StatelessWidget{
                   const Spacer(),
                   Row(
                     children: [
-                      Text(
-                        _prodotto.nome,
-                          textAlign: TextAlign.left,
-                          style: Theme.of(context).textTheme.headline6?.copyWith(
-                            color: Theme.of(context).primaryColorDark,
-                          ),
+                      Flexible(
+                        child: Text(
+                          _prodotto.nome,
+                            textAlign: TextAlign.left,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.headline6?.copyWith(
+                              color: Theme.of(context).primaryColorDark,
+                            ),
+                        ),
                       ),
                     ],
                   ),

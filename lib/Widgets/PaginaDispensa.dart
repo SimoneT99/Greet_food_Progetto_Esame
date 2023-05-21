@@ -13,6 +13,7 @@ import 'package:greet_food/Widgets/VisualizzazioniCard/VisualizzazioneArticoli.d
 import 'package:provider/provider.dart';
 
 import '../Classes/Items/Prodotto.dart';
+import 'Forms/Utility.dart';
 
 
 /**
@@ -138,14 +139,19 @@ class InformazioniDispensa extends StatelessWidget{
     articoliScadutiFinoOggi = eleboratoreArticoli.filtraPerLasciatiScadere().length;
 
     //prodotto preferito
-    //TODO
     int idProdottoPreferito = _idProdottoPreferito(managerArticoli);
-    prodottoPreferito = managerProdotti.getElementById(idProdottoPreferito).nome;
+    prodottoPreferito = idProdottoPreferito == -1 ? 'N.A.' : managerProdotti.getElementById(idProdottoPreferito).nome;
 
     //contenutoCorrente
     contenutoCorrente = eleboratoreArticoli.filtraPerConsumati(
         consumato: false
     ).length;
+
+    /**
+     * Prendiamoci il provider dell'immagine
+     */
+
+    Image image = _dispensa.getImage();
 
     /**
      * Costruizione del widget
@@ -169,7 +175,7 @@ class InformazioniDispensa extends StatelessWidget{
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           image: DecorationImage(
                             fit: BoxFit.fill,
-                            image: FileImage(File(_dispensa.imagePath)),
+                            image: image.image,
                           ),
                         ),
                       ),
@@ -181,10 +187,13 @@ class InformazioniDispensa extends StatelessWidget{
                             children: [
                               Row(
                                 children: [
-                                  Text(
-                                    _dispensa.nome,
-                                    style: Theme.of(context).textTheme.headline6?.copyWith(
-                                      color: Theme.of(context).primaryColorDark,
+                                  Flexible(
+                                    child: Text(
+                                      _dispensa.nome,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Theme.of(context).textTheme.headline6?.copyWith(
+                                        color: Theme.of(context).primaryColorDark,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -220,9 +229,11 @@ class InformazioniDispensa extends StatelessWidget{
                     children: [
                       Row(
                         children: [
-                          Text("Descrizione:",
-                            style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                              color: Theme.of(context).primaryColorDark,
+                          Expanded(
+                            child: Text("Descrizione:",
+                              style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                color: Theme.of(context).primaryColorDark,
+                              ),
                             ),
                           ),
                           Spacer()
@@ -271,16 +282,21 @@ class InformazioniDispensa extends StatelessWidget{
                   padding: const EdgeInsets.all(10),
                   child: Row(
                     children: [
-                      Text("Prodotto preferito:",
-                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                          color: Theme.of(context).primaryColorDark,
-                        ),
-                      ),
-                      Spacer(),
-                      Text(prodottoPreferito.toString(),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Text("Prodotto preferito:",
                           style: Theme.of(context).textTheme.subtitle1?.copyWith(
                             color: Theme.of(context).primaryColorDark,
-                          ))
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        child: Text(prodottoPreferito.toString(),
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                              color: Theme.of(context).primaryColorDark,
+                            )),
+                      )
                     ],
                   ),
                 ),

@@ -102,10 +102,10 @@ class PaginaRicercaProdotto extends StatelessWidget{
                               List<Prodotto> listaProdotti = managerProdotti.getAllElements();
                               ElaboratoreProdotti elaboratoreProdotti = new ElaboratoreProdotti(listaProdotti);
                               if(_nome != ""){
-                                listaProdotti = elaboratoreProdotti.filtraPerNome(_nome);
+                                listaProdotti = elaboratoreProdotti.filtraPerNome(_nome, changeState: true, caseSensitive: false);
                               }
                               if(_marca != ""){
-                                listaProdotti = elaboratoreProdotti.filtraPerNome(_marca);
+                                listaProdotti = elaboratoreProdotti.filtraPerNome(_marca, changeState: true, caseSensitive: false);
                               }
                               Navigator.of(context).push(
                                   new MaterialPageRoute(builder: (context) {

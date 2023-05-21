@@ -7,6 +7,7 @@ import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Classes/GestioneDati/Settings.dart';
 import 'package:greet_food/Classes/Items/Prodotto.dart';
 import 'package:greet_food/Widgets/Forms/CreazioneProdotto.dart';
+import 'package:greet_food/Widgets/Forms/PaginaEsito.dart';
 import 'package:greet_food/Widgets/VisualizzazioniCard/VisualizzazioneDispense.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -109,7 +110,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                     controller: _tabController,
                     children: [
                       _infoProdotto(context),
-                      _prezzi(),
+                      _prezzi(context),
                       _dispenseContenenti(),
                     ]
                 )
@@ -143,22 +144,15 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
     elaboratoreArticoli.filtraPerArticoliInScadenza(Provider.of<Settings>(context, listen: false).giorniInScadenza);
     inScadenza = elaboratoreArticoli.getCurrentList().length;
 
-
     elaboratoreArticoli.setListaArticoli(managerArticoli.getAllElements());
     elaboratoreArticoli.filtraPerProdotto(_prodotto, changeState: true);
-    ultimo_prezzo = _getLatestPrice(elaboratoreArticoli.getCurrentList());
+    ultimo_prezzo = elaboratoreArticoli.getCurrentList().isEmpty ? -1 : _getLatestPrice(elaboratoreArticoli.getCurrentList());
 
     GenericManager<Dispensa> managerDispensa = Provider.of<GenericManager<Dispensa>>(context, listen: false);
 
+    int favDispensaId = _getFavouriteDispensaId(elaboratoreArticoli.getCurrentList());
 
-    try{
-      dispensa_preferita = managerDispensa.getElementById(
-          getFavouriteDispensaId(elaboratoreArticoli.getCurrentList())
-      ).nome;
-    }
-    catch(exception){
-      dispensa_preferita = "Non disponibile";
-    }
+    dispensa_preferita = favDispensaId == -1 ? 'N.A.' : dispensa_preferita = managerDispensa.getElementById(favDispensaId).nome;
 
     return Padding(
       padding: const EdgeInsets.all(5.0),
@@ -179,7 +173,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           image: DecorationImage(
                             fit: BoxFit.fill,
-                            image: FileImage(File(_prodotto.imagePath)),
+                            image: _prodotto.getImage().image,
                           ),
                         ),
                       ),
@@ -192,12 +186,14 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                           children: [
                             Row(
                               children: [
-                                Text(_prodotto.nome,
-                                  textAlign: TextAlign.left,
-                                  style: Theme.of(context).textTheme.headline6?.copyWith(
-                                    color: Theme.of(context).primaryColorDark,
-                                  ),
+                                Flexible(
+                                  child: Text(_prodotto.nome,
+                                    textAlign: TextAlign.left,
+                                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                                      color: Theme.of(context).primaryColorDark,
+                                    ),
 
+                                  ),
                                 ),
 
                               ],
@@ -303,7 +299,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                           color: Theme.of(context).primaryColorDark,
                         ),),
                       Spacer(),
-                      Text("€ $ultimo_prezzo",
+                      Text(ultimo_prezzo == -1 ? "N.A." : "€ $ultimo_prezzo",
                         style: Theme.of(context).textTheme.subtitle1?.copyWith(
                           color: Theme.of(context).primaryColorDark,
                         ),)
@@ -340,7 +336,28 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
   /**
    * Sezione con le informazioni sui prezzi
    */
-  Widget _prezzi(){
+  Widget _prezzi(BuildContext context){
+
+    GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
+    ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(managerArticoli.getAllElements());
+    elaboratoreArticoli.filtraPerProdotto(this._prodotto, changeState: true);
+    if(elaboratoreArticoli.getCurrentList().isEmpty){
+      return Column(
+                children: [
+                    Container(
+                      height: 200,
+                      child: Image.asset("Assets/Images/Warning.png")
+                    ),
+                    Text("Nessun articolo per compilare il grafico prezzi",
+                            style: Theme.of(context)
+                              .textTheme
+                              .subtitle2
+                              ?.copyWith(
+                                  fontSize: 20
+                                  ),
+                        textAlign: TextAlign.center),
+                        ]);
+    }
     return priceHistoryPage(_prodotto);
   }
 
@@ -357,9 +374,25 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
   }
 
 
-  int getFavouriteDispensaId(List<Articolo> articoli){
-    //TODO
-    return 1;
+  int _getFavouriteDispensaId(List<Articolo> articoli){
+    ElaboratoreArticoli elaboratoreArticoli = ElaboratoreArticoli(articoli);
+    elaboratoreArticoli.filtraPerProdotto(this._prodotto, changeState: true);
+    Set<int> idDispense = Set<int>();
+    for(Articolo articolo in articoli){
+      idDispense.add(articolo.idDispensa);
+    }
+
+    int idDispensa = -1;
+    int max = -1;
+
+    elaboratoreArticoli.setListaArticoli(articoli);
+    for(int id in idDispense){
+      int currentNumber = elaboratoreArticoli.filtraPerIdDispensa(id).length;
+      if(currentNumber > max){
+        idDispensa = id;
+      }
+    }
+    return idDispensa;
   }
 
   double _getLatestPrice(List<Articolo> articoli, {bool alKg = false}){

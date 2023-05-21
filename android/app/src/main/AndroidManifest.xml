@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="Tomada.Simone.greet_food">
    <application
-        android:label="greet_food"
+        android:label="GreetFood"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

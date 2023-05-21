@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:greet_food/Classes/Interfaces/Item.dart';
 
 /**
@@ -5,6 +8,8 @@ import 'package:greet_food/Classes/Interfaces/Item.dart';
  */
 
 class Dispensa implements Item{
+
+  static String _DEFAULT_DISPENSA_IMAGE = "Assets/Images/Picture.png";
 
   static int _currentCode = 0;
 
@@ -17,7 +22,11 @@ class Dispensa implements Item{
   Dispensa(String nome, String imagePath, String descripion, String posizione){
     this._id = _currentCode++;
     this._nome = nome;
-    this._imagePath = imagePath;
+    if(imagePath != ""){
+      this._imagePath = imagePath;
+    }else{
+      this._imagePath = _DEFAULT_DISPENSA_IMAGE;
+    }
     this._descripion = descripion;
     this._posizione = posizione;
   }
@@ -105,6 +114,19 @@ class Dispensa implements Item{
   refreshCode(int code) {
     this._id = code;
     Dispensa._currentCode = code + 1;
+  }
+
+  Image getImage(){
+    Image image;
+    if(this._imagePath != _DEFAULT_DISPENSA_IMAGE) {
+      File file = File(this._imagePath);
+      image = Image.file(file);
+    }
+    else{
+      image = Image.asset(_DEFAULT_DISPENSA_IMAGE);
+    }
+
+    return image;
   }
 
 }

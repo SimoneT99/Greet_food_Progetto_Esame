@@ -11,6 +11,7 @@ import 'package:greet_food/Widgets/PaginaAggiuntaArticolo.dart';
 import 'package:provider/provider.dart';
 
 import 'CameraWidget.dart';
+import 'Utility.dart';
 
 /**
  * Stateful widget per gestire l'immagine
@@ -72,32 +73,34 @@ class FormCreazioneProdottoState extends State<FormCreazioneProdotto>{
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: endFormAppbar(saveData),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-        child: Form(
-          key: formKey,
-          child: ListView(
-            children: [
-              Center(
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  width: 125,
-                  child: InkWell(
-                    onTap: () {
-                      _takePicture(context);
-                    },
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: Card(
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        margin:  EdgeInsets.all(0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: imageProvider,
+    return WillPopScope(
+      child: Scaffold(
+        appBar: endFormAppbarAvvertimento(saveData, context, text: "Attenzione il prodotto che stai creando non verrà salvato"),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+          child: Form(
+            key: formKey,
+            child: ListView(
+              children: [
+                Center(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    width: 125,
+                    child: InkWell(
+                      onTap: () {
+                        _takePicture(context);
+                      },
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: Card(
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          margin:  EdgeInsets.all(0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: imageProvider,
+                              ),
                             ),
                           ),
                         ),
@@ -105,85 +108,86 @@ class FormCreazioneProdottoState extends State<FormCreazioneProdotto>{
                     ),
                   ),
                 ),
-              ),
 
-              //Nome
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    fillColor: Theme.of(context).colorScheme.secondary,
-                    filled: true,
-                    border: OutlineInputBorder(
+                //Nome
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      fillColor: Theme.of(context).colorScheme.secondary,
+                      filled: true,
+                      border: OutlineInputBorder(
 
+                      ),
+
+                      labelText: 'Nome',
                     ),
-
-                    labelText: 'Nome',
+                    validator: (value) {
+                      if(value == null || value.isEmpty){
+                        return "Devi inserire un nome";
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      this.nomeProdotto = value!;
+                    },
+                    initialValue: widget._prodotto != null ? widget._prodotto!.nome : null,
                   ),
-                  validator: (value) {
-                    if(value == null || value.isEmpty){
-                      return "Devi inserire un nome";
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    this.nomeProdotto = value!;
-                  },
-                  initialValue: widget._prodotto != null ? widget._prodotto!.nome : null,
                 ),
-              ),
 
-              //Marca
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    fillColor: Theme.of(context).colorScheme.secondary,
-                    filled: true,
-                    border: OutlineInputBorder(
+                //Marca
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      fillColor: Theme.of(context).colorScheme.secondary,
+                      filled: true,
+                      border: OutlineInputBorder(
+                      ),
+                      labelText: 'Marca',
                     ),
-                    labelText: 'Marca',
+                    validator: (value) {
+                      if(value == null || value.isEmpty){
+                        return "Devi inserire una marca";
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      this.marca = value!;
+                    },
+                    initialValue: widget._prodotto != null ? widget._prodotto!.marca : null,
                   ),
-                  validator: (value) {
-                    if(value == null || value.isEmpty){
-                      return "Devi inserire una marca";
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    this.marca = value!;
-                  },
-                  initialValue: widget._prodotto != null ? widget._prodotto!.marca : null,
                 ),
-              ),
 
-              //Descrizione
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    fillColor: Theme.of(context).colorScheme.secondary,
-                    filled: true,
-                    border: OutlineInputBorder(
+                //Descrizione
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      fillColor: Theme.of(context).colorScheme.secondary,
+                      filled: true,
+                      border: OutlineInputBorder(
+                      ),
+                      labelText: 'Descrizione',
                     ),
-                    labelText: 'Descrizione',
+                    validator: (value) {
+                      if(value == null || value.isEmpty){
+                        return "Devi inserire una descrizione";
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      this.descrizione = value!;
+                    },
+                    initialValue: widget._prodotto != null ? widget._prodotto!.descripion : null,
                   ),
-                  validator: (value) {
-                    if(value == null || value.isEmpty){
-                      return "Devi inserire una descrizione";
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    this.descrizione = value!;
-                  },
-                  initialValue: widget._prodotto != null ? widget._prodotto!.descripion : null,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
+      onWillPop: () => askConfirmationDialog(context, "Attenzione il prodotto che stai creando non verrà salvato"),
     );
   }
 
@@ -203,7 +207,7 @@ class FormCreazioneProdottoState extends State<FormCreazioneProdotto>{
           marca: this.marca,
           imagePath: this.pathImmagine != null
               ? this.pathImmagine!
-              : "Assets/PlaceholderImage.png",
+              : DEFAULT_IMAGE,
           barcode: widget._barcode,
           descripion: this.descrizione,
           alKg: true,
@@ -220,7 +224,7 @@ class FormCreazioneProdottoState extends State<FormCreazioneProdotto>{
         nuovoProdotto.nome = this.nomeProdotto;
         nuovoProdotto.marca = this.marca;
         nuovoProdotto.descripion = this.descrizione;
-        nuovoProdotto.imagePath = this.pathImmagine!; //Non può essere nulla se arriviamo qui
+        nuovoProdotto.imagePath = this.pathImmagine != null ? this.pathImmagine! : "";
 
         managerProdotti.replaceElement(nuovoProdotto);
 

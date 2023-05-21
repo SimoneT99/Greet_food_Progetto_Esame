@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Classes/GestioneDati/Settings.dart';
+import 'package:greet_food/Classes/Items/Dispensa.dart';
 import 'package:greet_food/Widgets/AppBars.dart';
 import 'package:flutter/foundation.dart';
+import 'package:greet_food/Widgets/Forms/PaginaEsito.dart';
 import 'package:greet_food/Widgets/PaginaAggiuntaArticolo.dart';
 import 'package:greet_food/Widgets/PaginaAiuto.dart';
 import 'package:provider/provider.dart';
 
+import 'Forms/CreazioneDispensa.dart';
 import 'Impostazioni.dart';
 import 'PaginaRicercaProdotto.dart';
 
@@ -78,9 +82,21 @@ class AggiungiArticolo extends StatelessWidget {
 
   void _button_pressed(BuildContext context){
     debugPrint("richiesta aggiunta articolo");
+    GenericManager<Dispensa> managerDispense = Provider.of<GenericManager<Dispensa>>(context, listen: false);
     Navigator.of(context).push(new MaterialPageRoute(
         builder: (context) {
-          return PaginaAggiuntaArticolo();
+          return managerDispense.getAllElements().length == 0 ? PaginaEsito(
+              "Attenzione devi creare almeno una dispensa per poter iniziare ad inserire articoli",
+              Esito.warning,
+              function: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(new MaterialPageRoute(
+                    builder: (context) {
+                      return FormCreazioneDispensa();
+                    }));
+              },
+            testoPulsante: "Crea dispensa",
+          ) : PaginaAggiuntaArticolo() ;
         }
     ));
   }
