@@ -47,7 +47,7 @@ class VisualizzazioneProdotti extends StatelessWidget{
               return CardProdotto(
                 prodotto: _prodotti[index],
                 cardAction: _visualizationContext == ProductVisualizationContext.insertingProcess ? _CardAction.insertProduct : _CardAction.productPage,
-                allowElimintaion: false,
+                allowElimintaion: _visualizationContext == ProductVisualizationContext.insertingProcess ? false : true,
               );
             }
         ),
@@ -76,7 +76,6 @@ class CardProdotto extends StatelessWidget{
     this._prodotto = prodotto;
     this._cardType = cardAction;
     this._allowElimination = allowElimintaion;
-
   }
 
   @override
@@ -110,8 +109,9 @@ class CardProdotto extends StatelessWidget{
               }
             },
             onLongPress: !_allowElimination ? (){} : (){
-              GenericManager<Prodotto> managerProdotti = Provider.of<GenericManager<Prodotto>>(context, listen: false);
-              managerProdotti.removeElement(_prodotto);
+
+              _showCancellationDialog(context);
+
             },
             child: Container(
               child: Row(
@@ -193,4 +193,93 @@ class CardProdotto extends StatelessWidget{
       ),
     );
   }
+
+
+  Future<void> _showCancellationDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Vuoi cancellare questo prodotto?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Annulla'),
+              onPressed: () {
+                debugPrint("Cancellazione annullata");
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text("Cancella"),
+              onPressed: () {
+                debugPrint("Cancellazione confermata");
+                Navigator.of(context).pop();
+                this._onDeleteRequested(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _onDeleteRequested(BuildContext context) {
+
+    GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
+    ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(managerArticoli.getAllElements());
+    elaboratoreArticoli.filtraPerProdotto(this._prodotto, changeState:  true);
+    int articoliNonConsumati = elaboratoreArticoli.filtraPerConsumati(consumato: false).length;
+
+    if(articoliNonConsumati != 0){ //Se ci sono articoli non consumati di questo prodotto non lo possiamo cancellare
+      _showCancellationDisabledDialog(context);
+    }else{
+      List<Articolo> articoliConsumati = elaboratoreArticoli.filtraPerConsumati();
+      if(!articoliConsumati.isEmpty) {
+        for (int i = 1; i < articoliConsumati.length; i++) {
+          managerArticoli.removeElement(
+              articoliConsumati[i], notifyListeners: false,
+              saveToDisk: false);
+        }
+        managerArticoli.removeElement(articoliConsumati[0]);
+      }
+      GenericManager<Prodotto> managerProdotti = Provider.of<GenericManager<Prodotto>>(context, listen: false);
+      managerProdotti.removeElement(this._prodotto);
+    }
+  }
+
+  Future<void> _showCancellationDisabledDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Non puoi cancellare un prodotto che ha degli articoli non ancora consumati'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Annulla'),
+              onPressed: () {
+                debugPrint("Cancellazione annullata");
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
 }

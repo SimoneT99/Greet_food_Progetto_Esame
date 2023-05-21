@@ -84,7 +84,7 @@ class GenericManager<T extends Item> extends ChangeNotifier{
    * Rimuovere un elemento dato l'id
    * Eccezione se l'elemento non è presente
    */
-  void removeElementById(int code){
+  void removeElementById(int code, {bool notifyListeners = true, bool saveToDisk = true}){
     int index = -1;
     for(int i = 0; i<_elements.length; i++){
       if (_elements[i].checkCode(code)){
@@ -95,15 +95,19 @@ class GenericManager<T extends Item> extends ChangeNotifier{
       throw Exception("Nessun elemento con questo ID");
     }
     _elements.removeAt(index);
-    this.notifyListeners();
-    this.saveToDisk();
+    if(notifyListeners){
+      this.notifyListeners();
+    }
+    if(saveToDisk){
+      this.saveToDisk();
+    }
   }
 
   /**
    * Rimuovere un elemento dato l'id
    * Eccezione se l'elemento non è presente
    */
-  void removeElement(T element){
+  void removeElement(T element, {bool notifyListeners = true, bool saveToDisk = true}){
     int index = -1;
     for(int i = 0; i<_elements.length; i++){
       if (_elements[i].checkCode(element.getCode())){
@@ -114,8 +118,12 @@ class GenericManager<T extends Item> extends ChangeNotifier{
       throw Exception("Nessun elemento con questo ID");
     }
     _elements.removeAt(index);
-    this.notifyListeners();
-    this.saveToDisk();
+    if(notifyListeners){
+      this.notifyListeners();
+    }
+    if(saveToDisk){
+      this.saveToDisk();
+    }
   }
 
   /**
