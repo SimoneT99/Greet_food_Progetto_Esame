@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Classes/Items/Dispensa.dart';
 import 'package:greet_food/Widgets/AppBars.dart';
@@ -15,9 +16,8 @@ import 'Utility.dart';
 final formKey = GlobalKey<FormState>();
 
 /**
- * Statefull widget perchè cambia l'immagine
+ * Stateful widget perchè cambia l'immagine
  */
-//TODO delete
 class FormCreazioneDispensa extends StatefulWidget{
 
   //per trattare il caso di modifiche
@@ -182,6 +182,7 @@ class FormCreazioneDispensaState extends State<FormCreazioneDispensa>{
   }
 
   void saveData(){
+    HapticFeedback.lightImpact();
     if(formKey.currentState!.validate()){
       formKey.currentState!.save();
       Navigator.of(context).pop();

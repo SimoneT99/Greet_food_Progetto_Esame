@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:greet_food/Classes/GestioneDati/ElaboratoreArticoli.dart';
 import 'package:greet_food/Classes/Items/Articolo.dart';
 import 'package:greet_food/Widgets/Forms/CreazioneDispensa.dart';
@@ -19,7 +20,6 @@ import '../Empty.dart';
 
 /**
  * Widgets per la visualizzazione delle dispense nella sezione dispense
- * //TODO refactoring per gestire meglio le responsabilità
  */
 
 enum _CardDispensaType{
@@ -84,11 +84,11 @@ class VisualizzazioneDispense extends StatelessWidget{
             }else{
               return _allowCreation ? Center(
                   child : SizedBox(
-                    //TODO gestire questi parametri
                       width: 150, // <-- Your width
                       height: 75, // <-- Your height
                       child: ElevatedButton(
                         onPressed: () {
+                          HapticFeedback.lightImpact();
                           debugPrint("debug: richiesta aggiunta dispensa");
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) {
@@ -164,6 +164,7 @@ class DispensaCard extends StatelessWidget{
         //borderRadius: BorderRadius.circular(12),
         child: InkWell(
           onTap: _accessEnabled ? () {
+            HapticFeedback.lightImpact();
             debugPrint('Short press: ${_dispensa.toString()}');
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) {
@@ -272,6 +273,7 @@ class DispensaCard extends StatelessWidget{
               TextButton(
                 child: const Text('Annulla'),
                 onPressed: () {
+                  HapticFeedback.lightImpact();
                   debugPrint("Cancellazione annullata");
                   Navigator.of(context).pop();
                 },
@@ -279,6 +281,7 @@ class DispensaCard extends StatelessWidget{
               TextButton(
                 child: const Text("Cancella"),
                 onPressed: () {
+                  HapticFeedback.lightImpact();
                   debugPrint("Cancellazione confermata");
                   Navigator.of(context).pop();
                   this._onDeleteRequested(context);
@@ -315,6 +318,7 @@ class DispensaCard extends StatelessWidget{
             TextButton(
               child: const Text('Annulla'),
               onPressed: () {
+                HapticFeedback.lightImpact();
                 debugPrint("Cancellazione annullata");
                 Navigator.of(context).pop();
               },

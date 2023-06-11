@@ -3,7 +3,6 @@ import 'package:path/path.dart';
 
 /**
  * Appbar solo con il titolo dell'applicazione
- * //TODO migliorare la gestione delle appBar
  */
 
 const String APP_NAME = "GreetFood";
@@ -124,7 +123,7 @@ AppBar backAppbarEdit(void Function()? action) {
         padding: EdgeInsets.all(10),
         child: OutlinedButton(
           onPressed: action,
-          child: const Icon(Icons.edit),
+          child: const Icon(Icons.edit_document),
         ),
       ),
     ],

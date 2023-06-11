@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:greet_food/Classes/GestioneDati/Settings.dart';
 import 'package:greet_food/Widgets/AppBars.dart';
 import 'package:provider/provider.dart';
@@ -82,29 +83,11 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
                       },
                       initialValue: this._currentDays.toString(),
                     ),
-                  ),/*
-                  Row(
-                    children: [
-                      Text("Notifiche attive:",
-                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                          color: Theme.of(context).primaryColorDark,
-                        ),
-                      ),
-                      Checkbox(
-                          value: this._notificheAttive,
-                          activeColor: Theme.of(context).primaryColor,
-                          onChanged: (bool? value){
-                            setState(() {
-                              debugPrint("checkbox cliccata $value");
-                              this._notificheAttive = value!;
-                            });
-                          }),
-                    ],
                   ),
-                  */
 
                   ElevatedButton(
                       onPressed: (){
+                        HapticFeedback.lightImpact();
                         if(formKey.currentState!.validate()){
                           formKey.currentState!.save();
                           this._saveChanges(context);

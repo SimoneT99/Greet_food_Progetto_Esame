@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Classes/GestioneDati/Settings.dart';
 import 'package:greet_food/Classes/Items/Dispensa.dart';
@@ -74,6 +75,7 @@ class AggiungiArticolo extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
+        HapticFeedback.lightImpact();
         _button_pressed(context);
       },
       child: Text("Aggiungi articolo"),
@@ -108,6 +110,7 @@ class CercaProdotto extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
+        HapticFeedback.lightImpact();
         _button_pressed(context);
       },
       child: Text("Cerca prodotto"),
@@ -164,6 +167,7 @@ class Aiuto extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
+        HapticFeedback.lightImpact();
         Navigator.of(context).push(new MaterialPageRoute(
             builder: (context) {
               return PaginaAiuto();
@@ -181,6 +185,7 @@ class Impostazioni extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
+        HapticFeedback.lightImpact();
         Navigator.of(context).push(new MaterialPageRoute(
             builder: (context) {
               return Consumer<Settings>(builder: (context, manager, child){

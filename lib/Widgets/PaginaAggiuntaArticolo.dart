@@ -87,6 +87,7 @@ class PaginaAggiuntaArticoloState extends State<PaginaAggiuntaArticolo>{
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: ElevatedButton(
                   onPressed: (){
+                    HapticFeedback.lightImpact();
                     _button_pressed(context);
                   },
                   child: Text("Sfoglia prodotti"),
@@ -140,7 +141,6 @@ class PaginaAggiuntaArticoloState extends State<PaginaAggiuntaArticolo>{
       ));
 
     }catch(exception){
-      //TODO
       debugPrint("Nessun prodotto con questo codice a barre");
       Navigator.of(context).push(new MaterialPageRoute(
           builder: (context) {
@@ -180,6 +180,7 @@ class NoCodeButton extends StatelessWidget{
         padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: ElevatedButton(
           onPressed: (){
+            HapticFeedback.lightImpact();
             _button_pressed(context);
           },
           child: Text("No codice"),

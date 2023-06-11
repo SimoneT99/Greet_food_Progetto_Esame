@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:greet_food/Classes/GestioneDati/ElaboratoreArticoli.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Classes/Items/Articolo.dart';
@@ -94,6 +95,7 @@ class CardProdotto extends StatelessWidget{
           //borderRadius: BorderRadius.circular(12),
           child: InkWell(
             onTap: (){
+              HapticFeedback.lightImpact();
               if(_cardType == _CardAction.productPage){
                 Navigator.of(context).push(
                     new MaterialPageRoute(builder: (context) {
@@ -110,8 +112,11 @@ class CardProdotto extends StatelessWidget{
             },
             onLongPress: !_allowElimination ? (){} : (){
 
-              _showCancellationDialog(context);
-
+              /**
+               * Al momento la cancellazione non è permessa
+               *
+               * _showCancellationDialog(context);
+               */
             },
             child: Container(
               child: Row(
@@ -212,6 +217,7 @@ class CardProdotto extends StatelessWidget{
             TextButton(
               child: const Text('Annulla'),
               onPressed: () {
+                HapticFeedback.lightImpact();
                 debugPrint("Cancellazione annullata");
                 Navigator.of(context).pop();
               },
@@ -219,6 +225,7 @@ class CardProdotto extends StatelessWidget{
             TextButton(
               child: const Text("Cancella"),
               onPressed: () {
+                HapticFeedback.lightImpact();
                 debugPrint("Cancellazione confermata");
                 Navigator.of(context).pop();
                 this._onDeleteRequested(context);
@@ -271,6 +278,7 @@ class CardProdotto extends StatelessWidget{
             TextButton(
               child: const Text('Annulla'),
               onPressed: () {
+                HapticFeedback.lightImpact();
                 debugPrint("Cancellazione annullata");
                 Navigator.of(context).pop();
               },

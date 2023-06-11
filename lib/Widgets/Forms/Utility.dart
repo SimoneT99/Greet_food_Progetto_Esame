@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /**
  * Funzioni utilizzate da più widget
@@ -29,6 +30,7 @@ Future<bool> askConfirmationDialog(BuildContext context, String message) async {
           TextButton(
             child: const Text("Continua"),
             onPressed: () {
+              HapticFeedback.lightImpact();
               Navigator.of(context).pop(true);
             },
           ),

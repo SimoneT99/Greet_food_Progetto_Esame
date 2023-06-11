@@ -38,7 +38,6 @@ class GenericManager<T extends Item> extends ChangeNotifier{
   T getElementById(int code){
     for(int i = 0; i<_elements.length; i++){
       if (_elements[i].checkCode(code)){
-        //TODO gestire la copia in modo che non si possa modificare
         return _elements[i];
       }
     }

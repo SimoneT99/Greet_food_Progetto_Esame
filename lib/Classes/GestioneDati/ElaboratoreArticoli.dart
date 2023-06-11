@@ -5,7 +5,6 @@ import '../Items/Dispensa.dart';
 
 /**
  * Classe che ha la responsabilità di elaborare delle liste di articoli
- * TODO rimuvere in caso di passaggio ad un database
  */
 
 class ElaboratoreArticoli{

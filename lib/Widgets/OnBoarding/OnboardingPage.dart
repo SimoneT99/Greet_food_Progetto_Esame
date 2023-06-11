@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:greet_food/Classes/GestioneDati/Settings.dart';
 import 'package:greet_food/Widgets/AppBars.dart';
 import 'package:provider/provider.dart';
@@ -116,7 +117,7 @@ class OnboardingHome extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container( //TODO immagine
+      child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
         child: Column(
           children: [
@@ -136,6 +137,7 @@ class OnboardingHome extends StatelessWidget{
             ),
             ElevatedButton(
                 onPressed: (){
+                  HapticFeedback.lightImpact();
                   goOnfunction(_onBoardingEnum.home);
                 },
                 child: Text(
@@ -179,6 +181,7 @@ class OnboardingScadenze extends StatelessWidget{
             ),
             ElevatedButton(
                 onPressed: (){
+                  HapticFeedback.lightImpact();
                   goOnfunction(_onBoardingEnum.scadenze);
                 },
                 child: Text(
@@ -202,7 +205,7 @@ class OnboardingDispense extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container( //TODO immagine
+      child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
         child: Column(
           children: [
@@ -222,6 +225,7 @@ class OnboardingDispense extends StatelessWidget{
             ),
             ElevatedButton(
                 onPressed: (){
+                  HapticFeedback.lightImpact();
                   goOnfunction(_onBoardingEnum.dispense);
                 },
                 child: Text(
@@ -244,7 +248,7 @@ class OnboardingAiuto extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container( //TODO immagine
+      child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
         child: Column(
           children: [
@@ -264,6 +268,7 @@ class OnboardingAiuto extends StatelessWidget{
             ),
             ElevatedButton(
                 onPressed: (){
+                  HapticFeedback.lightImpact();
                   goOnfunction(_onBoardingEnum.aiuto);
                 },
                 child: Text(

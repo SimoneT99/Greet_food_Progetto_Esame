@@ -166,20 +166,24 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                 child: Row(
                   children: [
                     //Immagine
-                    AspectRatio(
-                      aspectRatio: 1,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: _prodotto.getImage().image,
+                    Expanded(
+                      flex : 1,
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: _prodotto.getImage().image,
+                            ),
                           ),
                         ),
                       ),
                     ),
                     //Testo immagine
                     Expanded(
+                      flex: 1,
                       child: Padding(
                         padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 10),
                         child: Column(
@@ -226,8 +230,9 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                       Row(
                         children: [
                           Text("Descrizione:",
-                            style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                            style: Theme.of(context).textTheme.subtitle2?.copyWith(
                               color: Theme.of(context).primaryColorDark,
+                              fontSize: 20,
                             ),),
                           Spacer()
                         ],
@@ -239,6 +244,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                           style: Theme.of(context).textTheme.subtitle1?.copyWith(
                             color: Theme.of(context).primaryColorDark,
                             fontStyle: FontStyle.italic,
+                            fontSize: 20,
                           ),
                         ),
                       ),
@@ -256,14 +262,16 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                       Text("In possesso:",
                         overflow: TextOverflow.visible,
                         textAlign: TextAlign.left,
-                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                        style: Theme.of(context).textTheme.subtitle2?.copyWith(
                           color: Theme.of(context).primaryColorDark,
+                          fontSize: 20,
                         ),
                       ),
                       Spacer(),
                       Text("$posseduti",
                         style: Theme.of(context).textTheme.subtitle1?.copyWith(
                           color: Theme.of(context).primaryColorDark,
+                          fontSize: 20,
                         ),)
                     ],
                   ),
@@ -276,14 +284,19 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                   child: Row(
                     children: [
                       Text("Dispensa preferita:",
-                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                        style: Theme.of(context).textTheme.subtitle2?.copyWith(
                         color: Theme.of(context).primaryColorDark,
+                          fontSize: 20,
                       ),),
                       Spacer(),
-                      Text("$dispensa_preferita",
-                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                          color: Theme.of(context).primaryColorDark,
-                        ),)
+                      Expanded(
+                        child: Text("$dispensa_preferita",
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                            color: Theme.of(context).primaryColorDark,
+                            fontSize: 20,
+                          ),),
+                      )
                     ],
                   ),
                 ),
@@ -295,13 +308,15 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                   child: Row(
                     children: [
                       Text("Ultimo prezzo:",
-                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                        style: Theme.of(context).textTheme.subtitle2?.copyWith(
                           color: Theme.of(context).primaryColorDark,
+                          fontSize: 20,
                         ),),
                       Spacer(),
                       Text(ultimo_prezzo == -1 ? "N.A." : "€ $ultimo_prezzo",
                         style: Theme.of(context).textTheme.subtitle1?.copyWith(
                           color: Theme.of(context).primaryColorDark,
+                          fontSize: 20,
                         ),)
                     ],
                   ),
@@ -314,13 +329,15 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                   child: Row(
                     children: [
                       Text("In Scadenza:",
-                          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                          style: Theme.of(context).textTheme.subtitle2?.copyWith(
                             color: Theme.of(context).primaryColorDark,
+                            fontSize: 20,
                           )),
                       Spacer(),
                       Text("$inScadenza",
                           style: Theme.of(context).textTheme.subtitle1?.copyWith(
                             color: Theme.of(context).primaryColorDark,
+                            fontSize: 20,
                           ))
                     ],
                   ),
@@ -459,9 +476,25 @@ class priceHistoryPageState extends State<priceHistoryPage>{
     //Preparazione dati per popolare la pagina
     GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
     List<Articolo> articoliProdotto = new ElaboratoreArticoli(managerArticoli.getAllElements()).filtraPerProdotto(widget._prodotto);
-    double prezzoMassimo = articoliProdotto.reduce((current, next) => current.prezzo > next.prezzo ? current : next).prezzo;
-    double prezzoMinimo = articoliProdotto.reduce((current, next) => current.prezzo < next.prezzo ? current : next).prezzo;
-    double prezzoMedio = articoliProdotto.fold(.0, (current, next) => (current + next.prezzo))/articoliProdotto.length.toDouble();
+
+    double prezzoMassimo;
+    double prezzoMinimo;
+    double prezzoMedio;
+
+    if(this._alKg){
+      Articolo temp = articoliProdotto.reduce((current, next) => ((current.prezzo/current.weight) * 1000.0 > (next.prezzo/next.weight) * 1000.0 ? current : next));
+      prezzoMassimo = (temp.prezzo/temp.weight) * 1000.0;
+
+      temp = articoliProdotto.reduce((current, next) => ((current.prezzo/current.weight) * 1000.0 < (next.prezzo/next.weight) * 1000.0 ? current : next));
+      prezzoMinimo = (temp.prezzo/temp.weight) * 1000.0;
+
+      prezzoMedio = articoliProdotto.fold(.0, (current, next) => (current + ((next.prezzo/next.weight) * 1000.0)))/articoliProdotto.length.toDouble();
+    }else{
+      prezzoMassimo = articoliProdotto.reduce((current, next) => current.prezzo > next.prezzo ? current : next).prezzo;
+      prezzoMinimo = articoliProdotto.reduce((current, next) => current.prezzo < next.prezzo ? current : next).prezzo;
+      prezzoMedio = articoliProdotto.fold(.0, (current, next) => (current + next.prezzo))/articoliProdotto.length.toDouble();
+    }
+
 
     return Padding(
       padding: const EdgeInsets.all(5.0),
@@ -561,7 +594,8 @@ class priceHistoryPageState extends State<priceHistoryPage>{
         xValueMapper: (Articolo articolo, _) => articolo.dataInserimento,
         yValueMapper: (Articolo articolo, _) {
           if (_alKg) {
-            return (articolo.prezzo/articolo.weight) * 1000;
+            double e_al_kg = (articolo.prezzo/articolo.weight) * 1000.0;
+            return e_al_kg;
           }
           return articolo.prezzo;
         },

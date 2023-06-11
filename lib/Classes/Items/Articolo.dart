@@ -47,7 +47,7 @@ class Articolo implements Item{
     this._idProdotto = idProdotto;
     this._idDispensa = idDispensa;
     this._prezzo = prezzo;
-    this._weight = weight;
+    this._weight = peso;
     this._consumed = false;
     this._dataInserimento = dataInserimento;
     this._dataScadenza = dataScadenza;

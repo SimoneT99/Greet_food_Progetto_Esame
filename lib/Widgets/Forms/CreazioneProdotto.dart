@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Classes/Items/Prodotto.dart';
 import 'package:greet_food/Widgets/AppBars.dart';
@@ -193,6 +194,7 @@ class FormCreazioneProdottoState extends State<FormCreazioneProdotto>{
   }
 
   void saveData(){
+    HapticFeedback.lightImpact();
     if(formKey.currentState!.validate()) {
       formKey.currentState!.save();
       Navigator.of(context).pop();

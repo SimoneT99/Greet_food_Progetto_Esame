@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Classes/Items/Dispensa.dart';
 import 'package:greet_food/Widgets/AppBars.dart';
@@ -103,7 +104,7 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
                               borderRadius: BorderRadius.all(Radius.circular(10)),
                               image: DecorationImage(
                                 fit: BoxFit.fill,
-                                image: FileImage(File(widget._prodotto.imagePath)),
+                                image: widget._prodotto.getImage().image,
                               ),
                             ),
                           ),
@@ -255,7 +256,7 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
                               );
                         }).toList(),
                         onChanged: (value) {
-                          //TODO
+                            //do nothing
                         },
                         onSaved: (value){
                               this._dispensa = value;
@@ -283,6 +284,7 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
                     ),
                     ElevatedButton(
                         onPressed: (){
+                          HapticFeedback.heavyImpact();
                           debugPrint("Richiesta ripetizione inserimento");
                           if(formKey.currentState!.validate()){
                             formKey.currentState!.save();
@@ -312,8 +314,6 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
   Articolo _generaArticolo(){
     Articolo nuovoArticolo;
 
-
-
     nuovoArticolo = new Articolo(
       idProdotto: widget._prodotto!.getCode(),
       idDispensa: this._dispensa!.id,
@@ -322,6 +322,7 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
       dataScadenza: this._dataScadenza!,
       dataInserimento: DateTime.now(),
     );
+
     return nuovoArticolo;
   }
 
@@ -330,6 +331,7 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
    */
 
   void saveData(){
+    HapticFeedback.lightImpact();
     if(formKey.currentState!.validate()){
       debugPrint("Richiesta fine inserimento");
       formKey.currentState!.save();

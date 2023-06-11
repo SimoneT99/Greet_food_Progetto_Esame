@@ -168,19 +168,23 @@ class InformazioniDispensa extends StatelessWidget{
                 flex: 2,
                 child: Row(
                   children: [
-                    AspectRatio(
-                      aspectRatio: 1,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: image.image,
+                    Expanded(
+                      flex: 1,
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: image.image,
+                            ),
                           ),
                         ),
                       ),
                     ),
                     Expanded(
+                      flex: 1,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 10),
                           child: Column(
@@ -190,7 +194,6 @@ class InformazioniDispensa extends StatelessWidget{
                                   Flexible(
                                     child: Text(
                                       _dispensa.nome,
-                                      overflow: TextOverflow.ellipsis,
                                       style: Theme.of(context).textTheme.headline6?.copyWith(
                                         color: Theme.of(context).primaryColorDark,
                                       ),
@@ -202,14 +205,16 @@ class InformazioniDispensa extends StatelessWidget{
                               Row(
                                 children: [
                                   Text("Contenuti: ",
-                                      style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                      style: Theme.of(context).textTheme.subtitle2?.copyWith(
                                         color: Theme.of(context).primaryColorDark,
+                                        fontSize: 20,
                                       )
                                   ),
                                   Spacer(),
                                   Text(contenutoCorrente.toString(),
                                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
                                         color: Theme.of(context).primaryColorDark,
+                                        fontSize: 20,
                                       )
                                   ),
                                 ],
@@ -231,8 +236,9 @@ class InformazioniDispensa extends StatelessWidget{
                         children: [
                           Expanded(
                             child: Text("Descrizione:",
-                              style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                              style: Theme.of(context).textTheme.subtitle2?.copyWith(
                                 color: Theme.of(context).primaryColorDark,
+                                fontSize: 20,
                               ),
                             ),
                           ),
@@ -246,6 +252,7 @@ class InformazioniDispensa extends StatelessWidget{
                           style: Theme.of(context).textTheme.subtitle1?.copyWith(
                             color: Theme.of(context).primaryColorDark,
                             fontStyle: FontStyle.italic,
+                            fontSize: 20,
                           ),
                         ),
                       ),
@@ -263,14 +270,16 @@ class InformazioniDispensa extends StatelessWidget{
                       Text("Articoli scaduti\nfino ad oggi:",
                         overflow: TextOverflow.visible,
                         textAlign: TextAlign.left,
-                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                        style: Theme.of(context).textTheme.subtitle2?.copyWith(
                           color: Theme.of(context).primaryColorDark,
+                          fontSize: 20,
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Text(articoliScadutiFinoOggi.toString(),
                           style: Theme.of(context).textTheme.subtitle1?.copyWith(
                             color: Theme.of(context).primaryColorDark,
+                            fontSize: 20,
                           ))
                     ],
                   ),
@@ -285,16 +294,19 @@ class InformazioniDispensa extends StatelessWidget{
                       Padding(
                         padding: const EdgeInsets.only(right: 8.0),
                         child: Text("Prodotto preferito:",
-                          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                          style: Theme.of(context).textTheme.subtitle2?.copyWith(
                             color: Theme.of(context).primaryColorDark,
+                            fontSize: 20,
                           ),
                         ),
                       ),
+                      const Spacer(),
                       Flexible(
                         child: Text(prodottoPreferito.toString(),
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.subtitle1?.copyWith(
                               color: Theme.of(context).primaryColorDark,
+                              fontSize: 20,
                             )),
                       )
                     ],

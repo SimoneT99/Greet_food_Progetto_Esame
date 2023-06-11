@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Widgets/PaginaProdotto.dart';
 import 'package:intl/intl.dart';
@@ -63,7 +64,10 @@ class VisualizzazioneArticoliState extends State<VisualizzazioneArticoli>{
                 return  WidgetArticolo(widget._articoli[index], true, widget._managerArticoli, widget._removeText);
               }
           return GestureDetector(
-            onTap: () {_onChangedIndex(index);},
+            onTap: () {
+              HapticFeedback.lightImpact();
+              _onChangedIndex(index);
+              },
             child:  WidgetArticolo(widget._articoli[index], false, widget._managerArticoli, widget._removeText),
           );
         },
@@ -143,6 +147,7 @@ class WidgetArticolo extends StatelessWidget{
                         const Spacer(),
                         ElevatedButton(
                             onPressed: () {
+                              HapticFeedback.lightImpact();
                               debugPrint("debug: richiesto passaggio a pagina del prodotto");
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) {
@@ -154,6 +159,7 @@ class WidgetArticolo extends StatelessWidget{
                         const Spacer(),
                         ElevatedButton(
                             onPressed: () {
+                              HapticFeedback.lightImpact();
                               debugPrint("debug: richiesto consumo articolo");
                               this._articolo.consume();
                               this._managerArticoli.replaceElement(this._articolo);

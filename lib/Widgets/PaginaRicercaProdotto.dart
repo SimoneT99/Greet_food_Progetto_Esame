@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:greet_food/Classes/GestioneDati/ElaboratoreProdotti.dart';
 import 'package:greet_food/Widgets/AppBars.dart';
 import 'package:greet_food/Widgets/VisualizzazioniCard/VisualizzazioneProdotto.dart';
@@ -78,6 +79,7 @@ class PaginaRicercaProdotto extends StatelessWidget{
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                           onPressed: () {
+                            HapticFeedback.lightImpact();
                             Navigator.of(context).push(
                                 new MaterialPageRoute(builder: (context) {
                                   return RicercaConScansione();
@@ -96,6 +98,7 @@ class PaginaRicercaProdotto extends StatelessWidget{
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                           onPressed: (){
+                            HapticFeedback.lightImpact();
                             if(formKey.currentState!.validate()){
                               formKey.currentState!.save();
                               GenericManager<Prodotto> managerProdotti = Provider.of<GenericManager<Prodotto>>(context, listen: false);

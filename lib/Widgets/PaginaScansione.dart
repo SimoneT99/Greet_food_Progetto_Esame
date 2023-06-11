@@ -109,7 +109,6 @@ class PaginaAggiuntaArticoloState extends State<RicercaConScansione>{
       ));
 
     }catch(exception){
-      //TODO
       debugPrint("Nessun prodotto con questo codice a barre");
       Navigator.of(context).push(new MaterialPageRoute(
           builder: (context) {

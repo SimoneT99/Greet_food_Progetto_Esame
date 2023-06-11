@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:camera/camera.dart';
@@ -75,6 +76,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       floatingActionButton: FloatingActionButton(
         // Provide an onPressed callback.
         onPressed: () async {
+          HapticFeedback.lightImpact();
           // Take the Picture in a try / catch block. If anything goes wrong,
           // catch the error.
           try {

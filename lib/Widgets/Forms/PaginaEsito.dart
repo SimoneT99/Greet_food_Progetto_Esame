@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:greet_food/Widgets/AppBars.dart';
 
 /**
@@ -47,7 +48,7 @@ class PaginaEsito extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: emptyAppbar,
-      body: Container( //TODO immagine
+      body: Container(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
         child: Column(
           children: [
@@ -67,6 +68,7 @@ class PaginaEsito extends StatelessWidget {
             ),
             ElevatedButton(
                 onPressed: _function == null ? () {
+                  HapticFeedback.lightImpact();
                   Navigator.of(context).pop();
                 } : _function!,
                 child: Text(

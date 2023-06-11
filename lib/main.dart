@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:greet_food/Classes/GestioneDati/ElaboratoreArticoli.dart';
 import 'package:greet_food/Classes/GestioneDati/Settings.dart';
 import 'package:greet_food/Classes/Items/Dispensa.dart';
@@ -89,7 +90,7 @@ class GreetFoodState extends State<GreetFood>{
               debugShowCheckedModeBanner: false,
               title: "Let's avoid spoils",
               theme: GreetFoodTheme.light(),
-              home: const SafeArea(child: GreetFoodHome(title: "GreetFood")),
+              home: GreetFoodHome(title: "GreetFood"),
           ),
     );
   }
@@ -191,6 +192,7 @@ class _GreetFoodHomeState extends State<GreetFoodHome> {
    * Dobbiamo gestire tutti i casi partiolari delle schermate
    */
   _managePrimaryNavigation(int index) {
+    HapticFeedback.mediumImpact();
       setState(() {
         _bottomBarIndex = index;
       });
@@ -199,7 +201,7 @@ class _GreetFoodHomeState extends State<GreetFoodHome> {
   //per l'onboarding, sarebbe più sensato usare il consumer invece che passare una funzione
   _done(){
     setState(() {
-    });;
+    });
   }
 }
 
