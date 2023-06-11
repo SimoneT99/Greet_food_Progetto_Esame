@@ -8,7 +8,6 @@ import 'package:greet_food/Classes/Items/Prodotto.dart';
 import 'package:greet_food/Widgets/AppBars.dart';
 import 'package:greet_food/Widgets/Forms/CreazioneArticolo.dart';
 import 'package:greet_food/Widgets/Forms/PaginaEsito.dart';
-import 'package:greet_food/Widgets/PaginaAggiuntaArticolo.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -71,7 +70,7 @@ class FormCreazioneProdottoState extends State<FormCreazioneProdotto>{
   /**
    * Image provider
    */
-  ImageProvider<Object> imageProvider = AssetImage("Assets/Images/Camera3.png");
+  ImageProvider<Object> imageProvider = const AssetImage("Assets/Images/Camera3.png");
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +85,7 @@ class FormCreazioneProdottoState extends State<FormCreazioneProdotto>{
               children: [
                 Center(
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     width: 125,
                     child: InkWell(
                       onTap: () {
@@ -96,7 +95,7 @@ class FormCreazioneProdottoState extends State<FormCreazioneProdotto>{
                         aspectRatio: 1,
                         child: Card(
                           clipBehavior: Clip.antiAliasWithSaveLayer,
-                          margin:  EdgeInsets.all(0),
+                          margin:  const EdgeInsets.all(0),
                           child: Container(
                             decoration: BoxDecoration(
                               image: DecorationImage(
@@ -118,7 +117,7 @@ class FormCreazioneProdottoState extends State<FormCreazioneProdotto>{
                     decoration: InputDecoration(
                       fillColor: Theme.of(context).colorScheme.secondary,
                       filled: true,
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
 
                       ),
 
@@ -144,7 +143,7 @@ class FormCreazioneProdottoState extends State<FormCreazioneProdotto>{
                     decoration: InputDecoration(
                       fillColor: Theme.of(context).colorScheme.secondary,
                       filled: true,
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                       ),
                       labelText: 'Marca',
                     ),
@@ -168,7 +167,7 @@ class FormCreazioneProdottoState extends State<FormCreazioneProdotto>{
                     decoration: InputDecoration(
                       fillColor: Theme.of(context).colorScheme.secondary,
                       filled: true,
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                       ),
                       labelText: 'Descrizione',
                     ),
@@ -264,7 +263,7 @@ class FormCreazioneProdottoState extends State<FormCreazioneProdotto>{
   Future<void> _takePicture(BuildContext context) async{
 
     List<CameraDescription> cameras = await availableCameras();
-    if (cameras.length == 0){
+    if (cameras.isEmpty){
       return;
     }
 

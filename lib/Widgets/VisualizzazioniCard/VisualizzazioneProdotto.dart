@@ -1,6 +1,4 @@
-import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:greet_food/Classes/GestioneDati/ElaboratoreArticoli.dart';
@@ -37,7 +35,7 @@ class VisualizzazioneProdotti extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     //Se vuota renderizziamo una schermata apposita
-    if (_prodotti.length == 0){
+    if (_prodotti.isEmpty){
         return EmptyBody("Nessun prodotto disponibile");
     }else{
       return Padding(
@@ -47,7 +45,7 @@ class VisualizzazioneProdotti extends StatelessWidget{
             itemBuilder: (BuildContext context, int index){
               return CardProdotto(
                 prodotto: _prodotti[index],
-                cardAction: _visualizationContext == ProductVisualizationContext.insertingProcess ? _CardAction.insertProduct : _CardAction.productPage,
+                cardAction: _visualizationContext == ProductVisualizationContext.insertingProcess ? CardAction.insertProduct : CardAction.productPage,
                 allowElimintaion: _visualizationContext == ProductVisualizationContext.insertingProcess ? false : true,
               );
             }
@@ -59,7 +57,7 @@ class VisualizzazioneProdotti extends StatelessWidget{
 }
 
 
-enum _CardAction{
+enum CardAction{
   insertProduct,
   productPage,
 }
@@ -70,10 +68,10 @@ enum _CardAction{
 class CardProdotto extends StatelessWidget{
 
   late final Prodotto _prodotto;
-  late final _CardAction _cardType;
+  late final CardAction _cardType;
   late final bool _allowElimination;
 
-  CardProdotto({required Prodotto prodotto, _CardAction cardAction = _CardAction.productPage, bool allowElimintaion = false}){
+  CardProdotto({required Prodotto prodotto, CardAction cardAction = CardAction.productPage, bool allowElimintaion = false}){
     this._prodotto = prodotto;
     this._cardType = cardAction;
     this._allowElimination = allowElimintaion;
@@ -82,7 +80,7 @@ class CardProdotto extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
-    ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(managerArticoli.getAllElements());
+    ElaboratoreArticoli elaboratoreArticoli = ElaboratoreArticoli(managerArticoli.getAllElements());
     elaboratoreArticoli.filtraPerProdotto(this._prodotto, changeState: true);
     int articoliPresenti = elaboratoreArticoli.filtraPerConsumati(consumato: false).length;
 
@@ -96,15 +94,15 @@ class CardProdotto extends StatelessWidget{
           child: InkWell(
             onTap: (){
               HapticFeedback.lightImpact();
-              if(_cardType == _CardAction.productPage){
+              if(_cardType == CardAction.productPage){
                 Navigator.of(context).push(
-                    new MaterialPageRoute(builder: (context) {
+                    MaterialPageRoute(builder: (context) {
                       return PaginaProdotto(this._prodotto);
                     })
                 );
-              }else if( _cardType == _CardAction.insertProduct) {
+              }else if( _cardType == CardAction.insertProduct) {
                 Navigator.of(context).push(
-                    new MaterialPageRoute(builder: (context) {
+                    MaterialPageRoute(builder: (context) {
                       return FormCreazioneArticolo(this._prodotto);
                     })
                 );
@@ -199,7 +197,9 @@ class CardProdotto extends StatelessWidget{
     );
   }
 
-
+  /**
+   * Al momento la cancellazione è disabilitata, se si volesse abilitarla basterebbe chiamare questo metodo
+   */
   Future<void> _showCancellationDialog(BuildContext context) async {
     return showDialog<void>(
       context: context,
@@ -240,7 +240,7 @@ class CardProdotto extends StatelessWidget{
   void _onDeleteRequested(BuildContext context) {
 
     GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
-    ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(managerArticoli.getAllElements());
+    ElaboratoreArticoli elaboratoreArticoli = ElaboratoreArticoli(managerArticoli.getAllElements());
     elaboratoreArticoli.filtraPerProdotto(this._prodotto, changeState:  true);
     int articoliNonConsumati = elaboratoreArticoli.filtraPerConsumati(consumato: false).length;
 
@@ -248,7 +248,7 @@ class CardProdotto extends StatelessWidget{
       _showCancellationDisabledDialog(context);
     }else{
       List<Articolo> articoliConsumati = elaboratoreArticoli.filtraPerConsumati();
-      if(!articoliConsumati.isEmpty) {
+      if(articoliConsumati.isNotEmpty) {
         for (int i = 1; i < articoliConsumati.length; i++) {
           managerArticoli.removeElement(
               articoliConsumati[i], notifyListeners: false,

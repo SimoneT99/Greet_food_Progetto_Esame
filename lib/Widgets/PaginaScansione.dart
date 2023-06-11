@@ -40,7 +40,7 @@ class PaginaAggiuntaArticoloState extends State<RicercaConScansione>{
     return Scaffold(
       appBar: backAppbar,
       body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -50,7 +50,7 @@ class PaginaAggiuntaArticoloState extends State<RicercaConScansione>{
                   aspectRatio: 1,
                   child:Card(
                     clipBehavior: Clip.antiAliasWithSaveLayer,
-                    margin:  EdgeInsets.all(0),
+                    margin:  const EdgeInsets.all(0),
                     child: _scannerActive ? MobileScanner(
                       controller: MobileScannerController(
                         returnImage: false,
@@ -66,7 +66,7 @@ class PaginaAggiuntaArticoloState extends State<RicercaConScansione>{
                       child: Padding(
                         padding: const EdgeInsets.all(40.0),
                         child: Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             image: DecorationImage(
                               fit: BoxFit.fill,
                               image: AssetImage("Assets/Images/ScanBarcode.png"),
@@ -102,7 +102,7 @@ class PaginaAggiuntaArticoloState extends State<RicercaConScansione>{
     try{
       Prodotto prodotto = elaboratoreProdotti.getProdottoByBarcode(_barcode);
 
-      Navigator.of(context).push(new MaterialPageRoute(
+      Navigator.of(context).push(MaterialPageRoute(
           builder: (context) {
             return PaginaProdotto(prodotto);
           }
@@ -110,7 +110,7 @@ class PaginaAggiuntaArticoloState extends State<RicercaConScansione>{
 
     }catch(exception){
       debugPrint("Nessun prodotto con questo codice a barre");
-      Navigator.of(context).push(new MaterialPageRoute(
+      Navigator.of(context).push(MaterialPageRoute(
           builder: (context) {
             return PaginaEsito("Nessun prodotto con quel codice trovato", Esito.warning);
           }

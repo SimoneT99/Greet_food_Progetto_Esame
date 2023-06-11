@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/basic.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:greet_food/Classes/GestioneDati/ElaboratoreArticoli.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Classes/GestioneDati/Settings.dart';
 import 'package:greet_food/Classes/Items/Articolo.dart';
-import 'package:greet_food/Widgets/AppBars.dart';
 import 'package:provider/provider.dart';
 
 import 'Empty.dart';
@@ -49,7 +46,7 @@ class PaginaScadenzaStato extends State<PaginaScadenze> with SingleTickerProvide
         child: Column(
           children: [
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.blueGrey,
               ),
               height: 25,
@@ -59,7 +56,7 @@ class PaginaScadenzaStato extends State<PaginaScadenze> with SingleTickerProvide
                 indicator: BoxDecoration(
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                tabs: [
+                tabs: const [
                   Tab(
                     text: "Scaduti",
                   ),
@@ -74,10 +71,10 @@ class PaginaScadenzaStato extends State<PaginaScadenze> with SingleTickerProvide
                     controller: _tabController,
                     children: [
                       Consumer<GenericManager<Articolo>>(builder: (context, manager, child){
-                        ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(_managerArticoli.getAllElements());
+                        ElaboratoreArticoli elaboratoreArticoli = ElaboratoreArticoli(_managerArticoli.getAllElements());
                         elaboratoreArticoli.filtraPerArticoliScaduti(changeState: true);
                         List<Articolo> articoliScaduti = elaboratoreArticoli.filtraPerConsumati(consumato: false, changeState: true);
-                        if(articoliScaduti.length == 0){
+                        if(articoliScaduti.isEmpty){
                           return NoScadutiAttualmente();
                         }
 
@@ -85,10 +82,10 @@ class PaginaScadenzaStato extends State<PaginaScadenze> with SingleTickerProvide
                         return VisualizzazioneArticoli(articoliScaduti, manager, removeText: "Butta via",);
                       }),
                       Consumer2<GenericManager<Articolo>, Settings>(builder: (context, manager, settings, child){
-                        ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(_managerArticoli.getAllElements());
+                        ElaboratoreArticoli elaboratoreArticoli = ElaboratoreArticoli(_managerArticoli.getAllElements());
                         elaboratoreArticoli.filtraPerArticoliInScadenza(settings.giorniInScadenza, changeState: true);
                         List<Articolo> articoliInScadenza = elaboratoreArticoli.filtraPerConsumati(consumato: false, changeState: true);
-                        if(articoliInScadenza.length == 0){
+                        if(articoliInScadenza.isEmpty){
                           return NoScadenzeInArrivo();
                         }
                         articoliInScadenza = elaboratoreArticoli.orderByDate();

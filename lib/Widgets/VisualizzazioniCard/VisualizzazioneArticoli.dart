@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
@@ -50,7 +48,7 @@ class VisualizzazioneArticoliState extends State<VisualizzazioneArticoli>{
    */
   @override
   Widget build(BuildContext context) {
-    if(widget._articoli.length == 0){
+    if(widget._articoli.isEmpty){
       return EmptyBody("Nessun articolo disponibile");
     }
 
@@ -154,7 +152,7 @@ class WidgetArticolo extends StatelessWidget{
                                     return PaginaProdotto(_prodotto);
                                   }));
                             },
-                            child: Text("Prodotto")
+                            child: const Text("Prodotto")
                         ),
                         const Spacer(),
                         ElevatedButton(
@@ -165,9 +163,9 @@ class WidgetArticolo extends StatelessWidget{
                               this._managerArticoli.replaceElement(this._articolo);
 
                               SnackBar snackBar = SnackBar(
-                                content: Text("Articolo consumato"),
+                                content: const Text("Articolo consumato"),
                                 backgroundColor: Theme.of(context).primaryColor,
-                                duration: Duration(seconds: 1),
+                                duration: const Duration(seconds: 1),
                               );
 
                               ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -237,12 +235,12 @@ class WidgetArticolo extends StatelessWidget{
                       ),
                     ],
                   ),
-                  Spacer(flex: 2,),
+                  const Spacer(flex: 2,),
                   Row(
                     children: [
-                      Spacer(),
+                      const Spacer(),
                       Text(
-                        (new DateFormat("dd-MM-yyyy")).format(_articolo.dataScadenza),
+                        (DateFormat("dd-MM-yyyy")).format(_articolo.dataScadenza),
                         textAlign: TextAlign.right,
                         style: Theme.of(context).textTheme.subtitle1?.copyWith(
                           color: Theme.of(context).primaryColorDark,
@@ -252,7 +250,7 @@ class WidgetArticolo extends StatelessWidget{
                   ),
                   Row(
                     children: [
-                      Spacer(),
+                      const Spacer(),
                       Text(
                         _dispensa.nome,
                         textAlign: TextAlign.right,

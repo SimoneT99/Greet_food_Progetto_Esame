@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:greet_food/Classes/GestioneDati/Settings.dart';
 import 'package:greet_food/Widgets/AppBars.dart';
-import 'package:provider/provider.dart';
 
 final formKey = GlobalKey<FormState>();
 
@@ -68,7 +67,7 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
                       decoration: InputDecoration(
                         fillColor: Theme.of(context).colorScheme.secondary,
                         filled: true,
-                        border: OutlineInputBorder(
+                        border: const OutlineInputBorder(
 
                         ),
                       ),
@@ -79,7 +78,7 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
                         return null;
                       },
                       onSaved: (value) {
-                        this._currentDays = int.parse(value!)!;
+                        this._currentDays = int.parse(value!);
                       },
                       initialValue: this._currentDays.toString(),
                     ),
@@ -93,7 +92,7 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
                           this._saveChanges(context);
                         }
                         },
-                      child: Text("Salva"))
+                      child: const Text("Salva"))
                 ],
 
               ),
@@ -110,9 +109,9 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
     widget.settings.setNotificheAttive(this._notificheAttive);
 
     SnackBar snackBar = SnackBar(
-      content: Text("Impostazioni salvate"),
+      content: const Text("Impostazioni salvate"),
       backgroundColor: Theme.of(context).primaryColor,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);

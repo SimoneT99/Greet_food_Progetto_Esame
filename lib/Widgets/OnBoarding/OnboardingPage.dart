@@ -87,15 +87,15 @@ class _OnboardingState extends State<Onboarding> {
       bottomNavigationBar: BottomNavigationBar(    /** Usiamo direttamente una bottom bar per mostrare all'utente **/
         currentIndex: _bottomBarIndex,
         items: [
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.calendar_month),
             label: 'Scadenze',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.kitchen),
             label: 'Dispense',
           )
@@ -140,7 +140,7 @@ class OnboardingHome extends StatelessWidget{
                   HapticFeedback.lightImpact();
                   goOnfunction(_onBoardingEnum.home);
                 },
-                child: Text(
+                child: const Text(
                   "Avanti",
                 )
             )
@@ -184,7 +184,7 @@ class OnboardingScadenze extends StatelessWidget{
                   HapticFeedback.lightImpact();
                   goOnfunction(_onBoardingEnum.scadenze);
                 },
-                child: Text(
+                child: const Text(
                   "Avanti",
                 )
             )
@@ -228,7 +228,7 @@ class OnboardingDispense extends StatelessWidget{
                   HapticFeedback.lightImpact();
                   goOnfunction(_onBoardingEnum.dispense);
                 },
-                child: Text(
+                child: const Text(
                   "Avanti",
                 )
             )
@@ -271,7 +271,7 @@ class OnboardingAiuto extends StatelessWidget{
                   HapticFeedback.lightImpact();
                   goOnfunction(_onBoardingEnum.aiuto);
                 },
-                child: Text(
+                child: const Text(
                   "Entra nell'app",
                 )
             )

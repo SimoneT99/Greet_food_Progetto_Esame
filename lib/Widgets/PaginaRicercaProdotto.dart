@@ -33,7 +33,7 @@ class PaginaRicercaProdotto extends StatelessWidget{
                   decoration: InputDecoration(
                     fillColor: Theme.of(context).colorScheme.secondary,
                     filled: true,
-                    border: OutlineInputBorder(
+                    border: const OutlineInputBorder(
                     ),
                     labelText: 'Nome',
                   ),
@@ -51,7 +51,7 @@ class PaginaRicercaProdotto extends StatelessWidget{
                   decoration: InputDecoration(
                     fillColor: Theme.of(context).colorScheme.secondary,
                     filled: true,
-                    border: OutlineInputBorder(
+                    border: const OutlineInputBorder(
                     ),
                     labelText: 'Marca',
                   ),
@@ -81,11 +81,11 @@ class PaginaRicercaProdotto extends StatelessWidget{
                           onPressed: () {
                             HapticFeedback.lightImpact();
                             Navigator.of(context).push(
-                                new MaterialPageRoute(builder: (context) {
+                                MaterialPageRoute(builder: (context) {
                                   return RicercaConScansione();
                                 }));
                           },
-                          child: Text("Scan")
+                          child: const Text("Scan")
                       ),
                     ),
                   ),
@@ -103,7 +103,7 @@ class PaginaRicercaProdotto extends StatelessWidget{
                               formKey.currentState!.save();
                               GenericManager<Prodotto> managerProdotti = Provider.of<GenericManager<Prodotto>>(context, listen: false);
                               List<Prodotto> listaProdotti = managerProdotti.getAllElements();
-                              ElaboratoreProdotti elaboratoreProdotti = new ElaboratoreProdotti(listaProdotti);
+                              ElaboratoreProdotti elaboratoreProdotti = ElaboratoreProdotti(listaProdotti);
                               if(_nome != ""){
                                 listaProdotti = elaboratoreProdotti.filtraPerNome(_nome, changeState: true, caseSensitive: false);
                               }
@@ -111,7 +111,7 @@ class PaginaRicercaProdotto extends StatelessWidget{
                                 listaProdotti = elaboratoreProdotti.filtraPerNome(_marca, changeState: true, caseSensitive: false);
                               }
                               Navigator.of(context).push(
-                                  new MaterialPageRoute(builder: (context) {
+                                  MaterialPageRoute(builder: (context) {
                                     return Scaffold(
                                       appBar: backAppbar,
                                       body: VisualizzazioneProdotti(listaProdotti, type: ProductVisualizationContext.standard,),
@@ -120,7 +120,7 @@ class PaginaRicercaProdotto extends StatelessWidget{
                               );
                             }
                           },
-                          child: Text("Cerca")
+                          child: const Text("Cerca")
                       ),
                     ),
                   ),

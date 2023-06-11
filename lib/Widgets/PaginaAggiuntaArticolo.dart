@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
@@ -43,7 +42,7 @@ class PaginaAggiuntaArticoloState extends State<PaginaAggiuntaArticolo>{
     return Scaffold(
       appBar: backAppbar,
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -53,7 +52,7 @@ class PaginaAggiuntaArticoloState extends State<PaginaAggiuntaArticolo>{
                 aspectRatio: 1,
                   child:Card(
                     clipBehavior: Clip.antiAliasWithSaveLayer,
-                    margin:  EdgeInsets.all(0),
+                    margin:  const EdgeInsets.all(0),
                     child: _scannerActive ? MobileScanner(
                       controller: MobileScannerController(
                         returnImage: false,
@@ -69,7 +68,7 @@ class PaginaAggiuntaArticoloState extends State<PaginaAggiuntaArticolo>{
                       child: Padding(
                         padding: const EdgeInsets.all(40.0),
                         child: Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             image: DecorationImage(
                               fit: BoxFit.fill,
                               image: AssetImage("Assets/Images/ScanBarcode.png"),
@@ -90,7 +89,7 @@ class PaginaAggiuntaArticoloState extends State<PaginaAggiuntaArticolo>{
                     HapticFeedback.lightImpact();
                     _button_pressed(context);
                   },
-                  child: Text("Sfoglia prodotti"),
+                  child: const Text("Sfoglia prodotti"),
                 ),
               ),
             ),
@@ -108,7 +107,7 @@ class PaginaAggiuntaArticoloState extends State<PaginaAggiuntaArticolo>{
     setState(() {
       this._scannerActive = false;
     });
-    Navigator.of(context).push(new MaterialPageRoute(
+    Navigator.of(context).push(MaterialPageRoute(
         builder: (context) {
           return PaginaElencoProdotti();
         }
@@ -134,7 +133,7 @@ class PaginaAggiuntaArticoloState extends State<PaginaAggiuntaArticolo>{
     try{
       Prodotto prodotto = elaboratoreProdotti.getProdottoByBarcode(_barcode);
 
-      Navigator.of(context).push(new MaterialPageRoute(
+      Navigator.of(context).push(MaterialPageRoute(
           builder: (context) {
             return FormCreazioneArticolo(prodotto);
           }
@@ -142,7 +141,7 @@ class PaginaAggiuntaArticoloState extends State<PaginaAggiuntaArticolo>{
 
     }catch(exception){
       debugPrint("Nessun prodotto con questo codice a barre");
-      Navigator.of(context).push(new MaterialPageRoute(
+      Navigator.of(context).push(MaterialPageRoute(
           builder: (context) {
             return FormCreazioneProdotto(
               codice: _barcode,
@@ -183,7 +182,7 @@ class NoCodeButton extends StatelessWidget{
             HapticFeedback.lightImpact();
             _button_pressed(context);
           },
-          child: Text("No codice"),
+          child: const Text("No codice"),
         ),
       ),
     );
@@ -191,7 +190,7 @@ class NoCodeButton extends StatelessWidget{
 
   void _button_pressed(BuildContext context){
     debugPrint("Flusso senza codice richiesto");
-    Navigator.of(context).push(new MaterialPageRoute(
+    Navigator.of(context).push(MaterialPageRoute(
         builder: (context) {
           return PaginaElencoProdotti();
         }
@@ -207,13 +206,10 @@ class PaginaElencoProdotti extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    GenericManager<Prodotto> managerProdotti = Provider.of<GenericManager<Prodotto>>(context, listen: false);
-    List<Prodotto> prodottiDisponibili = managerProdotti.getAllElements();
-
     return Scaffold(
       appBar: backAppbarAdd((){
         Navigator.of(context).push(
-            new MaterialPageRoute(
+            MaterialPageRoute(
                 builder: (context){
                   return FormCreazioneProdotto();
                 }
@@ -223,7 +219,7 @@ class PaginaElencoProdotti extends StatelessWidget{
 
       body: Consumer<GenericManager<Prodotto>>(builder: (context, manager, child){
         List<Prodotto> prodottiDisponibili = manager.getAllElements();
-        if(prodottiDisponibili.length == 0){
+        if(prodottiDisponibili.isEmpty){
           return EmptyBody("Nessun prodotto disponibile al momento");
         }
         return VisualizzazioneProdotti(prodottiDisponibili, type: ProductVisualizationContext.insertingProcess,);

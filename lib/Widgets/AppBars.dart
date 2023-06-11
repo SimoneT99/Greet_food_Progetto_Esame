@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 
 /**
  * Appbar solo con il titolo dell'applicazione
@@ -14,24 +13,24 @@ const double HEIGHT = 50;
 AppBar emptyAppbar = AppBar(
   automaticallyImplyLeading: false,
   toolbarHeight: HEIGHT,
-  title: Text(APP_NAME),
+  title: const Text(APP_NAME),
 );
 
 AppBar drawerAppbar = AppBar(
   toolbarHeight: HEIGHT,
-  title: Text(APP_NAME),
+  title: const Text(APP_NAME),
 );
 
 AppBar backAppbar = AppBar(
   toolbarHeight: HEIGHT,
-  title: Text(APP_NAME),
-  leading: BackButton(),
+  title: const Text(APP_NAME),
+  leading: const BackButton(),
 );
 
 AppBar backAppbarAvvertimento(BuildContext context, {String text = 'Attenzione tornando indietro qello che stavi facendo non verrà salvato'}) {
   return AppBar(
     toolbarHeight: HEIGHT,
-    title: Text(APP_NAME),
+    title: const Text(APP_NAME),
     leading: BackButton(
       onPressed: () {
         _askConfirmationDialog(context, text);
@@ -78,11 +77,11 @@ Future<void> _askConfirmationDialog(BuildContext context, String message) async 
 AppBar endFormAppbar (void Function()? action) {
   return AppBar(
     toolbarHeight: HEIGHT,
-    title: Text(APP_NAME),
-    leading: BackButton(),
+    title: const Text(APP_NAME),
+    leading: const BackButton(),
     actions: [
       Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: OutlinedButton(
           onPressed: action,
           child: const Text('Fine'),
@@ -95,7 +94,7 @@ AppBar endFormAppbar (void Function()? action) {
 AppBar endFormAppbarAvvertimento(void Function()? action, BuildContext context, {String text = 'Attenzione tornando indietro qello che stavi facendo non verrà salvato'}) {
   return AppBar(
     toolbarHeight: HEIGHT,
-    title: Text(APP_NAME),
+    title: const Text(APP_NAME),
     leading: BackButton(
       onPressed: () {
         _askConfirmationDialog(context, text);
@@ -103,7 +102,7 @@ AppBar endFormAppbarAvvertimento(void Function()? action, BuildContext context, 
     ),
     actions: [
       Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: OutlinedButton(
           onPressed: action,
           child: const Text('Fine'),
@@ -116,11 +115,11 @@ AppBar endFormAppbarAvvertimento(void Function()? action, BuildContext context, 
 AppBar backAppbarEdit(void Function()? action) {
   return AppBar(
     toolbarHeight: HEIGHT,
-    title: Text(APP_NAME),
-    leading: BackButton(),
+    title: const Text(APP_NAME),
+    leading: const BackButton(),
     actions: [
       Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: OutlinedButton(
           onPressed: action,
           child: const Icon(Icons.edit_document),
@@ -133,11 +132,11 @@ AppBar backAppbarEdit(void Function()? action) {
 AppBar backAppbarAdd(void Function()? action){
   return AppBar(
     toolbarHeight: HEIGHT,
-    title: Text(APP_NAME),
-    leading: BackButton(),
+    title: const Text(APP_NAME),
+    leading: const BackButton(),
     actions: [
       Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: OutlinedButton(
           onPressed: action,
           child: const Icon(Icons.add),

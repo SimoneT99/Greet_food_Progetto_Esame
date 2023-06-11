@@ -3,8 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Classes/GestioneDati/Settings.dart';
 import 'package:greet_food/Classes/Items/Dispensa.dart';
-import 'package:greet_food/Widgets/AppBars.dart';
-import 'package:flutter/foundation.dart';
 import 'package:greet_food/Widgets/Forms/PaginaEsito.dart';
 import 'package:greet_food/Widgets/PaginaAggiuntaArticolo.dart';
 import 'package:greet_food/Widgets/PaginaAiuto.dart';
@@ -23,7 +21,7 @@ class Homepage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
       return Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -58,7 +56,7 @@ class HomeScreenbuttonContainer extends StatelessWidget {
     return AspectRatio(
       aspectRatio: 2.4,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 13),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
         child: this.child,
       ),
     );
@@ -78,21 +76,21 @@ class AggiungiArticolo extends StatelessWidget {
         HapticFeedback.lightImpact();
         _button_pressed(context);
       },
-      child: Text("Aggiungi articolo"),
+      child: const Text("Aggiungi articolo"),
     );
   }
 
   void _button_pressed(BuildContext context){
     debugPrint("richiesta aggiunta articolo");
     GenericManager<Dispensa> managerDispense = Provider.of<GenericManager<Dispensa>>(context, listen: false);
-    Navigator.of(context).push(new MaterialPageRoute(
+    Navigator.of(context).push(MaterialPageRoute(
         builder: (context) {
-          return managerDispense.getAllElements().length == 0 ? PaginaEsito(
+          return managerDispense.getAllElements().isEmpty ? PaginaEsito(
               "Attenzione devi creare almeno una dispensa per poter iniziare ad inserire articoli",
               Esito.warning,
               function: () {
                   Navigator.of(context).pop();
-                  Navigator.of(context).push(new MaterialPageRoute(
+                  Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) {
                       return FormCreazioneDispensa();
                     }));
@@ -113,13 +111,13 @@ class CercaProdotto extends StatelessWidget {
         HapticFeedback.lightImpact();
         _button_pressed(context);
       },
-      child: Text("Cerca prodotto"),
+      child: const Text("Cerca prodotto"),
     );
   }
 
   void _button_pressed(BuildContext context){
     debugPrint("richiesta ricerca prodotto");
-    Navigator.of(context).push(new MaterialPageRoute(
+    Navigator.of(context).push(MaterialPageRoute(
         builder: (context) {
           return PaginaRicercaProdotto();
         }
@@ -168,13 +166,13 @@ class Aiuto extends StatelessWidget {
     return ElevatedButton(
       onPressed: () {
         HapticFeedback.lightImpact();
-        Navigator.of(context).push(new MaterialPageRoute(
+        Navigator.of(context).push(MaterialPageRoute(
             builder: (context) {
               return PaginaAiuto();
             }
         ));
       },
-      child: Text("Aiuto"),
+      child: const Text("Aiuto"),
     );
   }
 }
@@ -186,7 +184,7 @@ class Impostazioni extends StatelessWidget {
     return ElevatedButton(
       onPressed: () {
         HapticFeedback.lightImpact();
-        Navigator.of(context).push(new MaterialPageRoute(
+        Navigator.of(context).push(MaterialPageRoute(
             builder: (context) {
               return Consumer<Settings>(builder: (context, manager, child){
                 return PaginaImpostazioni(manager);
@@ -194,7 +192,7 @@ class Impostazioni extends StatelessWidget {
             }
         ));
       },
-      child: Icon(Icons.settings, size: 50),
+      child: const Icon(Icons.settings, size: 50),
     );
   }
 }

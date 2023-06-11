@@ -82,10 +82,10 @@ class GreetFoodTheme{
    * Island green & white
    * (modificati)
    */
-  static Color _primaryColor = const Color(0xFF1B9653);
-  static Color _primaryColorDark = const Color(0xFF06381B);
-  static Color _secondaryColor1 = const Color(0xFFFCF6F5);
-  static Color _secondaryColor2 = const Color(0xFFDCD4D4);
+  static const Color _primaryColor = Color(0xFF1B9653);
+  static const Color _primaryColorDark = Color(0xFF06381B);
+  static const Color _secondaryColor1 = Color(0xFFFCF6F5);
+  static const Color _secondaryColor2 = Color(0xFFDCD4D4);
 
 
   static ThemeData light(){
@@ -95,7 +95,7 @@ class GreetFoodTheme{
       primaryColorDark: _primaryColorDark,
       primaryColor: _primaryColor,
 
-      colorScheme: ColorScheme.light().copyWith(
+      colorScheme: const ColorScheme.light().copyWith(
         primary: _primaryColor,
         secondary: _secondaryColor1,
       ),
@@ -116,7 +116,7 @@ class GreetFoodTheme{
       //BottomBar
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         elevation: 4,
-        selectedIconTheme: IconThemeData(
+        selectedIconTheme: const IconThemeData(
           size: 30
         ),
         selectedLabelStyle: testo.caption,
@@ -137,7 +137,7 @@ class GreetFoodTheme{
 
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          side: BorderSide(
+          side: const BorderSide(
             color: _primaryColor
           )
         )
@@ -152,20 +152,20 @@ class GreetFoodTheme{
       cardColor: _secondaryColor1,
 
       //Tema delle card
-      cardTheme: CardTheme(
+      cardTheme: const CardTheme(
         color: _secondaryColor1,
         shadowColor: _secondaryColor2,
         elevation: 5,
         margin: EdgeInsets.all(10.0)
       ),
 
-      drawerTheme: DrawerThemeData(
+      drawerTheme: const DrawerThemeData(
         backgroundColor: _secondaryColor2,
         width: 200,
         shadowColor: _secondaryColor2,
       ),
 
-      listTileTheme: ListTileThemeData(
+      listTileTheme: const ListTileThemeData(
         tileColor: _secondaryColor1,
         minVerticalPadding: 10
       )

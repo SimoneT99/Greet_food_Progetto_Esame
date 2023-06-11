@@ -1,13 +1,9 @@
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:greet_food/Classes/GestioneDati/ElaboratoreArticoli.dart';
-import 'package:greet_food/Classes/GestioneDati/ElaboratoreProdotti.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Classes/GestioneDati/Settings.dart';
 import 'package:greet_food/Classes/Items/Prodotto.dart';
 import 'package:greet_food/Widgets/Forms/CreazioneProdotto.dart';
-import 'package:greet_food/Widgets/Forms/PaginaEsito.dart';
 import 'package:greet_food/Widgets/VisualizzazioniCard/VisualizzazioneDispense.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -82,7 +78,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
         body: Column(
           children: [
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.blueGrey,
               ),
               height: 25,
@@ -92,7 +88,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                 indicator: BoxDecoration(
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                tabs: [
+                tabs: const [
                   Tab(
                     text: "Informazioni",
                   ),
@@ -135,7 +131,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
      */
 
     GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
-    ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(managerArticoli.getAllElements());
+    ElaboratoreArticoli elaboratoreArticoli = ElaboratoreArticoli(managerArticoli.getAllElements());
 
     elaboratoreArticoli.filtraPerConsumati(consumato: false, changeState: true);
     elaboratoreArticoli.filtraPerProdotto(_prodotto, changeState: true);
@@ -172,7 +168,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                         aspectRatio: 1,
                         child: Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            borderRadius: const BorderRadius.all(Radius.circular(10)),
                             image: DecorationImage(
                               fit: BoxFit.fill,
                               image: _prodotto.getImage().image,
@@ -234,10 +230,10 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                               color: Theme.of(context).primaryColorDark,
                               fontSize: 20,
                             ),),
-                          Spacer()
+                          const Spacer()
                         ],
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Center(
                         child: Text(
                           _prodotto.descripion,
@@ -248,7 +244,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                           ),
                         ),
                       ),
-                      Spacer(flex: 2,),
+                      const Spacer(flex: 2,),
                     ],
                   ),
                 ),
@@ -267,7 +263,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                           fontSize: 20,
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Text("$posseduti",
                         style: Theme.of(context).textTheme.subtitle1?.copyWith(
                           color: Theme.of(context).primaryColorDark,
@@ -288,7 +284,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                         color: Theme.of(context).primaryColorDark,
                           fontSize: 20,
                       ),),
-                      Spacer(),
+                      const Spacer(),
                       Expanded(
                         child: Text("$dispensa_preferita",
                           overflow: TextOverflow.ellipsis,
@@ -312,7 +308,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                           color: Theme.of(context).primaryColorDark,
                           fontSize: 20,
                         ),),
-                      Spacer(),
+                      const Spacer(),
                       Text(ultimo_prezzo == -1 ? "N.A." : "€ $ultimo_prezzo",
                         style: Theme.of(context).textTheme.subtitle1?.copyWith(
                           color: Theme.of(context).primaryColorDark,
@@ -333,7 +329,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                             color: Theme.of(context).primaryColorDark,
                             fontSize: 20,
                           )),
-                      Spacer(),
+                      const Spacer(),
                       Text("$inScadenza",
                           style: Theme.of(context).textTheme.subtitle1?.copyWith(
                             color: Theme.of(context).primaryColorDark,
@@ -356,7 +352,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
   Widget _prezzi(BuildContext context){
 
     GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
-    ElaboratoreArticoli elaboratoreArticoli = new ElaboratoreArticoli(managerArticoli.getAllElements());
+    ElaboratoreArticoli elaboratoreArticoli = ElaboratoreArticoli(managerArticoli.getAllElements());
     elaboratoreArticoli.filtraPerProdotto(this._prodotto, changeState: true);
     if(elaboratoreArticoli.getCurrentList().isEmpty){
       return Column(
@@ -428,21 +424,6 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
         : articoli.last.prezzo;
   }
 
-  double _getBiggestPrice(List<Articolo> articoli, {bool alKg = false}){
-    List<double> prices = [];
-
-    for(int i = 0; i<articoli.length; i++){
-      prices.add(
-        alKg ?
-        ((articoli[i].prezzo / articoli[i].weight) * 1000)
-            : articoli[i].prezzo);
-    }
-
-    prices.sort();
-
-    return prices.first;
-  }
-
 }
 
 /**
@@ -475,7 +456,7 @@ class priceHistoryPageState extends State<priceHistoryPage>{
 
     //Preparazione dati per popolare la pagina
     GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
-    List<Articolo> articoliProdotto = new ElaboratoreArticoli(managerArticoli.getAllElements()).filtraPerProdotto(widget._prodotto);
+    List<Articolo> articoliProdotto = ElaboratoreArticoli(managerArticoli.getAllElements()).filtraPerProdotto(widget._prodotto);
 
     double prezzoMassimo;
     double prezzoMinimo;
@@ -529,7 +510,7 @@ class priceHistoryPageState extends State<priceHistoryPage>{
                           style: Theme.of(context).textTheme.subtitle1?.copyWith(
                             color: Theme.of(context).primaryColorDark,
                           )),
-                      Spacer(),
+                      const Spacer(),
                       Text("${prezzoMassimo.toStringAsFixed(2)}",
                           style: Theme.of(context).textTheme.subtitle1?.copyWith(
                             color: Theme.of(context).primaryColorDark,
@@ -548,7 +529,7 @@ class priceHistoryPageState extends State<priceHistoryPage>{
                           style: Theme.of(context).textTheme.subtitle1?.copyWith(
                             color: Theme.of(context).primaryColorDark,
                           )),
-                      Spacer(),
+                      const Spacer(),
                       Text("${prezzoMinimo.toStringAsFixed(2)}",
                           style: Theme.of(context).textTheme.subtitle1?.copyWith(
                             color: Theme.of(context).primaryColorDark,
@@ -567,7 +548,7 @@ class priceHistoryPageState extends State<priceHistoryPage>{
                           style: Theme.of(context).textTheme.subtitle1?.copyWith(
                             color: Theme.of(context).primaryColorDark,
                           )),
-                      Spacer(),
+                      const Spacer(),
                       Text("${prezzoMedio.toStringAsFixed(2)}",
                           style: Theme.of(context).textTheme.subtitle1?.copyWith(
                             color: Theme.of(context).primaryColorDark,
@@ -578,7 +559,7 @@ class priceHistoryPageState extends State<priceHistoryPage>{
               ),
               ElevatedButton(
                 onPressed: _switchPrices,
-                child: this._alKg ? Text("Ignora peso") : Text("Vai al Kg"),
+                child: this._alKg ? const Text("Ignora peso") : const Text("Vai al Kg"),
               ),
             ],
           ),

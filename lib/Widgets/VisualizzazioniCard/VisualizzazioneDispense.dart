@@ -1,9 +1,5 @@
-import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:greet_food/Classes/GestioneDati/ElaboratoreArticoli.dart';
 import 'package:greet_food/Classes/Items/Articolo.dart';
@@ -123,7 +119,7 @@ class VisualizzazioneDispense extends StatelessWidget{
         elaboratoreArticoli.filtraPerDispensa(_potenzialiDispense[i], changeState: true);
         elaboratoreArticoli.filtraPerConsumati(consumato: false, changeState: true);
 
-        if(elaboratoreArticoli.getCurrentList().length > 0){
+        if(elaboratoreArticoli.getCurrentList().isNotEmpty){
           _dispense.add(_potenzialiDispense[i]);
         }
       }
@@ -226,7 +222,7 @@ class DispensaCard extends StatelessWidget{
                               Consumer<GenericManager<Articolo>>(builder: (context, manager, child){ //aggiorniamo il contenuto
 
                                 final GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
-                                final ElaboratoreArticoli  eleboratoreArticoli = new ElaboratoreArticoli(managerArticoli.getAllElements());
+                                final ElaboratoreArticoli  eleboratoreArticoli = ElaboratoreArticoli(managerArticoli.getAllElements());
                                 eleboratoreArticoli.filtraPerDispensa(_dispensa, changeState: true);
                                 this._articoliContenuti = eleboratoreArticoli.filtraPerConsumati(consumato: false).length;
 

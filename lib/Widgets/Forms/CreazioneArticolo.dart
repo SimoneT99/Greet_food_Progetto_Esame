@@ -1,5 +1,3 @@
-import 'dart:ffi';
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,16 +44,13 @@ class FormCreazioneArticolo extends StatefulWidget{
 
   @override
   State<StatefulWidget> createState() {
-    return new FormCreazioneArticoloStato();
+    return FormCreazioneArticoloStato();
   }
 }
 
 final formKey = GlobalKey<FormState>();
 
 class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
-
-  //per la ripetizione degli inserimenti
-  List<Articolo> _articoliInseriti = [];
 
   @override
   void initState() {
@@ -72,11 +67,11 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
   double? _peso = null;
   DateTime? _dataScadenza = null;
 
-  List<Articolo> articoliInseriti = []; //sarebbe più sensato uno stack...
+  List<Articolo> articoliInseriti = [];
 
 
   //DatePicker
-  TextEditingController dataScadenzaController = new TextEditingController();
+  TextEditingController dataScadenzaController = TextEditingController();
   DateTime? currentDateTime;
 
   @override
@@ -92,7 +87,7 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
               children: [
                 //introduzione prodotto
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: AspectRatio(
                     aspectRatio: 2.8,
                     child: Row(
@@ -101,7 +96,7 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
                           aspectRatio: 1,
                           child: Container(
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                              borderRadius: const BorderRadius.all(Radius.circular(10)),
                               image: DecorationImage(
                                 fit: BoxFit.fill,
                                 image: widget._prodotto.getImage().image,
@@ -143,12 +138,12 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: TextFormField(
-                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       decoration: InputDecoration(
-                        suffixIcon: Icon(Icons.euro),
+                        suffixIcon: const Icon(Icons.euro),
                         fillColor: Theme.of(context).colorScheme.secondary,
                         filled: true,
-                        border: OutlineInputBorder(
+                        border: const OutlineInputBorder(
 
                         ),
                         labelText: 'Prezzo (euro.cent)',
@@ -172,10 +167,10 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
                     controller: dataScadenzaController,
                     keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        suffixIcon: Icon(Icons.schedule),
+                        suffixIcon: const Icon(Icons.schedule),
                         fillColor: Theme.of(context).colorScheme.secondary,
                         filled: true,
-                        border: OutlineInputBorder(
+                        border: const OutlineInputBorder(
 
                         ),
 
@@ -189,16 +184,16 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
                     },
                     onTap: () async {
                       // Below line stops keyboard from appearing
-                      FocusScope.of(context).requestFocus(new FocusNode());
+                      FocusScope.of(context).requestFocus(FocusNode());
 
                       // Show Date Picker Here
                       DateTime? datePicked = await showDatePicker(
                           context: context,
-                          initialDate: new DateTime.now(),
-                          firstDate: new DateTime(2016),
-                          lastDate: new DateTime(3000)
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2016),
+                          lastDate: DateTime(3000)
                       );
-                      dataScadenzaController.text = (new DateFormat("dd/MM/yyyy")).format(datePicked!);
+                      dataScadenzaController.text = (DateFormat("dd/MM/yyyy")).format(datePicked!);
                       this._dataScadenza = datePicked;
                     },
                   ),
@@ -210,10 +205,10 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
                   child: TextFormField(
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      suffixIcon: Icon(Icons.scale),
+                      suffixIcon: const Icon(Icons.scale),
                       fillColor: Theme.of(context).colorScheme.secondary,
                       filled: true,
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
 
                       ),
 
@@ -240,10 +235,10 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
                         List<Dispensa> dispense = gestoreDispense.getAllElements();
                         return DropdownButtonFormField(
                           decoration: InputDecoration(
-                            suffixIcon: Icon(Icons.kitchen),
+                            suffixIcon: const Icon(Icons.kitchen),
                             fillColor: Theme.of(context).colorScheme.secondary,
                             filled: true,
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
 
                             ),
 
@@ -294,7 +289,7 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
                           setState(() {
                           });
                         },
-                        child: Text("Prossimo")
+                        child: const Text("Prossimo")
                     ),
                   ]
                 ),
@@ -314,8 +309,8 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
   Articolo _generaArticolo(){
     Articolo nuovoArticolo;
 
-    nuovoArticolo = new Articolo(
-      idProdotto: widget._prodotto!.getCode(),
+    nuovoArticolo = Articolo(
+      idProdotto: widget._prodotto.getCode(),
       idDispensa: this._dispensa!.id,
       prezzo: this._prezzo!,
       peso: this._peso!,
@@ -347,7 +342,7 @@ class FormCreazioneArticoloStato extends State<FormCreazioneArticolo>{
       gestoreArticoli.addElement(nuovoArticolo);
       Navigator.of(context).pop();
       Navigator.of(context).push(
-          new MaterialPageRoute(
+          MaterialPageRoute(
               builder: (context) {
                 return PaginaEsito(
                     "${articoliInseriti.length + 1} Articolo/i inseriti correttamente",

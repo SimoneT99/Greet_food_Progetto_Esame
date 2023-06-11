@@ -1,6 +1,4 @@
-import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:greet_food/Classes/GestioneDati/ElaboratoreArticoli.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
@@ -13,7 +11,6 @@ import 'package:greet_food/Widgets/VisualizzazioniCard/VisualizzazioneArticoli.d
 import 'package:provider/provider.dart';
 
 import '../Classes/Items/Prodotto.dart';
-import 'Forms/Utility.dart';
 
 
 /**
@@ -69,7 +66,7 @@ class PaginaDispensaStato extends State<PaginaDispensa> with SingleTickerProvide
           body: Column(
             children: [
               Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.blueGrey,
                 ),
                 height: 25,
@@ -80,10 +77,10 @@ class PaginaDispensaStato extends State<PaginaDispensa> with SingleTickerProvide
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   tabs: [
-                    Tab(
+                    const Tab(
                       text: "Articoli",
                     ),
-                    Tab(
+                    const Tab(
                       text: "Informazioni",
                     )
                   ],
@@ -92,7 +89,7 @@ class PaginaDispensaStato extends State<PaginaDispensa> with SingleTickerProvide
               Expanded(
                   child:
                         Consumer<GenericManager<Articolo>>(builder: (context, manager, child){
-                                List<Articolo> _articoli_contenuti = (new ElaboratoreArticoli(manager.getAllElements())).filtraPerDispensa(_dispensa);
+                                List<Articolo> _articoli_contenuti = (ElaboratoreArticoli(manager.getAllElements())).filtraPerDispensa(_dispensa);
                                 _articoli_contenuti = (ElaboratoreArticoli(_articoli_contenuti).filtraPerConsumati(consumato: false));
                                 return TabBarView(
                                   controller: _tabController,
@@ -131,7 +128,7 @@ class InformazioniDispensa extends StatelessWidget{
     GenericManager<Articolo> managerArticoli = Provider.of<GenericManager<Articolo>>(context, listen: false);
     GenericManager<Prodotto> managerProdotti = Provider.of<GenericManager<Prodotto>>(context, listen: false);
 
-    ElaboratoreArticoli eleboratoreArticoli = new ElaboratoreArticoli(managerArticoli.getAllElements());
+    ElaboratoreArticoli eleboratoreArticoli = ElaboratoreArticoli(managerArticoli.getAllElements());
     List<Articolo> articoliDispensaTotale = eleboratoreArticoli.filtraPerDispensa(this._dispensa);
 
     //articoli lasciati scadere
@@ -174,7 +171,7 @@ class InformazioniDispensa extends StatelessWidget{
                         aspectRatio: 1,
                         child: Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            borderRadius: const BorderRadius.all(Radius.circular(10)),
                             image: DecorationImage(
                               fit: BoxFit.fill,
                               image: image.image,
@@ -201,7 +198,7 @@ class InformazioniDispensa extends StatelessWidget{
                                   ),
                                 ],
                               ),
-                              Spacer(),
+                              const Spacer(),
                               Row(
                                 children: [
                                   Text("Contenuti: ",
@@ -210,7 +207,7 @@ class InformazioniDispensa extends StatelessWidget{
                                         fontSize: 20,
                                       )
                                   ),
-                                  Spacer(),
+                                  const Spacer(),
                                   Text(contenutoCorrente.toString(),
                                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
                                         color: Theme.of(context).primaryColorDark,
@@ -242,10 +239,10 @@ class InformazioniDispensa extends StatelessWidget{
                               ),
                             ),
                           ),
-                          Spacer()
+                          const Spacer()
                         ],
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Center(
                         child: Text(
                           _dispensa.descripion,
@@ -256,7 +253,7 @@ class InformazioniDispensa extends StatelessWidget{
                           ),
                         ),
                       ),
-                      Spacer(flex: 2,),
+                      const Spacer(flex: 2,),
                     ],
                   ),
                 ),

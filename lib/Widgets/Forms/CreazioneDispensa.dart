@@ -59,7 +59,7 @@ class FormCreazioneDispensaState extends State<FormCreazioneDispensa>{
   /**
    * Image provider
    */
-  ImageProvider<Object> imageProvider = AssetImage("Assets/Images/Camera3.png");
+  ImageProvider<Object> imageProvider = const AssetImage("Assets/Images/Camera3.png");
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +74,7 @@ class FormCreazioneDispensaState extends State<FormCreazioneDispensa>{
               children: [
                 Center(
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     width: 125,
                     child: InkWell(
                       onTap: () {
@@ -84,7 +84,7 @@ class FormCreazioneDispensaState extends State<FormCreazioneDispensa>{
                         aspectRatio: 1,
                         child: Card(
                           clipBehavior: Clip.antiAliasWithSaveLayer,
-                          margin:  EdgeInsets.all(0),
+                          margin:  const EdgeInsets.all(0),
                           child: Container(
                             decoration: BoxDecoration(
                               image: DecorationImage(
@@ -106,7 +106,7 @@ class FormCreazioneDispensaState extends State<FormCreazioneDispensa>{
                     decoration: InputDecoration(
                       fillColor: Theme.of(context).colorScheme.secondary,
                       filled: true,
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
 
                       ),
 
@@ -132,7 +132,7 @@ class FormCreazioneDispensaState extends State<FormCreazioneDispensa>{
                     decoration: InputDecoration(
                       fillColor: Theme.of(context).colorScheme.secondary,
                       filled: true,
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                       ),
                       labelText: 'Descrizione',
                     ),
@@ -156,7 +156,7 @@ class FormCreazioneDispensaState extends State<FormCreazioneDispensa>{
                     decoration: InputDecoration(
                       fillColor: Theme.of(context).colorScheme.secondary,
                       filled: true,
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                       ),
                       labelText: 'Posizione',
                     ),
@@ -228,7 +228,7 @@ class FormCreazioneDispensaState extends State<FormCreazioneDispensa>{
   Future<void> _takePicture(BuildContext context) async{
 
     List<CameraDescription> cameras = await availableCameras();
-    if (cameras.length == 0){
+    if (cameras.isEmpty){
       return;
     }
 
