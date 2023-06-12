@@ -97,7 +97,10 @@ class CardProdotto extends StatelessWidget{
               if(_cardType == CardAction.productPage){
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
-                      return PaginaProdotto(this._prodotto);
+                      return Consumer<GenericManager<Prodotto>>(
+                          builder: (context, manager, child) =>
+                          PaginaProdotto(this._prodotto),
+                      );
                     })
                 );
               }else if( _cardType == CardAction.insertProduct) {

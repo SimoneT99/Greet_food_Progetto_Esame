@@ -61,7 +61,7 @@ class FormCreazioneProdottoState extends State<FormCreazioneProdotto>{
   @override
   void initState(){
     if(widget._prodotto != null){
-      this.imageProvider = FileImage(File(widget._prodotto!.imagePath));
+      this.imageProvider = widget._prodotto!.getImage().image;
       this.pathImmagine = widget._prodotto!.imagePath;
     }
   }

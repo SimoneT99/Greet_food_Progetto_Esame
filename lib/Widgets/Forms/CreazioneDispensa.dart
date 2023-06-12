@@ -51,7 +51,7 @@ class FormCreazioneDispensaState extends State<FormCreazioneDispensa>{
   @override
   void initState(){
     if(widget._dispensa != null){
-      this.imageProvider = FileImage(File(widget._dispensa!.imagePath));
+      this.imageProvider = widget._dispensa!.getImage().image;
       this.pathImmagine = widget._dispensa!.imagePath;
     }
   }
