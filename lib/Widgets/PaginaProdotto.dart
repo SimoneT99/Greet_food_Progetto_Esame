@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:greet_food/Classes/GestioneDati/ElaboratoreArticoli.dart';
 import 'package:greet_food/Classes/GestioneDati/GenericManager.dart';
 import 'package:greet_food/Classes/GestioneDati/Settings.dart';
@@ -81,7 +82,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
               decoration: const BoxDecoration(
                 color: Colors.blueGrey,
               ),
-              height: 25,
+              height: 35,
               child: TabBar(
                 labelPadding: const EdgeInsets.symmetric(horizontal: 5),
                 controller: _tabController,
@@ -90,7 +91,7 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
                 ),
                 tabs: const [
                   Tab(
-                    text: "Informazioni",
+                    text: "Generale",
                   ),
                   Tab(
                     text: "Prezzi",
@@ -148,7 +149,11 @@ class PaginaProdottoStato extends State<PaginaProdotto> with SingleTickerProvide
 
     int favDispensaId = _getFavouriteDispensaId(elaboratoreArticoli.getCurrentList());
 
-    dispensa_preferita = favDispensaId == -1 ? 'N.A.' : dispensa_preferita = managerDispensa.getElementById(favDispensaId).nome;
+    try{
+      dispensa_preferita = favDispensaId == -1 ? 'N.A.' : dispensa_preferita = managerDispensa.getElementById(favDispensaId).nome;
+    }catch(exeption){
+      dispensa_preferita = 'N.A.';
+    }
 
     return Padding(
       padding: const EdgeInsets.all(5.0),
@@ -585,6 +590,7 @@ class priceHistoryPageState extends State<priceHistoryPage>{
   }
 
   _switchPrices(){
+    HapticFeedback.lightImpact();
     setState(() {
       _alKg = !_alKg;
     });

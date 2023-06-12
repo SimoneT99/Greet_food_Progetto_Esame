@@ -250,14 +250,26 @@ class CardProdotto extends StatelessWidget{
       List<Articolo> articoliConsumati = elaboratoreArticoli.filtraPerConsumati();
       if(articoliConsumati.isNotEmpty) {
         for (int i = 1; i < articoliConsumati.length; i++) {
-          managerArticoli.removeElement(
-              articoliConsumati[i], notifyListeners: false,
-              saveToDisk: false);
+          try{
+            managerArticoli.removeElement(
+                articoliConsumati[i], notifyListeners: false,
+                saveToDisk: false);
+          }catch(exception){
+
+          }
+
         }
-        managerArticoli.removeElement(articoliConsumati[0]);
+        try{
+          managerArticoli.removeElement(articoliConsumati[0]);
+        }catch(exception){
+        }
+
       }
       GenericManager<Prodotto> managerProdotti = Provider.of<GenericManager<Prodotto>>(context, listen: false);
-      managerProdotti.removeElement(this._prodotto);
+      try{
+        managerProdotti.removeElement(this._prodotto);
+        }catch(exception){
+      }
     }
   }
 

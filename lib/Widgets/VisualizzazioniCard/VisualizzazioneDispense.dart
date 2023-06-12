@@ -291,7 +291,12 @@ class DispensaCard extends StatelessWidget{
 
   void _onDeleteRequested(BuildContext context) {
     if(this._articoliContenuti == 0){
-      manager.removeElement(_dispensa);
+      try{
+        manager.removeElement(_dispensa);
+      }catch(exeption){
+        debugPrint("Cancellazione anullata per errore interno");
+      }
+
     }else{
       _showCancellationDisabledDialog(context);
     }

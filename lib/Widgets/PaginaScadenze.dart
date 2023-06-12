@@ -49,7 +49,7 @@ class PaginaScadenzaStato extends State<PaginaScadenze> with SingleTickerProvide
               decoration: const BoxDecoration(
                 color: Colors.blueGrey,
               ),
-              height: 25,
+              height: 35,
               child: TabBar(
                 labelPadding: const EdgeInsets.symmetric(horizontal: 5),
                 controller: _tabController,

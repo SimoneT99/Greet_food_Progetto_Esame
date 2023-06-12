@@ -143,10 +143,16 @@ class GreetFoodTheme{
         )
       ),
 
-      tabBarTheme: const TabBarTheme(
+      tabBarTheme: TabBarTheme(
         labelColor: Colors.white,
         unselectedLabelColor: Colors.white,
         indicatorColor: Color(0xFF2BAE66),
+        labelStyle : testo.caption?.copyWith(
+          fontSize: 20
+        ),
+        unselectedLabelStyle: testo.caption?.copyWith(
+            fontSize: 18
+        ),
       ),
 
       cardColor: _secondaryColor1,

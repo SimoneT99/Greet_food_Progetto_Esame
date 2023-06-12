@@ -213,7 +213,7 @@ class OnboardingDispense extends StatelessWidget{
                 height: 150,
                 child: Image.asset("Assets/Images/OnbDispense.png")
             ),
-            Text("In DISPENSE puoi inserire delle dispense ed entrarci per visualizzare gli articoli contenuti!\n Inserisci quelle che ti servono!!",
+            Text("In DISPENSE puoi inserire delle dispense ed entrarci per visualizzare gli articoli contenuti!\n Inserisci quelle di cui hai bisogno!!",
                 style: Theme
                     .of(context)
                     .textTheme

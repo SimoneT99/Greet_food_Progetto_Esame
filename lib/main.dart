@@ -46,6 +46,13 @@ class GreetFoodState extends State<GreetFood>{
     /**
      * Inizializziamo i manager caricando da disco
      */
+
+    //Prodotti
+    _managerProdotti = GenericManager<Prodotto>();
+    _managerProdotti.fromDisk(PATH_PRODOTTO);
+    _managerProdotti.setSavingPath(PATH_PRODOTTO);
+
+
     //Articoli
     _managerArticoli = GenericManager<Articolo>();
     _managerArticoli.fromDisk(PATH_ARTICOLO);
@@ -56,10 +63,6 @@ class GreetFoodState extends State<GreetFood>{
     _managerDispense.fromDisk(PATH_DISPENSA);
     _managerDispense.setSavingPath(PATH_DISPENSA);
 
-    //Prodotti
-    _managerProdotti = GenericManager<Prodotto>();
-    _managerProdotti.fromDisk(PATH_PRODOTTO);
-    _managerProdotti.setSavingPath(PATH_PRODOTTO);
 
     //Settings
     _settings = Settings();
@@ -219,6 +222,9 @@ class _sideDrawer extends StatelessWidget{
           ListTile(
             title: const Text('Tutti gli articoli'),
             onTap: (){
+
+              HapticFeedback.lightImpact();
+
               print('richiesti tutti gli articoli');
               Navigator.pop(context);  //Chiudiamo il drawer
 
@@ -245,6 +251,9 @@ class _sideDrawer extends StatelessWidget{
           ListTile(
             title: const Text('Tutti i prodotti'),
             onTap: (){
+
+              HapticFeedback.lightImpact();
+
               print('richiesti tutti i prodotti');
               Navigator.pop(context);  //Chiudiamo il drawer
 

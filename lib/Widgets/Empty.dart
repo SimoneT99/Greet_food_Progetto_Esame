@@ -68,7 +68,8 @@ class EmptyBody extends StatelessWidget{
           Text(_text,
               style: Theme.of(context).textTheme.subtitle2?.copyWith(
                   fontSize: 20
-              )
+              ),
+              textAlign: TextAlign.center
           ),
         ],
       ),

@@ -99,8 +99,12 @@ class WidgetArticolo extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    this._prodotto = Provider.of<GenericManager<Prodotto>>(context, listen: false).getElementById(_articolo.idProdotto);
-    this._dispensa = Provider.of<GenericManager<Dispensa>>(context, listen: false).getElementById(_articolo.idDispensa);
+    try{
+      this._prodotto = Provider.of<GenericManager<Prodotto>>(context, listen: false).getElementById(_articolo.idProdotto);
+      this._dispensa = Provider.of<GenericManager<Dispensa>>(context, listen: false).getElementById(_articolo.idDispensa);
+    }catch(exeption){
+      return SizedBox.shrink(); //in caso di errore non si mostra il widget
+    }
 
     if(_isExpanded){
       return expanded(context);

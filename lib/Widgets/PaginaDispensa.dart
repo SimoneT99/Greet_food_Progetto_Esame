@@ -69,7 +69,7 @@ class PaginaDispensaStato extends State<PaginaDispensa> with SingleTickerProvide
                 decoration: const BoxDecoration(
                   color: Colors.blueGrey,
                 ),
-                height: 25,
+                height: 35,
                 child: TabBar(
                   labelPadding: const EdgeInsets.symmetric(horizontal: 5),
                   controller: _tabController,
@@ -78,7 +78,7 @@ class PaginaDispensaStato extends State<PaginaDispensa> with SingleTickerProvide
                   ),
                   tabs: [
                     const Tab(
-                      text: "Articoli",
+                      text: "Contenuto",
                     ),
                     const Tab(
                       text: "Informazioni",
@@ -137,7 +137,11 @@ class InformazioniDispensa extends StatelessWidget{
 
     //prodotto preferito
     int idProdottoPreferito = _idProdottoPreferito(managerArticoli);
-    prodottoPreferito = idProdottoPreferito == -1 ? 'N.A.' : managerProdotti.getElementById(idProdottoPreferito).nome;
+    try{
+      prodottoPreferito = idProdottoPreferito == -1 ? 'N.A.' : managerProdotti.getElementById(idProdottoPreferito).nome;
+    }catch(exeption){
+      prodottoPreferito = 'N.A.';
+    }
 
     //contenutoCorrente
     contenutoCorrente = eleboratoreArticoli.filtraPerConsumati(
@@ -204,14 +208,14 @@ class InformazioniDispensa extends StatelessWidget{
                                   Text("Contenuti: ",
                                       style: Theme.of(context).textTheme.subtitle2?.copyWith(
                                         color: Theme.of(context).primaryColorDark,
-                                        fontSize: 20,
+                                        fontSize: 16,
                                       )
                                   ),
                                   const Spacer(),
                                   Text(contenutoCorrente.toString(),
                                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
                                         color: Theme.of(context).primaryColorDark,
-                                        fontSize: 20,
+                                        fontSize: 16,
                                       )
                                   ),
                                 ],
