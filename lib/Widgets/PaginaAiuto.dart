@@ -50,7 +50,7 @@ List<_Help> _tips = <_Help>[
       problem: "Come aggiungo un prodotto?",
       answer: "Puoi aggiungere un prodotto scannerizzandone uno per la prima volta "
               "se questo ha un codice a barre, oppure premendo nell'icona in alto"
-              "a destra nella schermata che appare premendo su no codice"
+              "a destra nella schermata che appare premendo sfoglia prodotti"
   ),
   _Help(
       problem: "Come cambio il numero di giorni usati per considerare un alimento in scadenza?",

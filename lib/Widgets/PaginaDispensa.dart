@@ -301,14 +301,47 @@ class InformazioniDispensa extends StatelessWidget{
                           ),
                         ),
                       ),
-                      const Spacer(),
+
                       Flexible(
-                        child: Text(prodottoPreferito.toString(),
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                              color: Theme.of(context).primaryColorDark,
-                              fontSize: 20,
-                            )),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(prodottoPreferito.toString(),
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                color: Theme.of(context).primaryColorDark,
+                                fontSize: 20,
+                              )),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Text("Posizione:",
+                          style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                            color: Theme.of(context).primaryColorDark,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(_dispensa.posizione,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                color: Theme.of(context).primaryColorDark,
+                                fontSize: 20,
+                              )),
+                        ),
                       )
                     ],
                   ),
