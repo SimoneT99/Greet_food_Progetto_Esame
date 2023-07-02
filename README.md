@@ -4,3 +4,5 @@ Progetto per l'esame di applicazioni mobili del'università degli studi di Udine
 ## Descrizione
 Il progetto si concentra sull'aspetto di design e del processo per ottenerlo, descritto nella [relazione](https://github.com/SimoneT99/Greet_food_Progetto_Esame/blob/master/Relazione_progetto_app_mobili.pdf).
 
+L'implementazione è in dart utilizzando il framework Flutter.
+
